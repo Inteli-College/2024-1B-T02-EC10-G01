@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant Device as Dispositivo
+    participant hive as HiveMQ
+
+
+Device ->> Device: Gera/Coleta dados
+
+Note over Device, hive: Estabelece conexão TLS
+
+Device ->> hive: Envia credenciais (username e senha)
+
+hive ->> hive: Verifica credenciais
+
+Note over Device, hive: Conexão autenticada e segura via TLS
+
+hive ->> hive: Verifica roles do usuário
+
+Note over Device, hive: Autorização via roles do HiveMQ
+
+Device ->> hive: Publica dados no tópico associado
+
+hive ->> Kafka Confluent: Encaminha dados do tópico
+
+Kafka Confluent ->> MongoDB: Armazena dados
+
+Note over MongoDB, Metabase: Dados acessíveis para análise
+
+Metabase ->> MongoDB: Consulta dados para visualização e análise
