@@ -1,0 +1,12 @@
+{
+    "position": 2,
+    "label": "Arquitetura",
+    "collapsible": true,
+    "collapsed": true,
+    "className": "red",
+    "link": {
+      "type": "generated-index",
+      "title": "Artefatos de arquitetura Sprint 1",
+      "slug": "/sprint-1/architecture"
+    }
+  }
