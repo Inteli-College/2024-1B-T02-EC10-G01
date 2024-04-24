@@ -1,0 +1,11 @@
+{
+    "position": 3,
+    "label": "Sprint 3",
+    "collapsible": true,
+    "collapsed": false,
+    "className": "red",
+    "link": {
+      "type": "generated-index",
+      "title": "Overview Sprint 3"
+    }
+  }
