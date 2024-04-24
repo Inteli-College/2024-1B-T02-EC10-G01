@@ -1,11 +1,12 @@
 {
-    "position": 1,
+    "position": 3,
     "label": "Negócios",
     "collapsible": true,
     "collapsed": true,
     "className": "red",
     "link": {
       "type": "generated-index",
-      "title": "Artefatos de negócios Sprint 1"
+      "title": "Artefatos de negócios Sprint 1",
+      "slug": "/sprint-1/business"
     }
   }
