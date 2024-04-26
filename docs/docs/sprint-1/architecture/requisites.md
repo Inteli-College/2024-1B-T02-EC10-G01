@@ -4,6 +4,8 @@ sidebar_position: 2
 ---
 ## Requisitos Funcionais:
 
+Os requisitos funcionais descrevem as funcionalidades específicas que um sistema deve fornecer. Eles descrevem o que o sistema deve fazer em termos de operações, serviços ou funções. 
+
 | Requisito | Descrição | Resultado esperado |
 |-----------|-----------|-------------------|
 | Autenticação de Usuários | Os usuários devem poder fazer login na plataforma usando credenciais válidas. | Acesso seguro à plataforma para usuários autorizados. |
@@ -16,6 +18,7 @@ sidebar_position: 2
 
 ## Requisitos Não Funcionais:
 
+Os requisitos não funcionais descrevem atributos do sistema que não estão diretamente relacionados às funcionalidades específicas, mas são igualmente importantes para a sua qualidade e desempenho.
 
 | Requisito | Descrição | Resultado esperado |
 |-----------|-----------|-------------------|
