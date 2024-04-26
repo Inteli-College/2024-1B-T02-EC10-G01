@@ -6,9 +6,21 @@ slug: /
 
 # Introdução
 
-## Objetivo
+O presente documento destina-se a introduzir o Asky, uma inovadora aplicação móvel desenvolvida pelos alunos do módulo 10 de Engenharia da Computação do Inteli, classe de 2025, especificamente para atender às necessidades do renomado Hospital Sírio-Libanês. Este aplicativo surge como uma solução crítica para otimizar o processo de comunicação e solicitação de urgências no sistema de reabastecimento de medicamentos, enfrentando diretamente as ineficiências existentes no uso dos dispensadores eletrônicos Pyxis, atualmente implementados em cada andar e ala do hospital.
 
-## Execução
+## Contexto do problema
+
+Os dispensadores Pyxis são dispositivos automatizados utilizados para armazenar e controlar a dispensação de medicamentos dentro de instituições de saúde. Eles são fundamentais para a manutenção da segurança e eficácia na administração de medicamentos aos pacientes. No entanto, a área responsável por reabastecer esses dispensadores enfrenta desafios significativos devido a discrepâncias no estoque. Comummente, os enfermeiros, ao retirar medicamentos, podem levar mais unidades do que as registradas no sistema para agilizar seu trabalho, resultando em desencontros de inventário que impactam diretamente o atendimento subsequente.↳
+
+Este cenário complica a gestão eficiente dos medicamentos, onde, frequentemente, enfermeiros encontram-se em situações críticas de falta de medicamentos necessários, sendo forçados a solicitar reabastecimentos de urgência. Atualmente, esse processo é realizado via WhatsApp, um método que carece de registros formais, histórico e transparência, deixando a liderança hospitalar sem visibilidade das operações e dos padrões de consumo.
+
+## Aplicativo Asky
+
+Asky foi concebido para resolver esses problemas de forma eficiente e transparente. Utilizando a tecnologia de QR Code, o aplicativo permite que os enfermeiros escaneiem os códigos nos dispensadores Pyxis para preencher automaticamente todos os dados necessários para a solicitação de reabastecimento. As solicitações são organizadas por prioridade em uma fila clara e são visíveis para todos os auxiliares de farmácia que utilizam o aplicativo, garantindo total visibilidade do estado do sistema e permitindo uma resposta rápida às urgências.
+
+Além disso, Asky integra-se diretamente ao robô separador e à farmácia central, facilitando a reposição urgente de medicamentos, que podem ser entregues via tubos pneumáticos. Essa integração promove uma significativa redução no tempo de resposta às solicitações. Todos os processos são meticulosamente registrados em um log, que alimenta um dashboard administrativo. Este dashboard oferece insights valiosos sobre o sistema, desde o tempo médio de atendimento até análises detalhadas sobre quais dispensadores demandam mais atenção e possíveis movimentações suspeitas.
+
+Com a implementação do Asky, o Hospital Sírio-Libanês estará equipado para enfrentar os desafios de gestão de medicamentos de uma maneira que é tanto tecnologicamente avançada quanto alinhada com as melhores práticas de transparência e eficiência operacional.
 
 ### Sprint 1:
 
