@@ -4,8 +4,6 @@ sidebar_position: 2
 ---
 ## Requisitos Funcionais:
 
-No contexto dinâmico e desafiador do projeto, é fundamental implementar um sistema que otimize as operações diárias dos funcionários. Os requisitos funcionais deste sistema são estruturados para garantir eficiência, precisão e interação intuitiva, visando melhorar significativamente a experiência no ambiente de trabalho, aprimorando a produtividade dentro da Ambev e agregando valor para a empresa.
-  
 | Requisito | Descrição | Resultado esperado |
 |-----------|-----------|-------------------|
 | Autenticação de Usuários | Os usuários devem poder fazer login na plataforma usando credenciais válidas. | Acesso seguro à plataforma para usuários autorizados. |
@@ -18,7 +16,6 @@ No contexto dinâmico e desafiador do projeto, é fundamental implementar um sis
 
 ## Requisitos Não Funcionais:
 
-Para a concepção e desenvolvimento de um sistema de gerenciamento de estoque e localização de peças no almoxarifado, além dos requisitos funcionais, é crucial considerar os requisitos não funcionais. Estes parâmetros definem os critérios que não estão diretamente ligados às funcionalidades específicas do sistema, mas que desempenham um papel fundamental na qualidade, segurança e eficiência do projeto como um todo.
 
 | Requisito | Descrição | Resultado esperado |
 |-----------|-----------|-------------------|
