@@ -64,3 +64,5 @@ Para este projeto, foram criadas três personas, por conseguinte foram desenvolv
 ## Disponibilização de Mapa de Jornada de Usuário 
 
 Devido à difícil visualização, a jornada de usuário não foi adicionada a está página de documentação, mas está disponível para acesso no link a seguir: https://miro.com/app/board/uXjVKQ4dWR0=/?share_link_id=599935398397
+
+Junto com o link do figma, onde é possível acessar o protótipo de baixa fidelidade, para entender melhor do fluxo de cada usuário: https://www.figma.com/proto/vUs3n8ymSo6Eoe8gf3u5kv/app-V1?node-id=3-7&starting-point-node-id=3%3A7&mode=design&t=9IYGJQiIde5Y2zVN-1
