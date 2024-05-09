@@ -28,6 +28,16 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  auth:
+    build: ./auth
+    ports:
+      - "8003:8003"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
+    depends_on:
+      postgres:
+        condition: service_healthy
   
   request_management:
     build: ./request_management
