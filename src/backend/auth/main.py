@@ -6,6 +6,10 @@ from sqlalchemy.future import select
 from database import get_session, engine, Base
 import uvicorn
 
+import logging
+logging.basicConfig()    
+logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
+
 app = FastAPI()
 
 api_router = APIRouter(prefix="/auth")

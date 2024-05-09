@@ -1,7 +1,9 @@
 import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, DeclarativeBase
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncAttrs
+
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -9,12 +11,16 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_async_engine(DATABASE_URL, echo=True)
 
 # Session maker bound to the engine
-async_session = sessionmaker(engine, class_=AsyncSession)
+async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-# Base class for models
-Base = declarative_base()
+class Base(AsyncAttrs, DeclarativeBase):
+    pass
 
 async def get_session() -> AsyncSession:
     async with async_session() as session:
-        await session.execute(text("SET search_path TO auth"))
-        yield session
+        # Set search path at the start of each session
+        await session.execute(text("SET search_path TO pyxis"))
+        try:
+            yield session
+        finally:
+            await session.close()
