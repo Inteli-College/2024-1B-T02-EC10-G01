@@ -7,12 +7,14 @@ from database import Base  # Import Base from database module
 # Association table for the many-to-many relationship between Dispenser and Medicine
 dispenser_medicine_association = Table(
     'dispenser_medicine', Base.metadata,
-    Column('dispenser_id', Integer, ForeignKey('dispenser.id'), primary_key=True),
-    Column('medicine_id', Integer, ForeignKey('medicine.id'), primary_key=True)
+    Column('dispenser_id', Integer, ForeignKey('pyxis.dispenser.id'), primary_key=True),
+    Column('medicine_id', Integer, ForeignKey('pyxis.medicine.id'), primary_key=True),
+    schema='pyxis'  # Specify the schema here
 )
 
 class Dispenser(Base):
     __tablename__ = 'dispenser'
+    __table_args__ = {'schema': 'pyxis'}
 
     id = Column(Integer, primary_key=True)
     code = Column(String, unique=True, index=True)
@@ -23,6 +25,8 @@ class Dispenser(Base):
 
 class Medicine(Base):
     __tablename__ = 'medicine'
+    __table_args__ = {'schema': 'pyxis'}
+
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, index=True)
@@ -33,6 +37,7 @@ class Medicine(Base):
 
 class Material(Base):
     __tablename__ = 'material'
+    __table_args__ = {'schema': 'pyxis'}
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, index=True)
