@@ -66,3 +66,25 @@ async def get_dispenser_qr(dispenser_id: int, session: AsyncSession = Depends(ge
     img_byte_array.seek(0)
 
     return StreamingResponse(img_byte_array, media_type="image/png")
+
+
+@router.get("/{dispenser_id}")
+async def read_dispenser(dispenser_id: int, session: AsyncSession = Depends(get_session)):
+    # Fetch the dispenser by ID
+    stmt = select(Dispenser).filter(Dispenser.id == dispenser_id)
+    result = await session.execute(stmt)
+    dispenser = result.scalar()
+
+    if not dispenser:
+        raise HTTPException(status_code=404, detail="Dispenser not found")
+
+    return {
+        "id": dispenser.id,
+        "code": dispenser.code,
+        "floor": dispenser.floor,
+        "medicines": [
+            {"id": medicine.id, "name": medicine.name, "dosage": medicine.dosage}
+            for medicine in dispenser.medicines
+        ]
+    }
+
