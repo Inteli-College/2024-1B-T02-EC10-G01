@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  pyxis:
+    build: ./pyxis
+    ports:
+      - "8001:8001"
+  request_management:
+    build: ./request_management
+    ports:
+      - "8002:8002"
+  gateway:
+    build: ./gateway
+    ports:
+      - "8000:80"
