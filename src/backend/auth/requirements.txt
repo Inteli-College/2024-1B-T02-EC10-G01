@@ -6,3 +6,4 @@ sqlalchemy
 asyncpg
 passlib
 pydantic
+pyjwt[crypto]
