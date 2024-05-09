@@ -13,6 +13,11 @@ services:
       volumes:
         - postgres_data:/var/lib/postgresql/data
         - ./init-db:/docker-entrypoint-initdb.d
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
  
   pyxis:
     build: ./pyxis
@@ -20,16 +25,26 @@ services:
       - "8001:8001"
     environment:
       DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
+    depends_on:
+      postgres:
+        condition: service_healthy
   
   request_management:
     build: ./request_management
     ports:
       - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
   
   gateway:
     build: ./gateway
     ports:
       - "8000:80"
+    depends_on: 
+      - pyxis
+      - request_management
+      - postgres
 
 volumes:
   postgres_data:
