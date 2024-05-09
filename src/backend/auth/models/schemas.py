@@ -11,7 +11,16 @@ class UserResponseModel(BaseModel):
     email: str
     role: str
 
+class LoginResponseModel(BaseModel):
+    email: str
+    access_token: str
+    token_type: str
+
 class UserRoleEnum(enum.Enum):
     ADMIN = 'admin'
     NURSE = 'nurse'
     AGENT = 'agent'
+
+class UserLoginRequest(BaseModel):
+    email: str
+    password: str

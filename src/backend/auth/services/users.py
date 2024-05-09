@@ -25,7 +25,6 @@ async def get_user_by_id(session, user_id: int):
     return user
 
 async def create_user(session, email: str, password_hash: str, role: str):
-    print(session)
     user = User(email=email, password_hash=password_hash, role=role)
     session.add(user)
     await session.commit()
