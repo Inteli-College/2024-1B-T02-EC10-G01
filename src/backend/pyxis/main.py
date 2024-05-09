@@ -3,7 +3,6 @@ from routes.dispenser import router as dispenser_router
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.future import select
 
-
 from database import get_session, engine, Base
 import uvicorn
 from models.dispenser import Dispenser
@@ -24,9 +23,8 @@ async def read_root():
 
 @app.get("/pyxis")
 async def read_items(session: AsyncSession = Depends(get_session)):
-    async with session.begin():
-        result = await session.execute(select(Dispenser))
-        items = result.scalars().all()
+    result = await session.execute(select(Dispenser))
+    items = result.scalars().all()
     return items
 
 app.include_router(api_router)
