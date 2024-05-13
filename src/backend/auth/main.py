@@ -2,11 +2,10 @@ from fastapi import FastAPI, APIRouter, Depends
 from routes.auth import router as auth_router
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.future import select
-
 from database import get_session, engine, Base
 import uvicorn
-
 import logging
+
 logging.basicConfig()    
 logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
 
