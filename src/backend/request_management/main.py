@@ -1,8 +1,16 @@
 from fastapi import FastAPI, APIRouter
 from routes.medicine_requests import router as medicine_requests_router
 import uvicorn
+from database import get_session, engine, Base
+from routes.medicine_requests import router as medicine_requests_router
+
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 api_router = APIRouter(prefix="/requests")
 api_router.include_router(medicine_requests_router)

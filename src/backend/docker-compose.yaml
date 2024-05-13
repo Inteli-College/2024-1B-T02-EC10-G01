@@ -42,6 +42,8 @@ services:
     build: ./request_management
     ports:
       - "8002:8002"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,6 +56,7 @@ services:
       - pyxis
       - request_management
       - postgres
-
+      - auth
+      
 volumes:
   postgres_data:

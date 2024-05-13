@@ -26,12 +26,6 @@ async def read_root(user: dict = Depends(is_admin)):
 async def protected_route(user: dict = Depends(is_admin)):
     return {"message": "Welcome to the protected route!", "user": user}
 
-@app.get("/pyxis")
-async def read_items(session: AsyncSession = Depends(get_session)):
-    result = await session.execute(select(Dispenser))
-    items = result.scalars().all()
-    return items
-
 app.include_router(api_router)
 
 if __name__ == "__main__":
