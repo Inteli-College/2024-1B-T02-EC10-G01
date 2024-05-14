@@ -29,3 +29,10 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     access_token = create_access_token(data={"sub": user.email, "role": user.role})
     return LoginResponseModel(email=user.email, access_token=access_token, token_type="bearer")
 
+@router.get("/users/{user_id}", response_model=UserResponseModel)
+async def get_user(user_id: int, session: AsyncSession = Depends(get_session)):
+    user = await get_user_by_id(session, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return UserResponseModel(id=user['id'], email=user['email'], role=user['role'])
+

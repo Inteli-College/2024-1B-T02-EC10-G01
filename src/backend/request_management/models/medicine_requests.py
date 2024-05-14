@@ -6,7 +6,7 @@ from sqlalchemy import desc  # Import desc
 
 class MedicineRequest(Base):
     __tablename__ = 'medicine_requests'
-    ___table_args__ = {'schema': 'requests'}
+    __table_args__ = {'schema': 'requests'}
 
     id = Column(Integer, primary_key=True)
     dispenser_id = Column(Integer)
