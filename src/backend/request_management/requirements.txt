@@ -6,3 +6,4 @@ qrcode[pil]
 pyjwt[crypto]
 starlette
 aiohttp
+pika
