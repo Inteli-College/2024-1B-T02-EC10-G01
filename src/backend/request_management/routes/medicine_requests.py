@@ -14,7 +14,6 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
     return [request.to_dict() for request in requests]
 
 @router.post("/")
-async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session)):
-    print(request)
-    created_request = await create_request(request, session)
+async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+    created_request = await create_request(session, request, user)
     return created_request

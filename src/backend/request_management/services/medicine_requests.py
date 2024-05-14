@@ -8,6 +8,7 @@ import aiohttp
 import asyncio
 import os
 import json
+from middleware import is_nurse, is_agent, is_admin
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
 
@@ -41,8 +42,8 @@ async def _fetch_medicine_data(medicine_id: int, session: aiohttp.ClientSession)
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the medicine service: {str(e)}")
     
-async def _fetch_user_data(user_id: int, session: aiohttp.ClientSession):
-    url = f"{gateway_url}/auth/users/{user_id}"
+async def _fetch_user_data(user_email: str, session: aiohttp.ClientSession):
+    url = f"{gateway_url}/auth/users/{user_email}"
     headers = {"Authorization": f"Bearer {token}"}
     try:
         async with session.get(url, headers=headers) as response:
@@ -59,10 +60,11 @@ async def fetch_requests(session: AsyncSession):
     result = await session.execute(stmt)
     return result.scalars().all()
 
-async def create_request(request: CreateMedicineRequest, session: AsyncSession, response_model=MedicineRequestSchema):
+async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
     async with aiohttp.ClientSession() as http_session:
+        print(user)
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
-                  _fetch_medicine_data(request.medicine_id, http_session), _fetch_user_data(request.requested_by, http_session)]
+                  _fetch_medicine_data(request.medicine_id, http_session), _fetch_user_data(user['sub'], http_session)]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         dispenser = results[0]
         medicine = results[1]
@@ -73,4 +75,4 @@ async def create_request(request: CreateMedicineRequest, session: AsyncSession, 
         session.add(new_request)
         await session.commit()
         await session.refresh(new_request)
-        return response_model(id=new_request.id, dispenser=dispenser, medicine=medicine, requested_by=user, status=new_request.status)
+        return new_request.to_dict()
