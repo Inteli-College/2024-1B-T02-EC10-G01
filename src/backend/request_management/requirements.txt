@@ -5,3 +5,4 @@ asyncpg
 qrcode[pil]
 pyjwt[crypto]
 starlette
+aiohttp

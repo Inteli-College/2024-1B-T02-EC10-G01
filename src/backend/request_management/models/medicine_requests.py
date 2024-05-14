@@ -10,10 +10,9 @@ class MedicineRequest(Base):
 
     id = Column(Integer, primary_key=True)
     dispenser_id = Column(Integer)
-    requested_by = Column(String)
+    requested_by = Column(Integer)
     medicine_id = Column(Integer)
-    dosage = Column(String)
-    current_status = Column(String)
+    current_status = Column(String, default="pending")
 
     def to_dict(self):
         return {
@@ -21,7 +20,6 @@ class MedicineRequest(Base):
             "dispenser_id": self.dispenser_id,
             "requested_by": self.requested_by,
             "medicine_id": self.medicine_id,
-            "dosage": self.dosage,
             "current_status": self.current_status
         }
 
