@@ -28,3 +28,4 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     
     access_token = create_access_token(data={"sub": user.email, "role": user.role})
     return LoginResponseModel(email=user.email, access_token=access_token, token_type="bearer")
+

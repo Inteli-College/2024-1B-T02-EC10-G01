@@ -21,7 +21,7 @@ class Dispenser(Base):
     floor = Column(Integer)
 
     # Relationships - Note how we reference the association table here
-    medicines = relationship("Medicine", secondary=dispenser_medicine_association, back_populates="dispensers")
+    medicines = relationship("Medicine", secondary=dispenser_medicine_association, back_populates="dispensers", lazy='joined')
 
     def to_dict(self):
         """Return dictionary representation of the Dispenser."""
