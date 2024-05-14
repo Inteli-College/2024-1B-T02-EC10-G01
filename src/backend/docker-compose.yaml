@@ -47,6 +47,7 @@ services:
     environment:
       DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
       GATEWAY_URL: "http://gateway:80"
+      RABBITMQ_HOST: "rabbitmq"
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,5 +62,15 @@ services:
       - postgres
       - auth
       
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ default port
+      - "15672:15672" # RabbitMQ Management Plugin port
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+
 volumes:
   postgres_data:
