@@ -23,11 +23,11 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     user = await get_user_by_email(session, request.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    if not verify_password(request.password, user.password_hash):
+    if not verify_password(request.password, user['password_hash']):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
     
-    access_token = create_access_token(data={"sub": user.email, "role": user.role})
-    return LoginResponseModel(email=user.email, access_token=access_token, token_type="bearer")
+    access_token = create_access_token(data={"sub": user['email'], "role": user['role']})
+    return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer")
 
 @router.get("/users/{user_id}", response_model=UserResponseModel)
 async def get_user(user_id: int, session: AsyncSession = Depends(get_session)):

@@ -16,17 +16,21 @@ async def get_user_by_email(session, email: str):
     stmt = select(User).filter(User.email == email)
     result = await session.execute(stmt)
     user = result.scalar()
+    print(user.to_dict())
     return user.to_dict() if user else None
 
 async def get_user_by_id(session, user_id: int):
     stmt = select(User).filter(User.id == user_id)
     result = await session.execute(stmt)
     user = result.scalar()
-    return user.to_dict() if user else None
+    user = user.to_dict() if user else None
+    return {"id": user["id"], "email": user["email"], "role": user["role"]}
 
 async def create_user(session, email: str, password_hash: str, role: str):
     user = User(email=email, password_hash=password_hash, role=role)
     session.add(user)
-    await session.commit()
-    return user.to_dict() 
+    user = await session.commit()
+    user = await session.refresh(user)
+    user = user.to_dict()
+    return {"message": "User created successfully", "user": {"id": user["id"], "email": user["email"], "role": user["role"]}}
 
