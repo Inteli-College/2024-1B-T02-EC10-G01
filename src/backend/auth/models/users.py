@@ -22,6 +22,7 @@ class User(Base):
             "id": self.id,
             "email": self.email,
             "role": self.role if self.role else None,  # Accessing enum value
+            "password_hash": self.password_hash,
             "created_at": self.created_at.isoformat() if self.created_at else None,  # Format datetime as string
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
         }

@@ -59,7 +59,6 @@ async def fetch_requests(session: AsyncSession):
     result = await session.execute(stmt)
     return result.scalars().all()
 
-
 async def create_request(request: CreateMedicineRequest, session: AsyncSession, response_model=MedicineRequestSchema):
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
@@ -68,9 +67,10 @@ async def create_request(request: CreateMedicineRequest, session: AsyncSession, 
         dispenser = results[0]
         medicine = results[1]
         user = results[2]
+        print(results)
         # add the request to the database
-        new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], user_id=user['id'])
+        new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         session.add(new_request)
-        new_request = await session.commit()
-        new_request = await session.refresh(new_request)
+        await session.commit()
+        await session.refresh(new_request)
         return response_model(id=new_request.id, dispenser=dispenser, medicine=medicine, requested_by=user, status=new_request.status)
