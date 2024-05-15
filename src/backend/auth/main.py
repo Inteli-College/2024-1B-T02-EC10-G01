@@ -10,7 +10,6 @@ logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
 
 app = FastAPI()
-
 api_router = APIRouter(prefix="/auth")
 api_router.include_router(auth_router)
 

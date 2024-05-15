@@ -64,7 +64,6 @@ async def fetch_requests(session: AsyncSession):
 
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
     async with aiohttp.ClientSession() as http_session:
-        print(user)
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                   _fetch_medicine_data(request.medicine_id, http_session), _fetch_user_data(user['sub'], http_session)]
         results = await asyncio.gather(*tasks, return_exceptions=True)
