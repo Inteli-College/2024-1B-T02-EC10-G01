@@ -15,6 +15,7 @@ api_router = APIRouter(prefix="/pyxis")
 api_router.include_router(dispenser_router)
 api_router.include_router(medicine_router)
 
+
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
