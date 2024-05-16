@@ -1,0 +1,25 @@
+---
+title: Wireframe
+sidebar_position: 4
+---
+
+A prototipação de alta fidelidade é uma representação detalhada e quase final de um produto ou sistema, geralmente feita com o objetivo de simular o funcionamento e a aparência da versão final. Esses protótipos são criados com grande atenção aos detalhes visuais e interativos, utilizando elementos como cores, tipografia, imagens e animações para tornar a experiência o mais próxima possível da realidade.
+
+Normalmente, a prototipação de alta fidelidade é feita após a fase de prototipação de baixa fidelidade ou wireframes, que são esboços mais simples e abstratos do design. A prototipação de alta fidelidade é útil para testar a usabilidade, a estética e a funcionalidade do produto com usuários reais antes do desenvolvimento final, permitindo identificar e corrigir problemas de forma mais eficiente e econômica.
+
+## Cores
+
+Foram utilizados tons de azul, que são as cores do cliente. Além do azul ser frequentemente associado à confiança, tranquilidade e segurança, o que pode ser reconfortante para os profissionais de saúde.
+
+![colors](../../static/img/colors.png)
+
+## Tipografia
+
+A fonte escolhida foi a Noto Sans, que possui uma excelente legibilidade, o que é essencial em um ambiente onde informações precisas e claras são cruciais, como em um aplicativo hospitalar. Além de possuir um design limpo e profissional, o que pode ajudar a transmitir uma imagem de confiança e credibilidade para os usuários do aplicativo. Ela também foi otimizada para uso em telas de diferentes tamanhos e resoluções, garantindo uma boa legibilidade em smartphones, tablets e computadores, que são comumente usados em ambientes hospitalares.
+
+![Fonte](../../static/img/font.png)
+
+## Demonstração
+
+<video controls src="../../static/img/demo-sprint2.mp4" title="Demonstração"></video>
+
