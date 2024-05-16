@@ -1,0 +1,9 @@
+bcrypt
+python-jose[cryptography]
+fastapi==0.110.3
+uvicorn==0.29.0
+sqlalchemy
+asyncpg
+passlib
+pydantic
+pyjwt[crypto]
