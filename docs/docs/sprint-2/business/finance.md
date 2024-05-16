@@ -96,6 +96,18 @@ Os custos detalhados são os seguintes:
     -   Cobrem a configuração de servidor e o lançamento nas plataformas.
 -   **Treinamento e Suporte**: R$10,000.00
     -   Inclui o treinamento de usuários e suporte técnico inicial.
+
+| MVP                            | Descrição                                                    | Estimativa média de custo | Observações                                                                                   |
+|--------------------------------|--------------------------------------------------------------|---------------------------|------------------------------------------------------------------------------------------------|
+| Análise e Planejamento         | Consultoria, definição de requisitos, planejamento de sistema| R$20,000.00               |                                                                                               |
+| Design de Interface (UI/UX)    | Wireframes, design gráfico, testes de usabilidade            | R$12,000.00               | Ferramentas, frameworks e serviços terceirizados                                              |
+| Desenvolvimento de Software    | Programação, integração, segurança, comunicação              | R$44,700.86               | Custos de implementação de arquitetura mais custos de serviços terceiros como cybersecurete ou features específicas da empresa |
+| Testes e Garantia de Qualidade | Testes funcionais, de segurança e de desempenho              | R$7,000.00                | Contratação especializada em testes de qualidade                                              |
+| Implantação e Lançamento       | Configuração de servidor, lançamento nas plataformas         | R$4,000.00                | Custos para implementação e lançamento                                                        |
+| Treinamento e Suporte          | Treinamento de usuários, suporte técnico inicial             | R$10,000.00               |                                                                                               |
+| **Total**                      |                                                              | **R$97,700.86**           |                                                                                               |
+
+
     
 O custo total para a produção e implementação do MVP do projeto  é de R$97,700.86. Esses são gastos diretos e únicos, necessários para garantir que o aplicativo esteja completamente funcional e pronto para uso, sem considerar custos operacionais contínuos ou anuais. Esses investimentos iniciais são cruciais para assegurar a eficiência e a eficácia do sistema desde o seu lançamento.
 
