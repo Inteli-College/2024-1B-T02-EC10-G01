@@ -1,0 +1,12 @@
+{
+    "position": 3,
+    "label": "User experience",
+    "collapsible": true,
+    "collapsed": true,
+    "className": "red",
+    "link": {
+      "type": "generated-index",
+      "title": "Artefatos de UX Sprint 2",
+      "slug": "/sprint-2/user-experience/"
+    }
+  }
