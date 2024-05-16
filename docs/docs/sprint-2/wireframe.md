@@ -23,5 +23,6 @@ A fonte escolhida foi a Noto Sans, que possui uma excelente legibilidade, o que 
 
 (https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99195612/d8b62355-3faa-4845-abdd-cf5e31bdb76c)
 
+[Acesso ao Figma](https://www.figma.com/design/vUs3n8ymSo6Eoe8gf3u5kv/app-V1?node-id=0%3A1&t=7lEyxEwUJu6DWcx7-1)
 
 
