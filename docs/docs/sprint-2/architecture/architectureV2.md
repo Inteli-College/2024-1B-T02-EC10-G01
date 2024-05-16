@@ -1,6 +1,6 @@
 ---
 title: Arquitetura do backend
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Arquitetura do backend
@@ -9,7 +9,7 @@ Durante a segunda sprint, concentramos nossos esforços no desenvolvimento da ve
 
 Nesse sentido, desde a Sprint 1, nossa arquitetura foi significativamente refinada e agora inclui um API Gateway implementado em nginx, uma série de microsserviços desenvolvidos em FastAPI com armazenamento de dados em Postgres, e comunicação síncrona realizada via HTTPS (e futuramente gRPC). A comunicação assíncrona é gerenciada através do RabbitMQ, enquanto a escalabilidade será assegurada por meio do Kubernetes nas próximas semanas, conforme ilustrado no esquema abaixo:
 
-![alt text](../../static/img/arch-new.png)
+![alt text](../../../static/img/arch-new.png)
 
 ## Blocos do sistema
 
