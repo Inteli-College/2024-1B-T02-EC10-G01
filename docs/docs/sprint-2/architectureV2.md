@@ -26,8 +26,11 @@ Utilizamos um banco de dados centralizado com esquemas diferentes para isolar o 
 Cada microserviço segue uma estrutura geral composta por:
 
 **Modelos (models):** Definem a estrutura dos dados e os esquemas do banco de dados.
+
 **Serviços (services):** Contêm a lógica de negócios e interações com o banco de dados.
+
 **Roteadores (routes):** Definem as rotas da API e lidam com as requisições HTTP.
+
 **Main (main.py):** Ponto de entrada do serviço, onde a aplicação FastAPI é inicializada.
 
 ### Serviço de Autenticação (auth)
