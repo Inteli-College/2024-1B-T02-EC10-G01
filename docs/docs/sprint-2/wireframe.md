@@ -21,5 +21,7 @@ A fonte escolhida foi a Noto Sans, que possui uma excelente legibilidade, o que 
 
 ## Demonstração
 
-<video controls src="../../static/img/demo-sprint2.mp4" title="Demonstração"></video>
+https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99195612/d8b62355-3faa-4845-abdd-cf5e31bdb76c
+
+
 
