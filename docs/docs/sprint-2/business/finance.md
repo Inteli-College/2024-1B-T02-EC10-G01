@@ -11,7 +11,7 @@ A estrutura de custos é detalhada em três partes principais:
 1.  **Custo de Arquitetura:** Inclui o custo estimado dos serviços de cloud utilizados.
 2.  **Custo de Criação do MVP:** Uma estimativa realista dos custos envolvidos no desenvolvimento do Produto Mínimo Viável (MVP).
 3.  **Custo Mensal:** Abrange tanto a manutenção contínua quanto os serviços de arquitetura que serão mantidos após o lançamento do MVP.
-4. 
+
 ### Mão de Obra
 
 Para a implementação do projeto Asky, será necessária uma equipe composta por profissionais especializados, incluindo engenheiros juniors, plenos, seniors, gerentes e profissionais de QA (Quality Assurance). A tabela a seguir detalha a composição dessa equipe, incluindo o número de profissionais em cada categoria.
