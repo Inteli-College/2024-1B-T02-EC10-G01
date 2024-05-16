@@ -99,9 +99,10 @@ Destinado aos administradores, este painel exibe todos os medicamentos solicitad
 
 Apesar desta tela ter sido pensada e projetada, o foco foi destinado aos outros wireframes, uma vez que o dashboard não faz parte do escopo.
 ![Screenshot](https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99187952/64e02385-b6a3-4810-87f2-749c16b3a947)
-## Demonstração de uso da interface
-(https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99187952/bffcc089-9219-41f2-a91a-e8fdd6a5a8c4)
 
+## Demonstração de uso da interface
+
+(https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99187952/bffcc089-9219-41f2-a91a-e8fdd6a5a8c4)
 
 
 
