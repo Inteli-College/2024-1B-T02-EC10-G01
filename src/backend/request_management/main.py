@@ -3,7 +3,7 @@ from routes.medicine_requests import router as medicine_requests_router
 import uvicorn
 from database import get_session, engine, Base
 from routes.medicine_requests import router as medicine_requests_router
-from models.medicine_requests import MedicineRequest
+from models.medicine_requests import MedicineRequest, StatusChange
 
 app = FastAPI()
 
