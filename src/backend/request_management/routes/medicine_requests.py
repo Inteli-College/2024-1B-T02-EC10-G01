@@ -15,6 +15,5 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
 
 @router.post("/")
 async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
-    print("fui autenticado")
     created_request = await create_request(session, request, user)
     return created_request

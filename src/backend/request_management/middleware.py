@@ -40,9 +40,7 @@ async def is_admin(authorization: str = Header(...)):
     return user_info
 
 async def is_nurse(authorization: str = Header(...)):
-    print(authorization)
     user_info = await get_current_user(authorization)
-    print(user_info)
     if user_info["role"] != "nurse":
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="You are not authorized to access this resource.")
     return user_info
