@@ -1,9 +1,16 @@
+import 'package:asky/api/firebase_api.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/views/home_screen.dart';
 import 'package:asky/views/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+final navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
