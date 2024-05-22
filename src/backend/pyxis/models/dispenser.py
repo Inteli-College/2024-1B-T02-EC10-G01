@@ -12,6 +12,14 @@ dispenser_medicine_association = Table(
     schema='pyxis'  # Specify the schema here
 )
 
+# Association table for the many-to-many relationship between Dispenser and Material
+dispenser_material_association = Table(
+    'dispenser_material', Base.metadata,
+    Column('dispenser_id', Integer, ForeignKey('pyxis.dispenser.id'), primary_key=True),
+    Column('material_id', Integer, ForeignKey('pyxis.material.id'), primary_key=True),
+    schema='pyxis' # Specify the schema here
+)
+
 class Dispenser(Base):
     __tablename__ = 'dispenser'
     __table_args__ = {'schema': 'pyxis'}
@@ -23,13 +31,16 @@ class Dispenser(Base):
     # Relationships - Note how we reference the association table here
     medicines = relationship("Medicine", secondary=dispenser_medicine_association, back_populates="dispensers", lazy='joined')
 
+    materials = relationship("Materials", secondary=dispenser_material_association, back_populates="dispensers", lazy='joined')
+
     def to_dict(self):
         """Return dictionary representation of the Dispenser."""
         return {
             "id": self.id,
             "code": self.code,
             "floor": self.floor,
-            "medicines": [medicine.to_dict() for medicine in self.medicines]
+            "medicines": [medicine.to_dict() for medicine in self.medicines],
+            "materials": [material.to_dict() for material in self.materials]
         }
 
 class Medicine(Base):
@@ -58,7 +69,8 @@ class Material(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, index=True)
-    # Add any relationships or additional fields as necessary
+    
+    dispensers = relationship("Dispenser", secondary=dispenser_material_association, back_populates="materials")
 
     def to_dict(self):
         """Return dictionary representation of the Material."""
