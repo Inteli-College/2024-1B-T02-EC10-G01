@@ -16,6 +16,7 @@ async def register(request: UserRegistrationRequest, session: AsyncSession = Dep
     
     hashed_password = hash_password(request.password)
     user = await create_user(session, request.email, hashed_password, request.role)
+    print(f"================== USER: {user}")
     return UserResponseModel(id=user['id'], email=user['email'], role=user['role'])
 
 @router.post("/login", response_model=LoginResponseModel)
