@@ -16,7 +16,6 @@ async def get_user_by_email(session, email: str):
     stmt = select(User).filter(User.email == email)
     result = await session.execute(stmt)
     user = result.scalar()
-    print(user.to_dict())
     return user.to_dict() if user else None
 
 async def get_user_by_id(session, user_id: int):
@@ -29,8 +28,7 @@ async def get_user_by_id(session, user_id: int):
 async def create_user(session, email: str, password_hash: str, role: str):
     user = User(email=email, password_hash=password_hash, role=role)
     session.add(user)
-    user = await session.commit()
-    user = await session.refresh(user)
-    user = user.to_dict()
-    return {"message": "User created successfully", "user": {"id": user["id"], "email": user["email"], "role": user["role"]}}
+    await session.commit()
+    await session.refresh(user)
+    return {"id": user.id, "email": user.email, "role": user.role}
 
