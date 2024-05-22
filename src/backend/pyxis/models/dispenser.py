@@ -20,6 +20,14 @@ dispenser_material_association = Table(
     schema='pyxis' # Specify the schema here
 )
 
+# Association table for the many-to-many relationship between Dispenser and Assistance
+dispenser_assistance_association = Table(
+    'dispenser_assistance', Base.metadata,
+    Column('dispenser_id', Integer, ForeignKey('pyxis.dispenser.id'), primary_key=True),
+    Column('assistance_id', Integer, ForeignKey('pyxis.assistance.id'), primary_key=True),
+    schema='pyxis' # Specify the schema here
+)
+
 class Dispenser(Base):
     __tablename__ = 'dispenser'
     __table_args__ = {'schema': 'pyxis'}
@@ -33,6 +41,8 @@ class Dispenser(Base):
 
     materials = relationship("Materials", secondary=dispenser_material_association, back_populates="dispensers", lazy='joined')
 
+    assistances = relationship("Assistances", secondary=dispenser_assistance_association, back_populates="dispensers", lazy='joined')
+
     def to_dict(self):
         """Return dictionary representation of the Dispenser."""
         return {
@@ -40,7 +50,8 @@ class Dispenser(Base):
             "code": self.code,
             "floor": self.floor,
             "medicines": [medicine.to_dict() for medicine in self.medicines],
-            "materials": [material.to_dict() for material in self.materials]
+            "materials": [material.to_dict() for material in self.materials],
+            "assistances": [assistance.to_dict() for assistance in self.assistances],
         }
 
 class Medicine(Base):
@@ -77,4 +88,20 @@ class Material(Base):
         return {
             "id": self.id,
             "name": self.name,
+        }
+    
+class Assistance(Base):
+    __tablename__ = 'assistance'
+    __table_args__ = {'schema': 'pyxis'}
+
+    id = Column(Integer, primary_key=True)
+    description = Column(String, unique=True, index=True)
+    
+    dispensers = relationship("Dispenser", secondary=dispenser_assistance_association, back_populates="assistances")
+
+    def to_dict(self):
+        """Return dictionary representation of the Assistance."""
+        return {
+            "id": self.id,
+            "description": self.description,
         }

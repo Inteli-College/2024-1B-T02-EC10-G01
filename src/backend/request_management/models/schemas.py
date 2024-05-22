@@ -26,3 +26,14 @@ class MaterialRequestSchema(BaseModel):
     material: dict
     status: str
     emergency: bool
+
+class CreateAssistanceRequest(BaseModel):
+    dispenser_id: int
+    assistance_id: int
+
+class AssistanceRequestSchema(BaseModel):
+    id: int
+    dispenser: dict
+    requested_by: dict
+    assistance: dict
+    status: str
