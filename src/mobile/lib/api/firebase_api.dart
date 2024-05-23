@@ -1,10 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:asky/main.dart';
 
 @pragma('vm:entry-point')
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print("Title ${message.notification?.title}");
   print("Body ${message.notification?.body}");
-  print("PAyload ${message.data}");
+  print("Payload ${message.data}");
 
 }
 
@@ -13,12 +14,12 @@ class FirebaseApi {
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
-
-    // navigatorKey.currentState?.pushNamed(
-    //   MyApp.routes,
-    //   arguments: message,
-    // );
-    return;
+    print("message: ${message.data['data']}");
+    navigatorKey.currentState?.pushNamed(
+      '/',
+      arguments: int.parse(message.data['data']),
+    );
+    
   }
 
   Future initPushNotifications() async {
