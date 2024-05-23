@@ -1,3 +1,4 @@
+import 'package:asky/api/authentication_api.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -11,9 +12,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+
+  final auth = AuthenticationApi();
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Text(
       'Home',
       style: optionStyle,
@@ -26,10 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final int? notificationIndex = ModalRoute.of(context)?.settings.arguments as int?;
+    final int? notificationIndex =
+        ModalRoute.of(context)?.settings.arguments as int?;
     if (notificationIndex != null) {
       setState(() {
         _selectedIndex = notificationIndex;
