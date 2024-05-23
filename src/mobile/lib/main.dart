@@ -1,6 +1,7 @@
 import 'package:asky/api/firebase_api.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/views/home_screen.dart';
+import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
       initialRoute: "/login",
       routes: {
         "/": (context) => HomeScreen(),
-        "/login": (context) => LoginPage(),
-        "/history": (context) => HistoryPage()
+        "/assistance": (context) => AssistanceScreen(),
+        "/history": (context) => HistoryPage(),
+        "/login": (context) => LoginPage()
       },
     );
   }

@@ -14,3 +14,5 @@ INSERT INTO users (id, email, password_hash, role) VALUES
 (1, 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
 (2, 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
 (3, 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
+
+SELECT setval(pg_get_serial_sequence('auth.users', 'id'), (SELECT MAX(id) FROM auth.users));
