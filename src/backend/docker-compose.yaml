@@ -61,6 +61,7 @@ services:
       - request_management
       - postgres
       - auth
+      - redis
       
   rabbitmq:
     image: rabbitmq:management
@@ -71,6 +72,12 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:
