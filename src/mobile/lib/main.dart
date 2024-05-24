@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
         future: auth.getToken(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.done) {
             var session = snapshot.data;
             return MaterialApp(
               navigatorKey: navigatorKey,
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
               },
             );
           }
-          return CircularProgressIndicator();
+          return Container(child: const CircularProgressIndicator());
         });
   }
 }
