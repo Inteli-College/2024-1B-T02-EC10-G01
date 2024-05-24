@@ -65,11 +65,21 @@ async def fetch_requests(session: AsyncSession):
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
-                  _fetch_medicine_data(request.medicine_id, http_session), _fetch_user_data(user['sub'], http_session)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        dispenser = results[0]
-        medicine = results[1]
-        user = results[2]
+                 _fetch_medicine_data(request.medicine_id, http_session), 
+                 _fetch_user_data(user['sub'], http_session)]
+        
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+                
+        # If no HTTPException, extract data from results
+        dispenser, medicine, user = results
         print(results)
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
