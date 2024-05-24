@@ -14,6 +14,10 @@ class MedicineRequestSchema(BaseModel):
     status: str
     emergency: bool
 
+class UpdateStatus(BaseModel):
+    id: int
+    status: str
+
 class CreateMaterialRequest(BaseModel):
     dispenser_id: int
     material_id: int

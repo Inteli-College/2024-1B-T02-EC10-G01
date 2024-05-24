@@ -26,6 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final int? notificationIndex = ModalRoute.of(context)?.settings.arguments as int?;
+    if (notificationIndex != null) {
+      setState(() {
+        _selectedIndex = notificationIndex;
+      });
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

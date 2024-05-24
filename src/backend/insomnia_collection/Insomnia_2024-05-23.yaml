@@ -1,0 +1,428 @@
+_type: export
+__export_format: 4
+__export_date: 2024-05-23T13:31:08.931Z
+__export_source: insomnia.desktop.app:v9.2.0
+resources:
+  - _id: req_564a4f32cc644481812838b3ec32c93b
+    parentId: fld_548816ce5c4048e192ba21c9137351f9
+    modified: 1716470826099
+    created: 1716470659822
+    url: http://0.0.0.0:8003/auth/users/:user_email
+    name: GET - auth/login/:user_email
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716470659822
+    isPrivate: false
+    pathParameters:
+      - name: user_email
+        value: nurse@nurse.com
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_548816ce5c4048e192ba21c9137351f9
+    parentId: wrk_88853e091eb548b4940f9f4fb15d7f70
+    modified: 1716470036697
+    created: 1716470036697
+    name: auth
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1716470036697
+    _type: request_group
+  - _id: wrk_88853e091eb548b4940f9f4fb15d7f70
+    parentId: null
+    modified: 1716468824327
+    created: 1716468824327
+    name: TTPD - Inteli
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_b6aebc5f10c14897bbb36a3ad20923bd
+    parentId: fld_548816ce5c4048e192ba21c9137351f9
+    modified: 1716470574713
+    created: 1716470418956
+    url: http://0.0.0.0:8003/auth/login
+    name: POST - auth/login/
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "nurse@nurse.com",
+          "password": "nurse"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716470418956
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4c3a20725c07436eb267bc4213d7c1dc
+    parentId: fld_548816ce5c4048e192ba21c9137351f9
+    modified: 1716470410249
+    created: 1716470040832
+    url: http://0.0.0.0:8003/auth/register
+    name: POST - auth/register/
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "email": "nurse3@nurse.com",
+          "password": "nurse",
+          "role": "nurse"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716470040832
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_832e43cc94864d148e6b4cd30378ad1a
+    parentId: fld_755d0039220d4abb8bc8cddfdf0dd36f
+    modified: 1716469992591
+    created: 1716469952440
+    url: http://0.0.0.0:8002/requests/heartbeat
+    name: GET - heartbeat/
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469952440
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_755d0039220d4abb8bc8cddfdf0dd36f
+    parentId: wrk_88853e091eb548b4940f9f4fb15d7f70
+    modified: 1716469632706
+    created: 1716469632706
+    name: request
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1716469632706
+    _type: request_group
+  - _id: req_87208753af664df1bb665a405538317b
+    parentId: fld_755d0039220d4abb8bc8cddfdf0dd36f
+    modified: 1716469999060
+    created: 1716469785143
+    url: http://0.0.0.0:8002/requests/status
+    name: PUT - request/status/
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "id": 0,
+          "status": "string"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469785143
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c13be59a49aa4c518975b71843300144
+    parentId: fld_755d0039220d4abb8bc8cddfdf0dd36f
+    modified: 1716469759780
+    created: 1716469679290
+    url: http://0.0.0.0:8002/requests/medicine/
+    name: POST - request/medicine/
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "dispenser_id": 0,
+          "medicine_id": 0,
+          "emergency": true
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469679290
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_1d8b2a27101444b6aee384762666d303
+    parentId: fld_755d0039220d4abb8bc8cddfdf0dd36f
+    modified: 1716469673005
+    created: 1716469651481
+    url: http://0.0.0.0:8002/requests/medicine/
+    name: GET - requests/medicine/
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469651481
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_00baa286250c4d61aef872206d4a1be9
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469584054
+    created: 1716469564797
+    url: http://0.0.0.0:8001/pyxis/protected
+    name: GET - pyxis/protected
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469564797
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    parentId: wrk_88853e091eb548b4940f9f4fb15d7f70
+    modified: 1716468882199
+    created: 1716468882199
+    name: pyxis
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1716468882199
+    _type: request_group
+  - _id: req_60c5c061b5504d62b8b0d4bbdbbed389
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469527026
+    created: 1716469498617
+    url: http://0.0.0.0:8001/pyxis/heartbeat
+    name: GET - pyxis/heartbeat
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469498617
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_64504b21e8624f0d9c9358a08274af6d
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469443161
+    created: 1716469391096
+    url: http://0.0.0.0:8001/pyxis/medicines/:medicine_id
+    name: GET - pyxis/medicines/:medicide_id
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469391096
+    isPrivate: false
+    pathParameters:
+      - name: medicine_id
+        value: "1"
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_0cef8a0899d14b6488a9bf391d8227d9
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469285436
+    created: 1716469208092
+    url: http://0.0.0.0:8001/pyxis/dispensers/:dispenser_1
+    name: GET - pyxis/dispensers/:dispenser_id
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469208092
+    isPrivate: false
+    pathParameters:
+      - name: dispenser_1
+        value: "1"
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c802682b2ec943db878e5196db0afe00
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469177602
+    created: 1716469090911
+    url: http://0.0.0.0:8001/pyxis/dispensers/:dispenser_id/qr
+    name: GET - pyxis/dispensers/:dispenser_id/qr
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716469090911
+    isPrivate: false
+    pathParameters:
+      - name: dispenser_id
+        value: "1"
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_85ed675ded4740978ab19d3475ed1d1f
+    parentId: fld_46d54ad329fe48a0bd9fdabed5f69c3d
+    modified: 1716469032778
+    created: 1716468906334
+    url: http://0.0.0.0:8001/pyxis/dispensers/
+    name: GET-pyxis/dispensers
+    description: ""
+    method: GET
+    body: {}
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1716468906334
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_b3881cb4684f86928714aaf4b6a1241bf1f1ad56
+    parentId: wrk_88853e091eb548b4940f9f4fb15d7f70
+    modified: 1716468824328
+    created: 1716468824328
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1716468824328
+    _type: environment
+  - _id: jar_b3881cb4684f86928714aaf4b6a1241bf1f1ad56
+    parentId: wrk_88853e091eb548b4940f9f4fb15d7f70
+    modified: 1716468824329
+    created: 1716468824329
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar

@@ -4,7 +4,8 @@ from routes.material_requests import router as material_requests_router
 from routes.material_requests import router as assistance_requests_router
 import uvicorn
 from database import get_session, engine, Base
-from models.medicine_requests import MedicineRequest
+from models.medicine_requests import MedicineRequest, StatusChange
+from routes.status import router as status_router
 from models.material_requests import MaterialRequest
 from models.assistance_requests import AssistanceRequest
 
@@ -12,6 +13,7 @@ app = FastAPI()
 
 api_router = APIRouter(prefix="/requests")
 api_router.include_router(medicine_requests_router)
+api_router.include_router(status_router)
 api_router.include_router(material_requests_router)
 api_router.include_router(assistance_requests_router)
 
