@@ -19,12 +19,25 @@ CREATE TABLE IF NOT EXISTS pyxis.material (
     name VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS pyxis.assistance (
+    id SERIAL PRIMARY KEY,
+    description VARCHAR(255) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS pyxis.dispenser_medicine (
     dispenser_id INTEGER NOT NULL,
     medicine_id INTEGER NOT NULL,
     PRIMARY KEY (dispenser_id, medicine_id),
     FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
     FOREIGN KEY (medicine_id) REFERENCES medicine(id)
+);
+
+CREATE TABLE IF NOT EXISTS pyxis.dispenser_material (
+    dispenser_id INTEGER NOT NULL,
+    material_id INTEGER NOT NULL,
+    PRIMARY KEY (dispenser_id, material_id),
+    FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+    FOREIGN KEY (material_id) REFERENCES material(id)
 );
 
 -- Insert data into 'dispenser'
@@ -50,6 +63,11 @@ INSERT INTO material (name) VALUES
 ('Máscaras cirúrgicas'),
 ('Cateter IV'),
 ('Ataduras');
+
+INSERT INTO assistance (description) VALUES
+('Manutenção'),
+('Dúvidas'),
+('Divergência');
 
 -- Associating medicines with dispensers
 INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
