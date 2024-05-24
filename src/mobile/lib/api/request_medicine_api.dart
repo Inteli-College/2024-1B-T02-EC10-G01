@@ -2,7 +2,7 @@ import 'package:asky/api/authentication_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class HistoryApi {
+class RequestMedicineApi {
   final auth = AuthenticationApi();
 
   Future<List<dynamic>> getHistory() async {
@@ -10,7 +10,7 @@ class HistoryApi {
 
     final String bearerToken = 'Bearer $token';
 
-    final response = await http.get(
+    final response = await http.post(
       Uri.parse('http://10.254.19.211:8000/requests/medicine/'),
       headers: {
         'Content-Type': "application/json",

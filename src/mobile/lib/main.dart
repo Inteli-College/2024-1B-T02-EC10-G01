@@ -4,6 +4,7 @@ import 'package:asky/views/history_page.dart';
 import 'package:asky/views/home_screen.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
+import 'package:asky/views/request_medicine_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
                 "/": (context) => HomeScreen(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
-                "/login": (context) => LoginPage()
+                "/login": (context) => LoginPage(),
+                "/medicine": (context) => RequestMedicine()
               },
             );
           }

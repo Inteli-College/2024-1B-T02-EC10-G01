@@ -11,7 +11,7 @@ class AuthenticationApi {
 
     final Map<String, dynamic> body = {"email": _email, "password": _password};
     final response = await http.post(
-        Uri.parse('http://192.168.101.235:8000/auth/login'),
+        Uri.parse('http://10.254.19.211:8000/auth/login'),
         headers: {'Content-Type': "application/json"},
         body: jsonEncode(body));
 
