@@ -5,3 +5,5 @@ asyncpg
 qrcode[pil]
 pyjwt[crypto]
 starlette
+plusminus==0.7.0
+redis==5.0.4

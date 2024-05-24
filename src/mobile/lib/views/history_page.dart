@@ -1,8 +1,9 @@
+import 'package:asky/api/history_api.dart';
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
-
+  HistoryPage({super.key});
+  final historyApi = HistoryApi();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -14,19 +15,27 @@ class HistoryPage extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Histórico',
                   style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 20),
-                ListView.builder(
-                  itemCount: 10,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return const HistoryCard();
-                  },
-                )
+                FutureBuilder(
+                    future: historyApi.getHistory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return ListView.builder(
+                          itemCount: snapshot.data?.length ?? 0,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return const HistoryCard();
+                          },
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    })
               ],
             ),
           ),
