@@ -7,3 +7,5 @@ pyjwt[crypto]
 starlette
 aiohttp
 pika
+plusminus==0.7.0
+redis==5.0.4
