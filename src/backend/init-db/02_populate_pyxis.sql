@@ -40,6 +40,14 @@ CREATE TABLE IF NOT EXISTS pyxis.dispenser_material (
     FOREIGN KEY (material_id) REFERENCES material(id)
 );
 
+CREATE TABLE IF NOT EXISTS pyxis.dispenser_assistance (
+    dispenser_id INTEGER NOT NULL,
+    assistance_id INTEGER NOT NULL,
+    PRIMARY KEY (dispenser_id, assistance_id),
+    FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+    FOREIGN KEY (assistance_id) REFERENCES assistance(id)
+);
+
 -- Insert data into 'dispenser'
 INSERT INTO dispenser (code, floor) VALUES
 ('A1B2C', 5),
@@ -78,6 +86,26 @@ INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
 (3, 4),
 (4, 5),
 (5, 1);
+
+INSERT INTO dispenser_material (dispenser_id, material_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 1);
+
+INSERT INTO dispenser_assistance (dispenser_id, assistance_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 1),
+(2, 2),
+(2, 3),
+(3, 1),
+(3, 2),
+(3, 3);
 
 -- Commit all changes (necessary if you are using transactional SQL or certain SQL environments)
 COMMIT;

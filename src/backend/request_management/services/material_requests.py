@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.material_requests import MaterialRequest
+from models.material_requests import MaterialRequest, StatusChange
 from models.schemas import CreateMaterialRequest, MaterialRequestSchema
 from fastapi import HTTPException
 import aiohttp
@@ -73,6 +73,8 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         print(results)
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
+        new_status = StatusChange(status="pending")
+        new_request.status = new_status
         session.add(new_request)
         await session.commit()
         await session.refresh(new_request)
@@ -86,7 +88,7 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
                 'dispenser_id': new_request.dispenser_id,
                 'material_id': new_request.material_id,
                 'requested_by': new_request.requested_by,
-                'status': new_request.status
+                'status': new_status.status
             }
             channel.basic_publish(
                 exchange=exchange_name,
