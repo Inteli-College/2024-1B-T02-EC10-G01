@@ -12,7 +12,8 @@ class AssistanceRequest(Base):
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
     assistance_id = Column(Integer)
-    status = Column(String, default="pending")
+    status_id = Column(Integer, ForeignKey('requests.status.id'))
+    status = relationship("StatusChange", uselist=False, back_populates="request")
 
     def to_dict(self):
         return {
@@ -20,6 +21,19 @@ class AssistanceRequest(Base):
             "dispenser_id": self.dispenser_id,
             "requested_by": self.requested_by,
             "material_id": self.material_id,
-            "status": self.status
+            "status_id": self.status_id
         }
 
+class StatusChange(Base):
+    __tablename__ = 'status'
+    __table_args__ = {'schema': 'requests'}
+
+    id = Column(Integer, primary_key=True)
+    status = Column(String, default="pending")
+    request = relationship("AssistanceRequest", uselist=False ,back_populates="status")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "status": self.status
+        }
