@@ -59,8 +59,8 @@ Nesta sprint, o foco foi em avançar a solução a fim de atingir o objetivo de 
 
 ### Sprint 4:
 
-<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style={{ display: 'block', marginLeft: 'auto', maxHeight: '30vh', marginRight: 'auto' }} />
+<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style="display: block; margin-left: auto; max-height: 30vh; margin-right: auto;" />
 
 ### Sprint 5:
 
-<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style={{ display: 'block', marginLeft: 'auto', maxHeight: '30vh', marginRight: 'auto' }} />
+<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style="display: block; margin-left: auto; max-height: 30vh; margin-right: auto;" />
