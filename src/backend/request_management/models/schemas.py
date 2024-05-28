@@ -14,6 +14,30 @@ class MedicineRequestSchema(BaseModel):
     status: str
     emergency: bool
 
+class CreateMaterialRequest(BaseModel):
+    dispenser_id: int
+    material_id: int
+    emergency: bool
+
+class MaterialRequestSchema(BaseModel):
+    id: int
+    dispenser: dict
+    requested_by: dict
+    material: dict
+    status: str
+    emergency: bool
+
+class CreateAssistanceRequest(BaseModel):
+    dispenser_id: int
+    assistance_id: int
+
+class AssistanceRequestSchema(BaseModel):
+    id: int
+    dispenser: dict
+    requested_by: dict
+    assistance: dict
+    status: str
+
 class UpdateStatus(BaseModel):
     id: int
     status: str
