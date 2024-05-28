@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: asky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: elisaflemer/asky-auth:latest
+        ports:
+        - containerPort: 8003
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
+        - name: GATEWAY_URL
+          value: "http://gateway.asky.svc.cluster.local:80"
