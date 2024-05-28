@@ -1,0 +1,7 @@
+Rodar backend
+cd backend
+docker-compose up --build  
+
+Rodar Testes
+pip install locust
+locust -f (arquivo do teste).py
