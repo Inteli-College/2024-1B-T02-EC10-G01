@@ -19,12 +19,33 @@ CREATE TABLE IF NOT EXISTS pyxis.material (
     name VARCHAR(255) UNIQUE NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS pyxis.assistance (
+    id SERIAL PRIMARY KEY,
+    description VARCHAR(255) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS pyxis.dispenser_medicine (
     dispenser_id INTEGER NOT NULL,
     medicine_id INTEGER NOT NULL,
     PRIMARY KEY (dispenser_id, medicine_id),
     FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
     FOREIGN KEY (medicine_id) REFERENCES medicine(id)
+);
+
+CREATE TABLE IF NOT EXISTS pyxis.dispenser_material (
+    dispenser_id INTEGER NOT NULL,
+    material_id INTEGER NOT NULL,
+    PRIMARY KEY (dispenser_id, material_id),
+    FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+    FOREIGN KEY (material_id) REFERENCES material(id)
+);
+
+CREATE TABLE IF NOT EXISTS pyxis.dispenser_assistance (
+    dispenser_id INTEGER NOT NULL,
+    assistance_id INTEGER NOT NULL,
+    PRIMARY KEY (dispenser_id, assistance_id),
+    FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+    FOREIGN KEY (assistance_id) REFERENCES assistance(id)
 );
 
 -- Insert data into 'dispenser'
@@ -51,6 +72,11 @@ INSERT INTO material (name) VALUES
 ('Cateter IV'),
 ('Ataduras');
 
+INSERT INTO assistance (description) VALUES
+('Manutenção'),
+('Dúvidas'),
+('Divergência');
+
 -- Associating medicines with dispensers
 INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
 (1, 1),
@@ -60,6 +86,26 @@ INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
 (3, 4),
 (4, 5),
 (5, 1);
+
+INSERT INTO dispenser_material (dispenser_id, material_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 1);
+
+INSERT INTO dispenser_assistance (dispenser_id, assistance_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 1),
+(2, 2),
+(2, 3),
+(3, 1),
+(3, 2),
+(3, 3);
 
 -- Commit all changes (necessary if you are using transactional SQL or certain SQL environments)
 COMMIT;
