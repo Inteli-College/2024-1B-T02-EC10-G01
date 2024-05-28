@@ -39,9 +39,9 @@ class Dispenser(Base):
     # Relationships - Note how we reference the association table here
     medicines = relationship("Medicine", secondary=dispenser_medicine_association, back_populates="dispensers", lazy='joined')
 
-    materials = relationship("Materials", secondary=dispenser_material_association, back_populates="dispensers", lazy='joined')
+    materials = relationship("Material", secondary=dispenser_material_association, back_populates="dispensers", lazy='joined')
 
-    assistances = relationship("Assistances", secondary=dispenser_assistance_association, back_populates="dispensers", lazy='joined')
+    assistances = relationship("Assistance", secondary=dispenser_assistance_association, back_populates="dispensers", lazy='joined')
 
     def to_dict(self):
         """Return dictionary representation of the Dispenser."""
