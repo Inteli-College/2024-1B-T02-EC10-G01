@@ -12,8 +12,8 @@ class AssistanceRequest(Base):
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
     assistance_id = Column(Integer)
-    status_id = Column(Integer, ForeignKey('requests.status.id'))
-    status = relationship("StatusChange", uselist=False, back_populates="request")
+    status_id = Column(Integer, ForeignKey('requests.assistance_status.id'))
+    status = relationship("AssistanceStatusChange", uselist=False, back_populates="request")
 
     def to_dict(self):
         return {
@@ -24,8 +24,8 @@ class AssistanceRequest(Base):
             "status_id": self.status_id
         }
 
-class StatusChange(Base):
-    __tablename__ = 'status'
+class AssistanceStatusChange(Base):
+    __tablename__ = 'assistance_status'
     __table_args__ = {'schema': 'requests'}
 
     id = Column(Integer, primary_key=True)

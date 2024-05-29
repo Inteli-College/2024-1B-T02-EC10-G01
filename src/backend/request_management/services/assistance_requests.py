@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.assistance_requests import AssistanceRequest, StatusChange
+from models.assistance_requests import AssistanceRequest, AssistanceStatusChange
 from models.schemas import CreateAssistanceRequest, AssistanceRequestSchema
 from fastapi import HTTPException
 import aiohttp
@@ -73,7 +73,7 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
         print(results)
         # add the request to the database
         new_request = AssistanceRequest(dispenser_id=dispenser['id'], assistance_id=assistance['id'], requested_by=user['id'])
-        new_status = StatusChange(status="pending")
+        new_status = AssistanceStatusChange(status="pending")
         new_request.status = new_status
         session.add(new_request)
         await session.commit()

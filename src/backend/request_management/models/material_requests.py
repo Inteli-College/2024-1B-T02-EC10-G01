@@ -12,9 +12,9 @@ class MaterialRequest(Base):
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
     material_id = Column(Integer)
-    status_id = Column(Integer, ForeignKey('requests.status.id'))
+    status_id = Column(Integer, ForeignKey('requests.material_status.id'))
     emergency = Column(Boolean, default=False)
-    status = relationship("StatusChange", uselist=False, back_populates="request")
+    status = relationship("MaterialStatusChange", uselist=False, back_populates="request")
 
     def to_dict(self):
         return {
@@ -26,8 +26,8 @@ class MaterialRequest(Base):
             "status_id": self.status_id
         }
 
-class StatusChange(Base):
-    __tablename__ = 'status'
+class MaterialStatusChange(Base):
+    __tablename__ = 'material_status'
     __table_args__ = {'schema': 'requests'}
 
     id = Column(Integer, primary_key=True)

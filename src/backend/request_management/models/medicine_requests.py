@@ -12,9 +12,9 @@ class MedicineRequest(Base):
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
     medicine_id = Column(Integer)
-    status_id = Column(Integer, ForeignKey('requests.status.id'))
+    status_id = Column(Integer, ForeignKey('requests.medicine_status.id'))
     emergency = Column(Boolean, default=False)
-    status = relationship("StatusChange", uselist=False, back_populates="request")
+    status = relationship("MedicineStatusChange", uselist=False, back_populates="request")
 
 
     def to_dict(self):
@@ -27,8 +27,8 @@ class MedicineRequest(Base):
             "status_id": self.status_id
         }
     
-class StatusChange(Base):
-    __tablename__ = 'status'
+class MedicineStatusChange(Base):
+    __tablename__ = 'medicine_status'
     __table_args__ = {'schema': 'requests'}
 
     id = Column(Integer, primary_key=True)

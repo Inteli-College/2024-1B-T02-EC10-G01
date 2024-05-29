@@ -1,7 +1,9 @@
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.medicine_requests import MedicineRequest, StatusChange
+from models.medicine_requests import MedicineStatusChange
+from models.assistance_requests import AssistanceStatusChange 
+from models.material_requests import MaterialStatusChange 
 from models.schemas import CreateMedicineRequest, MedicineRequestSchema, UpdateStatus
 from fastapi import HTTPException
 import aiohttp
@@ -17,8 +19,8 @@ gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
 with open('./services/token.json', 'r') as file:
     token = json.load(file)['token']
 
-async def update_status(session: AsyncSession, request: UpdateStatus):
-    stmt = select(StatusChange).where(StatusChange.id == request.id)
+async def update_assistance_status(session: AsyncSession, request: UpdateStatus):
+    stmt = select(AssistanceStatusChange).where(AssistanceStatusChange.id == request.id)
     try:
         result = await session.execute(stmt)
         status_change = result.scalar_one()
@@ -27,4 +29,27 @@ async def update_status(session: AsyncSession, request: UpdateStatus):
         return status_change
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
+
+async def update_material_status(session: AsyncSession, request: UpdateStatus):
+    stmt = select(MaterialStatusChange).where(MaterialStatusChange.id == request.id)
+    try:
+        result = await session.execute(stmt)
+        status_change = result.scalar_one()
+        status_change.status = request.status
+        await session.commit()
+        return status_change
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
+        
+async def update_medicine_status(session: AsyncSession, request: UpdateStatus):
+    stmt = select(MedicineStatusChange).where(MedicineStatusChange.id == request.id)
+    try:
+        result = await session.execute(stmt)
+        status_change = result.scalar_one()
+        status_change.status = request.status
+        await session.commit()
+        return status_change
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
+        
         
