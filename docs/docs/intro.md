@@ -47,12 +47,20 @@ Na Sprint 2, foi desenvolvida a segunda versão da arquitetura do aplicativo, ad
 
 ### Sprint 3:
 
-<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style={{ display: 'block', marginLeft: 'auto', maxHeight: '30vh', marginRight: 'auto' }} />
+Nesta sprint, o foco foi em avançar a solução a fim de atingir o objetivo de ser escalável e de grande porte. Para isso, houveram adições no Back-End na aplicação, tais como: implementação de Kubernetes para a orquestração de microsserviços e implementação de sistema de Cache por meio do Redis. Além disso novas features foram desenvolvidas, como a adição de rotas para atualizar o Status das Requests, sistema de notificação e novas rotas de Request para materiais e assitência. Ainda relacionado a features da aplicação, no Front-End foram desenvolvidas novas telas de login, histórico e detalhamento de requisição. Além disso, foram executados testes de usabilidade para validar o a capacidade dos usuários de completar tarefas que foram designadas à eles.
+<div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAGGA2WGG3g&#x2F;9--s65oxeByFAEE3Lxu6CQ&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAGGA2WGG3g&#x2F;9--s65oxeByFAEE3Lxu6CQ&#x2F;view?utm_content=DAGGA2WGG3g&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Sprint 3 - M10</a> de Felipe Campos
 
 ### Sprint 4:
 
-<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style={{ display: 'block', marginLeft: 'auto', maxHeight: '30vh', marginRight: 'auto' }} />
+<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style="display: block; margin-left: auto; max-height: 30vh; margin-right: auto;" />
 
 ### Sprint 5:
 
-<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style={{ display: 'block', marginLeft: 'auto', maxHeight: '30vh', marginRight: 'auto' }} />
+<img src="https://i.redd.it/q0dd3k02unqb1.gif" alt="Boot process" style="display: block; margin-left: auto; max-height: 30vh; margin-right: auto;" />

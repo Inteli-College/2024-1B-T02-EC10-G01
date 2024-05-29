@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.medicine_requests import MedicineRequest, StatusChange
+from models.medicine_requests import MedicineRequest, MedicineStatusChange
 from models.schemas import CreateMedicineRequest, MedicineRequestSchema
 from fastapi import HTTPException
 import aiohttp
@@ -83,7 +83,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         print(results)
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
-        new_status = StatusChange(status="pending")
+        new_status = MedicineStatusChange(status="pending")
         new_request.status = new_status
         session.add(new_request)
         await session.commit()
