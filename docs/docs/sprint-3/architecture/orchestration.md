@@ -1,22 +1,73 @@
 # Arquitetura de Orquestração
-A orquestração do projeto Asky é composta por vários componentes Kubernetes, cada um desempenhando um papel crucial na infraestrutura. A seguir, detalhamos esses componentes e justificamos sua utilização.
+A orquestração do projeto Asky é uma peça fundamental para gerenciar a complexidade e assegurar a eficiência e escalabilidade do sistema. Utilizamos o Kubernetes como plataforma de orquestração devido às suas robustas capacidades de gerenciamento de containers, que são essenciais para lidar com os múltiplos componentes de nossa arquitetura de microserviços. Cada componente no Kubernetes desempenha um papel crucial na infraestrutura, permitindo a automatização de tarefas críticas como o escalonamento, o balanceamento de carga, a atualização contínua e a manutenção da saúde dos serviços.
+
+A seguir, detalhamos os componentes específicos e justificamos sua utilização no contexto do Asky.
 
 ## Namespace
-Criamos um namespace específico chamado asky para isolar os recursos do projeto e evitar conflitos com outros aplicativos em execução no mesmo cluster.
+Criamos um namespace específico chamado asky para isolar os recursos do projeto e evitar conflitos com outros aplicativos no mesmo cluster. Isso é crucial para manter o ambiente de produção organizado e seguro, especialmente quando várias instâncias de aplicativos estão sendo executadas.
 
 ```
 kubectl create namespace asky
 ```
 
 ## Persistent Volumes e Persistent Volume Claims
-Utilizamos Persistent Volumes (PVs) e Persistent Volume Claims (PVCs) para garantir o armazenamento persistente dos dados do PostgreSQL. Isso é essencial para assegurar que os dados do banco de dados sejam preservados entre reinicializações dos pods.
+
+Usamos Persistent Volumes (PVs) e Persistent Volume Claims (PVCs) para fornecer armazenamento persistente e confiável para o banco de dados PostgreSQL. Esses componentes são vitais para a funcionalidade de gerenciamento de requisições e autenticação, pois garantem que os dados cruciais dos usuários e registros de transações sejam mantidos seguros e intactos entre as reinicializações dos Pods.
+
+```
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+```
+
+```
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+```
 
 ## ConfigMaps
 ConfigMaps são utilizados para gerenciar configurações específicas dos serviços. No caso do Asky, utilizamos ConfigMaps para armazenar scripts de inicialização do banco de dados e configurações do gateway.
 
+### ConfigMap postgres-initdb-config
+Este ConfigMap contém um script SQL que inicializa a base de dados PostgreSQL com esquemas específicos para cada parte do aplicativo: pyxis, requests e auth. Este script não só cria esquemas e tabelas necessárias, mas também popula algumas delas com dados iniciais, facilitando a configuração e o início rápido do ambiente. Aqui estão alguns pontos importantes sobre este ConfigMap:
+
+- Criação de Esquemas: Separa os dados por funções dentro do aplicativo, garantindo que a organização e manutenção do banco de dados sejam simplificadas.
+- Tabelas e Relações: Define tabelas com relacionamentos, como dispenser_medicine, garantindo integridade referencial e facilitando consultas complexas.
+- Segurança de Dados: Popula a tabela de usuários com hashes de senhas, o que é crucial para a segurança da autenticação.
+
+### ConfigMap gateway-config
+Este ConfigMap configura um servidor NGINX que atua como um proxy reverso, encaminhando requisições para os diferentes microserviços do Asky baseados em Kubernetes. Veja como ele beneficia o sistema:
+
+- Roteamento Eficiente: Define regras de roteamento que direcionam as requisições para os microserviços apropriados, como pyxis, request_management e auth, com base no caminho da URL.
+- Configuração de Proxy: Ajusta cabeçalhos específicos para assegurar que as requisições sejam tratadas corretamente pelos microserviços backend, incluindo cabeçalhos para suportar o correto encaminhamento de IPs e protocolos.
+- Escalabilidade e Desempenho: Ao utilizar o NGINX, o ConfigMap permite que o tráfego seja gerenciado de forma eficiente, beneficiando-se das capacidades de alto desempenho do NGINX como balanceador de carga e servidor de conteúdo estático.
+
 ## Deployments e Services
 
-Cada microserviço do Asky (autenticação, gateway, pyxis, e gerenciamento de requisições) é gerenciado através de objetos Deployment e Service do Kubernetes. Os Deployments garantem que o número desejado de réplicas de cada serviço esteja em execução, proporcionando alta disponibilidade e escalabilidade. Os Services expõem esses Deployments dentro do cluster e, no caso do gateway, externamente para permitir o acesso ao aplicativo.
+Cada microserviço no Asky (como autenticação, gateway, pyxis e gerenciamento de requisições) é gerenciado através de objetos Deployment e Service. Os Deployments são cruciais para garantir alta disponibilidade e escalabilidade automática das aplicações. Eles são especialmente importantes para o serviço de gerenciamento de requisições e o serviço pyxis, onde a demanda pode flutuar significativamente, exigindo uma resposta rápida em termos de escalonamento. Os Services são essenciais para expor esses Deployments dentro do cluster e, no caso do gateway, também externamente, permitindo que os usuários acessem o aplicativo de maneira eficiente.
 
 ### PostgreSQL
 
