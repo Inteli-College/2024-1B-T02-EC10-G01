@@ -1,3 +1,8 @@
+---
+title: Arquitetura de Orquestração
+sidebar_position: 2
+---
+
 # Arquitetura de Orquestração
 A orquestração do projeto Asky é uma peça fundamental para gerenciar a complexidade e assegurar a eficiência e escalabilidade do sistema. Utilizamos o Kubernetes como plataforma de orquestração devido às suas robustas capacidades de gerenciamento de containers, que são essenciais para lidar com os múltiplos componentes de nossa arquitetura de microserviços. Cada componente no Kubernetes desempenha um papel crucial na infraestrutura, permitindo a automatização de tarefas críticas como o escalonamento, o balanceamento de carga, a atualização contínua e a manutenção da saúde dos serviços.
 

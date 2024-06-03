@@ -1,6 +1,6 @@
 ---
 title: Introdução
-sidebar_position: 5
+sidebar_position: 1
 slug: /sprint-5
 ---
 
