@@ -15,6 +15,7 @@ class User(Base):
     role = Column(role_enum, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    mobile_token = Column(String(255), nullable=True)
 
     def to_dict(self):
         """Return dictionary representation of the User."""
@@ -24,6 +25,7 @@ class User(Base):
             "role": self.role if self.role else None,  # Accessing enum value
             "password_hash": self.password_hash,
             "created_at": self.created_at.isoformat() if self.created_at else None,  # Format datetime as string
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "mobile_token": self.mobile_token if self.mobile_token else None
         }
 

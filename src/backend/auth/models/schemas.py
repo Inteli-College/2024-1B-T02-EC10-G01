@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 import enum
+from typing import Optional
 
 class UserRegistrationRequest(BaseModel):
     email: str
@@ -15,6 +16,7 @@ class LoginResponseModel(BaseModel):
     email: str
     access_token: str
     token_type: str
+    mobile_token: Optional[str] = None
 
 class UserRoleEnum(enum.Enum):
     ADMIN = 'admin'
@@ -24,3 +26,4 @@ class UserRoleEnum(enum.Enum):
 class UserLoginRequest(BaseModel):
     email: str
     password: str
+    mobile_token: Optional[str] = None

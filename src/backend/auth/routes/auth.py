@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from services.auth import hash_password, create_access_token, verify_password
-from services.users import get_users, get_user_by_email, get_user_by_id, create_user
+from services.users import get_users, get_user_by_email, get_user_by_id, create_user, update_user_with_mobile_token
 from database import get_session  # make sure to have this function defined in your database module
 from models.schemas import UserRegistrationRequest, UserResponseModel, LoginResponseModel, UserLoginRequest
 
@@ -27,8 +27,11 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     if not verify_password(request.password, user['password_hash']):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
     
+    mobile_token = await update_user_with_mobile_token(session, request.email, request.mobile_token)
+    print("PRINT MUITOS TESTES OBA: ", mobile_token)
+
     access_token = create_access_token(data={"sub": user['email'], "role": user['role']})
-    return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer")
+    return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer", mobile_token=mobile_token)
 
 @router.get("/users/{user_email}", response_model=UserResponseModel)
 async def get_user(user_email: str, session: AsyncSession = Depends(get_session)):
