@@ -5,6 +5,7 @@ import 'package:asky/views/home_screen.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
 import 'package:asky/views/request_medicine_screen.dart';
+import 'package:asky/views/home_nurse.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
               initialRoute: session != null ? "/" : "/login",
               routes: {
-                "/": (context) => HomeScreen(),
+                "/": (context) => HomeNurse(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),

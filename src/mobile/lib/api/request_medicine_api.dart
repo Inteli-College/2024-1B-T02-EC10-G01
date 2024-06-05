@@ -11,7 +11,7 @@ class RequestMedicineApi {
     final String bearerToken = 'Bearer $token';
 
     final response = await http.post(
-      Uri.parse('http://10.254.19.211:8000/requests/medicine/'),
+      Uri.parse('https://0077-177-69-182-113.ngrok-free.app/requests/medicine/'),
       headers: {
         'Content-Type': "application/json",
         'Authorization': bearerToken,
