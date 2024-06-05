@@ -32,3 +32,12 @@ async def create_user(session, email: str, password_hash: str, role: str):
     await session.refresh(user)
     return {"id": user.id, "email": user.email, "role": user.role}
 
+async def update_user_with_mobile_token(session, email: str, mobile_token: str):
+    stmt = select(User).filter(User.email == email)
+    result = await session.execute(stmt)
+    user_database = result.scalar()
+    user = await session.get(User, int(user_database.id))
+    user.mobile_token = mobile_token
+    await session.commit()
+    return mobile_token
+

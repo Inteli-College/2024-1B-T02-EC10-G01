@@ -2,6 +2,9 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 from fastapi import HTTPException, Security, Depends, Header
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+from sqlalchemy.exc import NoResultFound
+import firebase_admin
+from firebase_admin import credentials, messaging
 
 def get_public_key():
     try:
@@ -50,3 +53,24 @@ async def is_agent(authorization: str = Header(...)):
     if user_info["role"] != "agent":
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="You are not authorized to access this resource.")
     return user_info
+
+async def publish_notification(title, body, payload, authorization: str = Header(...)):
+    user_info = await get_current_user(authorization)
+    try:
+    # Inicialize o SDK do Firebase com suas credenciais
+        cred = credentials.Certificate("./serviceAccountKey.json")
+        firebase_admin.initialize_app(cred)
+        message = messaging.Message(
+            notification=messaging.Notification(
+                title=str(title),
+                body=str(body),
+            ),
+            data={
+                'data': int(payload)
+            },
+            token= str(user_info['mobile_token']),
+        )
+        # Envie a mensagem
+        response = messaging.send(message)
+    except:
+        raise HTTPException(status_code=404, detail="Server Error")

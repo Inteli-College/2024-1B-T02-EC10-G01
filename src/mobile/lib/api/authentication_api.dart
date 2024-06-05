@@ -9,9 +9,13 @@ class AuthenticationApi {
   Future<void> singIn(String _email, String _password) async {
     const _secureStorage = FlutterSecureStorage();
 
-    final Map<String, dynamic> body = {"email": _email, "password": _password};
+    var _mobile_token = await _secureStorage.read(
+        key: "mobile_token", aOptions: _getAndroidOptions()
+      );
+
+    final Map<String, dynamic> body = {"email": _email, "password": _password, "mobile_token": _mobile_token};
     final response = await http.post(
-        Uri.parse('http://10.254.19.211:8000/auth/login'),
+        Uri.parse('http://10.0.2.2:8000/auth/login'),
         headers: {'Content-Type': "application/json"},
         body: jsonEncode(body));
 
