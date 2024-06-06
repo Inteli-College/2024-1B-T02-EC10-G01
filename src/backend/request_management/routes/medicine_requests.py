@@ -7,6 +7,8 @@ from middleware import get_current_user, is_admin, is_nurse, is_agent
 from services.medicine_requests import fetch_requests, create_request
 import redis
 import pickle
+from services.notifications import publish_notification
+import asyncio
 
 redis_client = redis.Redis(host='redis', port=6379, db=0)
 
@@ -19,8 +21,8 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
     if resultado:
         return pickle.loads(resultado)
     requests = await fetch_requests(session)
-    # Store the fetched data in Redis before returning
     redis_client.setex(key, 120, pickle.dumps(requests))
+    # asyncio.create_task(publish_notification('Medicine Request', 'Medicine Requested', user.mobile_token))
     return [request.to_dict() for request in requests]
 
 @router.post("/")
