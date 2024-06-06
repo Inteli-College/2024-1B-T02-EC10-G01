@@ -90,7 +90,8 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         session.add(new_request)
         await session.commit()
         print(new_request.to_dict())
-        publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token'])
+        # publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token'])
+        asyncio.create_task(publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token']))
 
         try:
             channel = rabbitmq.get_channel()
