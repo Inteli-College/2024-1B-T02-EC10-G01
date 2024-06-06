@@ -69,3 +69,6 @@ flutter pub get
 2. Execute `flutter run`
 
 ## Vídeo
+
+https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99259251/9b489453-6397-483b-98f2-cf3bcd2393df
+
