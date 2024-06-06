@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:asky/api/authentication_api.dart';
+import 'package:asky/api/request_last_solicitation.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/top_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -18,6 +20,8 @@ class HomeNurse extends StatefulWidget {
 
 class _HomeNurseState extends State<HomeNurse> {
   int _selectedIndex = 0;
+
+  final lastSolicitation = LastSolicitationApi();
 
   final auth = AuthenticationApi();
   static const TextStyle optionStyle =
@@ -53,7 +57,7 @@ class _HomeNurseState extends State<HomeNurse> {
           children: [
             ElevatedButton(
               onPressed: () {
-                print("oi");
+                Navigator.pushNamed(context, '/camera');
               },
               child: Icon(
                 Icons.add,
@@ -64,7 +68,7 @@ class _HomeNurseState extends State<HomeNurse> {
                 shape: CircleBorder(),
                 padding: EdgeInsets.all(50),
                 backgroundColor: Colors.white,
-                 // Cor de fundo
+                // Cor de fundo
               ),
             ),
             Padding(
@@ -78,14 +82,56 @@ class _HomeNurseState extends State<HomeNurse> {
               ),
             ),
             SizedBox(height: 10),
-            Text(
-              "Última solicitação:",
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Color(0xFF1A365D),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Última solicitação:',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Color(0xFF1A365D),
+                  ),
+                ),
               ),
-              textAlign: TextAlign.left,
             ),
+            FutureBuilder(
+                future: lastSolicitation.getLastSolicitation(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      var data = snapshot.data!;
+                      print(data);
+                      return Container(
+                        color: Color(0xFF1A365D),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Medicamento: ${data}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Status: ${data}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ]),
+                      );
+                    } else {
+                      return Text('Nenhuma solicitação encontrada');
+                    }
+                  } else {
+                    return Text('Nenhuma solicitação encontrada');
+                  }
+                }),
           ],
         ),
       ),

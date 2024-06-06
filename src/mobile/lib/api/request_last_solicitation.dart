@@ -2,10 +2,10 @@ import 'package:asky/api/authentication_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class HistoryApi {
+class LastSolicitationApi {
   final auth = AuthenticationApi();
 
-  Future<List<dynamic>> getHistory() async {
+  Future<List<dynamic>> getLastSolicitation() async {
     var token = await auth.getToken();
 
     final String bearerToken = 'Bearer $token';
@@ -23,7 +23,7 @@ class HistoryApi {
 
       return data;
     } else {
-      throw Exception('Failed to fetch history');
+      throw Exception('Failed to fetch last solicitation');
     }
   }
 }

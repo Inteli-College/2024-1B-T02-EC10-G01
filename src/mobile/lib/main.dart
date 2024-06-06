@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
               navigatorKey: navigatorKey,
               title: 'Asky',
               theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-              initialRoute: session != null ? "/" : "/login",
+              // initialRoute: session != null ? "/" : "/login",
+              initialRoute: "/login",
               routes: {
                 "/": (context) => HomeNurse(),
                 "/assistance": (context) => AssistanceScreen(),

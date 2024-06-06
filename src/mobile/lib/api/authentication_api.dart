@@ -11,7 +11,7 @@ class AuthenticationApi {
 
     final Map<String, dynamic> body = {"email": _email, "password": _password};
     final response = await http.post(
-        Uri.parse('https://0077-177-69-182-113.ngrok-free.app/auth/login'),
+        Uri.parse('https://1902-179-99-33-90.ngrok-free.app/auth/login'),
         headers: {'Content-Type': "application/json"},
         body: jsonEncode(body));
 
