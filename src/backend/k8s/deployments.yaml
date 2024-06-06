@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: asky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: elisaflemer/asky-auth:latest
+        ports:
+        - containerPort: 8003
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
+        - name: GATEWAY_URL
+          value: "http://gateway.asky.svc.cluster.local:80"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: asky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: POSTGRES_DB
+          value: "asky"
+        volumeMounts:
+        - name: postgres-initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+      - name: postgres-initdb
+        configMap:
+          name: postgres-initdb-config
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyxis
+  namespace: asky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pyxis
+  template:
+    metadata:
+      labels:
+        app: pyxis
+    spec:
+      containers:
+      - name: pyxis
+        image: elisaflemer/asky-pyxis:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
+        - name: GATEWAY_URL
+          value: "http://gateway.asky.svc.cluster.local:80"
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: request-management
+  namespace: asky
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: request-management
+  template:
+    metadata:
+      labels:
+        app: request-management
+    spec:
+      containers:
+      - name: request-management
+        image: elisaflemer/asky-request-management:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
+        - name: GATEWAY_URL
+          value: "http://gateway.asky.svc.cluster.local:80"

@@ -2,6 +2,9 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 from fastapi import HTTPException, Security, Depends, Header
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+from sqlalchemy.exc import NoResultFound
+import firebase_admin
+from firebase_admin import credentials, messaging
 
 def get_public_key():
     try:
@@ -26,11 +29,10 @@ async def get_current_user(authorization: str = Header(...)):
     except ValueError:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid authorization header format.")
     
-    # Verify the token using your verification function
     user_info = verify_token(token)
+    
     if user_info is None:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-    print(user_info)
     return user_info
 
 async def is_admin(authorization: str = Header(...)):

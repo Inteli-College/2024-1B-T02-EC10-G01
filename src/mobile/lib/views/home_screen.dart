@@ -53,8 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 34), // Espaçamento de 5 antes do texto
             Text(
               'Do que você precisa?',
-              style: TextStyle(fontSize: 24),
-            ),
+              style: TextStyle(fontSize: 24)),
             SizedBox(
                 height:
                     25), // Espaçamento de 5 entre o texto e o primeiro botão

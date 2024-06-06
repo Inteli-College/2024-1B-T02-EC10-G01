@@ -5,98 +5,68 @@ sidebar_position: 2
 
 # Arquitetura de Orquestração
 A orquestração do projeto Asky é uma peça fundamental para gerenciar a complexidade e assegurar a eficiência e escalabilidade do sistema. Utilizamos o Kubernetes como plataforma de orquestração devido às suas robustas capacidades de gerenciamento de containers, que são essenciais para lidar com os múltiplos componentes de nossa arquitetura de microserviços. Cada componente no Kubernetes desempenha um papel crucial na infraestrutura, permitindo a automatização de tarefas críticas como o escalonamento, o balanceamento de carga, a atualização contínua e a manutenção da saúde dos serviços.
+Esta documentação descreve a orquestração do nosso aplicativo utilizando Kubernetes. O aplicativo é composto por vários componentes, incluindo ConfigMaps, Persistent Volumes, Deployments, Services, Ingress, entre outros.
 
-A seguir, detalhamos os componentes específicos e justificamos sua utilização no contexto do Asky.
+## Estrutura dos Arquivos
+- config_maps.yaml: Define os ConfigMaps utilizados pelo aplicativo.
+- deployments.yaml: Define os deployments dos componentes principais do aplicativo.
+- ingress.yaml: Configura o Ingress para gerenciar o tráfego de entrada e substituir a necessidade do uso de um container Nginx.
+- namespace.yaml: Define o namespace onde todos os componentes do aplicativo serão implantados.
+- persistent_volumes_and_claims.yaml: Define os volumes persistentes e suas respectivas claims.
+- postgres-deployment.yaml: Define o deployment específico do PostgreSQL.
+- postgres-service.yaml: Define o service para o PostgreSQL.
+- services.yaml: Define os services necessários para o aplicativo.
+- terminate.sh: Script para encerrar e limpar todos os recursos do Kubernetes.
+- run.sh: Script para iniciar todos os recursos do Kubernetes.
 
-## Namespace
-Criamos um namespace específico chamado asky para isolar os recursos do projeto e evitar conflitos com outros aplicativos no mesmo cluster. Isso é crucial para manter o ambiente de produção organizado e seguro, especialmente quando várias instâncias de aplicativos estão sendo executadas.
+## Configurações Importantes
+### Ingress
+O `ingress.yaml` é utilizado para substituir a necessidade de um container Nginx dentro do nosso aplicativo. O Ingress é um recurso do Kubernetes que gerencia o tráfego HTTP(S) de entrada para os serviços no cluster, proporcionando uma maneira de expor os serviços de forma segura e eficiente.
+
+#### Como o Ingress Funciona
+O Ingress atua como um ponto de entrada para o tráfego externo, direcionando solicitações para os serviços corretos com base em regras de roteamento. Ele pode ser configurado para oferecer suporte a várias funcionalidades, como:
+
+- Balanceamento de Carga: Distribui o tráfego de entrada entre múltiplos pods, garantindo uma distribuição uniforme de carga e melhorando a disponibilidade e a resiliência do aplicativo.
+- Regras de Roteamento: Permite a definição de regras para rotear o tráfego para diferentes serviços com base em caminhos ou hosts. Por exemplo, solicitações para app.example.com podem ser direcionadas para um serviço diferente de api.example.com.
+- TLS/SSL: Suporta a configuração de certificados TLS/SSL, garantindo que o tráfego entre o cliente e o aplicativo seja criptografado e seguro.
+- Autenticação e Autorização: Pode ser configurado para trabalhar com soluções de autenticação e autorização, protegendo o acesso aos serviços.
+
+### Importância do Ingress em uma Arquitetura de Microsserviços
+Em uma arquitetura de microsserviços, onde o aplicativo é dividido em vários serviços menores e independentes, o Ingress desempenha um papel crucial ao:
+
+- Centralizar o Ponto de Entrada: Proporciona um ponto centralizado para gerenciar o tráfego de entrada, simplificando a configuração e o gerenciamento de roteamento.
+- Facilitar a Comunicação entre Serviços: Permite que diferentes serviços sejam expostos externamente com regras de roteamento claras, facilitando a comunicação e a integração entre eles.
+- Melhorar a Segurança: Ao suportar TLS/SSL, o Ingress garante que a comunicação entre os clientes e os serviços é segura, protegendo dados sensíveis.
+- Aumentar a Flexibilidade e a Escalabilidade: Com funcionalidades como balanceamento de carga e roteamento baseado em regras, o Ingress ajuda a escalar serviços de maneira eficiente e a gerenciar mudanças na topologia dos serviços sem interromper o tráfego.
+
+### Serviços
+Os services definidos no services.yaml e postgres-service.yaml são utilizados para expor os pods internamente no cluster do Kubernetes. Cada service possui um IP estável e um nome DNS, permitindo que os pods se comuniquem de maneira previsível.
+
+### Volumes Persistentes
+Os volumes persistentes definidos em persistent_volumes_and_claims.yaml são utilizados para armazenar dados de maneira persistente. Isso é crucial para serviços como o PostgreSQL, que precisam de armazenamento de dados durável.
+
+### Deployments
+Os deployments definidos em deployments.yaml e postgres-deployment.yaml especificam como os pods devem ser implantados e gerenciados pelo Kubernetes. Eles incluem definições para réplicas, atualizações contínuas, e recuperação automática de falhas.
+
+### Scripts de Automação
+**run.sh**
+O script run.sh é utilizado para iniciar todos os recursos do Kubernetes. Ele aplica todos os arquivos YAML necessários para configurar o ambiente completo do aplicativo.
+
+**terminate.sh**
+O script terminate.sh é utilizado para encerrar e limpar todos os recursos do Kubernetes. Ele remove todos os deployments, services, volumes, e outros recursos criados para o aplicativo.
+
+## Instruções de Uso
+
+Para iniciar o ambiente, execute:
 
 ```
-kubectl create namespace asky
+minikube start
+./run.sh
+minikube tunnel
 ```
-
-## Persistent Volumes e Persistent Volume Claims
-
-Usamos Persistent Volumes (PVs) e Persistent Volume Claims (PVCs) para fornecer armazenamento persistente e confiável para o banco de dados PostgreSQL. Esses componentes são vitais para a funcionalidade de gerenciamento de requisições e autenticação, pois garantem que os dados cruciais dos usuários e registros de transações sejam mantidos seguros e intactos entre as reinicializações dos Pods.
-
-```
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: postgres-pv-claim
-  labels:
-    app: postgres
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 5Gi
-```
+Encerramento do Ambiente
+Para encerrar e limpar o ambiente, execute o script terminate.sh:
 
 ```
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: postgres-pv-volume
-  labels:
-    type: local
-    app: postgres
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/mnt/data"
+./terminate.sh
 ```
-
-## ConfigMaps
-ConfigMaps são utilizados para gerenciar configurações específicas dos serviços. No caso do Asky, utilizamos ConfigMaps para armazenar scripts de inicialização do banco de dados e configurações do gateway.
-
-### ConfigMap postgres-initdb-config
-Este ConfigMap contém um script SQL que inicializa a base de dados PostgreSQL com esquemas específicos para cada parte do aplicativo: pyxis, requests e auth. Este script não só cria esquemas e tabelas necessárias, mas também popula algumas delas com dados iniciais, facilitando a configuração e o início rápido do ambiente. Aqui estão alguns pontos importantes sobre este ConfigMap:
-
-- Criação de Esquemas: Separa os dados por funções dentro do aplicativo, garantindo que a organização e manutenção do banco de dados sejam simplificadas.
-- Tabelas e Relações: Define tabelas com relacionamentos, como dispenser_medicine, garantindo integridade referencial e facilitando consultas complexas.
-- Segurança de Dados: Popula a tabela de usuários com hashes de senhas, o que é crucial para a segurança da autenticação.
-
-### ConfigMap gateway-config
-Este ConfigMap configura um servidor NGINX que atua como um proxy reverso, encaminhando requisições para os diferentes microserviços do Asky baseados em Kubernetes. Veja como ele beneficia o sistema:
-
-- Roteamento Eficiente: Define regras de roteamento que direcionam as requisições para os microserviços apropriados, como pyxis, request_management e auth, com base no caminho da URL.
-- Configuração de Proxy: Ajusta cabeçalhos específicos para assegurar que as requisições sejam tratadas corretamente pelos microserviços backend, incluindo cabeçalhos para suportar o correto encaminhamento de IPs e protocolos.
-- Escalabilidade e Desempenho: Ao utilizar o NGINX, o ConfigMap permite que o tráfego seja gerenciado de forma eficiente, beneficiando-se das capacidades de alto desempenho do NGINX como balanceador de carga e servidor de conteúdo estático.
-
-## Deployments e Services
-
-Cada microserviço no Asky (como autenticação, gateway, pyxis e gerenciamento de requisições) é gerenciado através de objetos Deployment e Service. Os Deployments são cruciais para garantir alta disponibilidade e escalabilidade automática das aplicações. Eles são especialmente importantes para o serviço de gerenciamento de requisições e o serviço pyxis, onde a demanda pode flutuar significativamente, exigindo uma resposta rápida em termos de escalonamento. Os Services são essenciais para expor esses Deployments dentro do cluster e, no caso do gateway, também externamente, permitindo que os usuários acessem o aplicativo de maneira eficiente.
-
-### PostgreSQL
-
-- **Deployment:** Garante a execução do banco de dados PostgreSQL com a configuração necessária e persistência de dados.
-
-- **Service:** Exponibiliza o banco de dados para outros serviços dentro do cluster
-
-### Autenticação, Gateway, Pyxis e Gerenciamento de Requisições
-
-- **Deployments:** Cada um desses serviços possui seu próprio Deployment, garantindo a disponibilidade e escalabilidade.
-
-- **Services:** Os Services associados a esses Deployments permitem a comunicação entre os serviços dentro do cluster e expõem o gateway externamente para acesso dos usuários.
-
-## Arquivos de Script
-Para automatizar o processo de criação e destruição dos recursos no cluster Kubernetes, utilizamos scripts shell.
-
-### Script de Inicialização (run.sh)
-Este script automatiza a criação dos namespaces, volumes persistentes, ConfigMaps, Deployments e Services. Além disso, ele monitora o status dos pods para garantir que estejam prontos antes de prosseguir com a implantação dos próximos componentes.
-
-### Script de Terminação (terminate.sh)
-Este script automatiza a limpeza do ambiente, deletando o namespace, PVCs e PVs, garantindo que todos os recursos alocados sejam liberados.
-
-## Estratégia de Réplicas
-Cada microserviço é configurado com um número específico de réplicas para garantir alta disponibilidade e capacidade de lidar com aumentos de carga. O número de réplicas pode ser ajustado com base em testes de carga e requisitos de desempenho.
-
-## Conclusão
-A arquitetura de orquestração do projeto Asky no Minikube garante a robustez, escalabilidade e resiliência necessárias para um ambiente hospitalar crítico. Utilizando Kubernetes, conseguimos gerenciar eficientemente os diversos componentes da aplicação, assegurando alta disponibilidade e capacidade de resposta às variações de carga e demandas do sistema.

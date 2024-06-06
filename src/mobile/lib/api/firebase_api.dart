@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:asky/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 @pragma('vm:entry-point')
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
@@ -11,6 +13,10 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
+  
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
@@ -37,7 +43,11 @@ class FirebaseApi {
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
     final fCMToken = await _firebaseMessaging.getToken();
+    const _secureStorage = FlutterSecureStorage();
     print("Token: $fCMToken");
+    await _secureStorage.write(
+      key: "mobile_token", value: fCMToken, aOptions: _getAndroidOptions()
+      );
     initPushNotifications();
   }
 }

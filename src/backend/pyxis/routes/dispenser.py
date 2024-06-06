@@ -32,7 +32,7 @@ async def get_dispenser_qr(dispenser_id: int, session: AsyncSession = Depends(ge
     dispenser = await fetch_dispenser_by_id(session, dispenser_id)
     if not dispenser:
         raise HTTPException(status_code=404, detail="Dispenser not found")
-    img_byte_array = generate_qr_code({"dispenser_id": dispenser.id, "code": dispenser.code, "floor": dispenser.floor})
+    img_byte_array = await generate_qr_code({"dispenser_id": dispenser.id, "code": dispenser.code, "floor": dispenser.floor})
     redis_client.setex(key, 120, pickle.dumps(img_byte_array))
     return StreamingResponse(img_byte_array, media_type="image/png")
 

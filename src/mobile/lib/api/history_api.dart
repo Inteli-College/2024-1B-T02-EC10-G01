@@ -1,6 +1,8 @@
 import 'package:asky/api/authentication_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:asky/constants.dart';
+
 
 class HistoryApi {
   final auth = AuthenticationApi();
@@ -11,7 +13,7 @@ class HistoryApi {
     final String bearerToken = 'Bearer $token';
 
     final response = await http.get(
-      Uri.parse('https://1902-179-99-33-90.ngrok-free.app/requests/medicine/'),
+      Uri.parse(Constants.baseUrl + '/requests/medicine/'),
       headers: {
         'Content-Type': "application/json",
         'Authorization': bearerToken,

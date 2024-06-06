@@ -20,6 +20,7 @@ services:
  
   pyxis:
     build: ./pyxis
+    # image: pyxis
     ports:
       - "8001:8001"
     environment:
@@ -31,6 +32,7 @@ services:
 
   auth:
     build: ./auth
+    # image: auth
     ports:
       - "8003:8003"
     environment:
@@ -42,6 +44,7 @@ services:
   
   request_management:
     build: ./request_management
+    # image: request_management
     ports:
       - "8002:8002"
     environment:
@@ -52,6 +55,17 @@ services:
       postgres:
         condition: service_healthy
   
+  logger-service:
+    build:
+      context: ./logger
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
+    ports:
+      - "8004:8004"
+    depends_on:
+      - rabbitmq
+      - postgres
+
   gateway:
     build: ./gateway
     ports:

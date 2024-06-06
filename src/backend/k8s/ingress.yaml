@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asky-ingress
+  namespace: asky
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: 
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /pyxis
+        pathType: Prefix
+        backend:
+          service:
+            name: pyxis
+            port:
+              number: 8001
+      - path: /requests
+        pathType: Prefix
+        backend:
+          service:
+            name: request-management
+            port:
+              number: 8002
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth
+            port:
+              number: 8003
