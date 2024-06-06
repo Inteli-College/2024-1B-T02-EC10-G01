@@ -36,6 +36,6 @@ async def get_user(user_email: str, session: AsyncSession = Depends(get_session)
     user = await get_user_by_email(session, user_email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return UserResponseModel(id=user['id'], email=user['email'], role=user['role'])
+    return UserResponseModel(id=user['id'], email=user['email'], role=user['role'], mobile_token=user['mobile_token'])
 
 

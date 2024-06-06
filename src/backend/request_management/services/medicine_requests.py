@@ -11,6 +11,8 @@ import json
 from middleware import is_nurse, is_agent, is_admin
 from rabbitmq import rabbitmq
 import pika
+from services.notifications import publish_notification
+
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
 
@@ -80,14 +82,16 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
                 
         # If no HTTPException, extract data from results
         dispenser, medicine, user = results
+        print(user)
         print(results)
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         new_status = MedicineStatusChange(status="pending")
-        new_request.status = new_status
         session.add(new_request)
         await session.commit()
-        await session.refresh(new_request)
+        print(new_request.to_dict())
+        publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token'])
+
         try:
             channel = rabbitmq.get_channel()
             exchange_name = 'medicine_requests'
@@ -110,5 +114,6 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
             )
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
+        
         
         return new_request
