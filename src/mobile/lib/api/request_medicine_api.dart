@@ -27,4 +27,27 @@ class RequestMedicineApi {
       throw Exception('Failed to fetch history');
     }
   }
+
+  Future<Map> getPyxisByPyxisId(int pyxisId) async {
+    var token = await auth.getToken();
+
+    final String bearerToken = 'Bearer $token';
+
+    final response = await http.get(
+      Uri.parse(Constants.baseUrl + '/pyxis/dispensers/$pyxisId'),
+      headers: {
+        'Content-Type': "application/json",
+        'Authorization': bearerToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      return data;
+    } else {
+      throw Exception('Failed to fetch medicines');
+    }
+
+}
 }
