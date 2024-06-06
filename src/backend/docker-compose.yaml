@@ -55,17 +55,6 @@ services:
       postgres:
         condition: service_healthy
   
-  logger-service:
-    build:
-      context: ./logger
-    environment:
-      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
-    ports:
-      - "8004:8004"
-    depends_on:
-      - rabbitmq
-      - postgres
-
   gateway:
     build: ./gateway
     ports:
