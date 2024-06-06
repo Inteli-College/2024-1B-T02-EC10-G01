@@ -6,10 +6,11 @@ class PyxisStore = _PyxisStore with _$PyxisStore;
 
 abstract class _PyxisStore with Store {
   @observable
-  var currentPyxisId = -1;
+  ObservableMap<dynamic, dynamic> currentPyxisData = ObservableMap<dynamic, dynamic>();
 
   @action
-  void setCurrentPyxisId(dynamic id) {
-    currentPyxisId = id;
+  void setCurrentPyxisData(Map<dynamic, dynamic> data) {
+    currentPyxisData.clear();
+    currentPyxisData.addAll(data);
   }
 }

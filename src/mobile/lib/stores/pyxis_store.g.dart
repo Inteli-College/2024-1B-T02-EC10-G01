@@ -9,19 +9,19 @@ part of 'pyxis_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PyxisStore on _PyxisStore, Store {
-  late final _$currentPyxisIdAtom =
-      Atom(name: '_PyxisStore.currentPyxisId', context: context);
+  late final _$currentPyxisDataAtom =
+      Atom(name: '_PyxisStore.currentPyxisData', context: context);
 
   @override
-  int get currentPyxisId {
-    _$currentPyxisIdAtom.reportRead();
-    return super.currentPyxisId;
+  ObservableMap<dynamic, dynamic> get currentPyxisData {
+    _$currentPyxisDataAtom.reportRead();
+    return super.currentPyxisData;
   }
 
   @override
-  set currentPyxisId(int value) {
-    _$currentPyxisIdAtom.reportWrite(value, super.currentPyxisId, () {
-      super.currentPyxisId = value;
+  set currentPyxisData(ObservableMap<dynamic, dynamic> value) {
+    _$currentPyxisDataAtom.reportWrite(value, super.currentPyxisData, () {
+      super.currentPyxisData = value;
     });
   }
 
@@ -29,11 +29,11 @@ mixin _$PyxisStore on _PyxisStore, Store {
       ActionController(name: '_PyxisStore', context: context);
 
   @override
-  void setCurrentPyxisId(dynamic id) {
+  void setCurrentPyxisData(Map<dynamic, dynamic> data) {
     final _$actionInfo = _$_PyxisStoreActionController.startAction(
-        name: '_PyxisStore.setCurrentPyxisId');
+        name: '_PyxisStore.setCurrentPyxisData');
     try {
-      return super.setCurrentPyxisId(id);
+      return super.setCurrentPyxisData(data);
     } finally {
       _$_PyxisStoreActionController.endAction(_$actionInfo);
     }
@@ -42,7 +42,7 @@ mixin _$PyxisStore on _PyxisStore, Store {
   @override
   String toString() {
     return '''
-currentPyxisId: ${currentPyxisId}
+currentPyxisData: ${currentPyxisData}
     ''';
   }
 }

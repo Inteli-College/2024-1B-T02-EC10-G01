@@ -40,7 +40,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     await authenticationApi
                         .singIn(emailCtrl.text, passCtrl.text)
-                        .then((c) => Navigator.pushNamed(context, "/"));
+                        .then((c) => Navigator.pushNamed(context, "/qrcode"));
                   },
                   style:
                       ElevatedButton.styleFrom(fixedSize: const Size(200, 50)),

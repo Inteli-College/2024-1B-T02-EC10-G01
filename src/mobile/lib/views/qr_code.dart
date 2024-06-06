@@ -1,3 +1,4 @@
+import 'package:asky/api/request_medicine_api.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -15,6 +16,7 @@ class BarcodeScannerSimple extends StatefulWidget {
 class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   Barcode? _barcode;
   late MobileScannerController _controller;
+  RequestMedicineApi requestMedicineApi = RequestMedicineApi();
 
   @override
   void initState() {
@@ -38,7 +40,7 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
     );
   }
 
-  void _handleBarcode(BarcodeCapture barcodes) {
+  void _handleBarcode(BarcodeCapture barcodes) async {
     final pyxisStore = context.read<PyxisStore>(); // Get the store instance
     if (barcodes.barcodes.isNotEmpty && mounted) {
       final barcodeValue =
@@ -53,17 +55,18 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
 
       try {
         // Parse the barcode value as JSON
-        print('OIIIIIIIIIII!!!!!!!');
-        print(barcodeValue);
-        print(barcodeValue?.displayValue);
-        final Map<String, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
-        print(barcodeJson);
+        final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
         final pyxisId = barcodeJson[
             'dispenser_id']; // Assuming 'pyxisId' is the key you are looking for
 
         if (pyxisId != null) {
-          pyxisStore.setCurrentPyxisId(
-              pyxisId); // Set the currentPyxisId in the store
+          var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId); // Make the call async
+          if (pyxisData == null) {
+            print('Failed to fetch pyxis data');
+            return;
+          }
+          pyxisStore.setCurrentPyxisData(
+              pyxisData); // Set the currentPyxisId in the store
           _controller.stop(); // Stop the scanner before navigating
           Navigator.pushNamed(
             context,
@@ -78,7 +81,7 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
         }
       } catch (e) {
         // Handle JSON parsing error
-        print('Error parsing JSON from barcode: $e');
+        print('Error: $e');
       }
     }
   }
