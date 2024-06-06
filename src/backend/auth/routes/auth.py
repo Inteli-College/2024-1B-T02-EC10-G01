@@ -16,7 +16,6 @@ async def register(request: UserRegistrationRequest, session: AsyncSession = Dep
     
     hashed_password = hash_password(request.password)
     user = await create_user(session, request.email, hashed_password, request.role)
-    print(f"================== USER: {user}")
     return UserResponseModel(id=user['id'], email=user['email'], role=user['role'])
 
 @router.post("/login", response_model=LoginResponseModel)
@@ -27,11 +26,10 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     if not verify_password(request.password, user['password_hash']):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
     
-    mobile_token = await update_user_with_mobile_token(session, request.email, request.mobile_token)
-    print("PRINT MUITOS TESTES OBA: ", mobile_token)
+    await update_user_with_mobile_token(session, request.email, request.mobile_token)
 
-    access_token = create_access_token(data={"sub": user['email'], "role": user['role']})
-    return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer", mobile_token=mobile_token)
+    access_token = create_access_token(data={"sub": user['email'], "role": user['role'], "mobile_token": request.mobile_token})
+    return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer", mobile_token=request.mobile_token)
 
 @router.get("/users/{user_email}", response_model=UserResponseModel)
 async def get_user(user_email: str, session: AsyncSession = Depends(get_session)):
