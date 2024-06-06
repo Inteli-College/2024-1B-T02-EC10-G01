@@ -7,7 +7,6 @@ from middleware import get_current_user, is_admin, is_nurse, is_agent
 from services.medicine_requests import fetch_requests, create_request
 import redis
 import pickle
-from services.notifications import publish_notification
 import asyncio
 
 redis_client = redis.Redis(host='redis', port=6379, db=0)

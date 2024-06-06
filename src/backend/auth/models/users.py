@@ -1,9 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, Enum, DateTime, func
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import ENUM
+import enum
+from sqlalchemy import Enum
 from database import Base  # Import Base from database module
-
-role_enum = ENUM('admin', 'nurse', 'agent', name='role_enum', create_type=True, schema='auth', metadata=Base.metadata)
 
 class User(Base):
     __tablename__ = 'users'
@@ -12,7 +11,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True, unique=True, nullable=False, autoincrement=True)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
-    role = Column(role_enum, nullable=False)
+    role = Column(String(100), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     mobile_token = Column(String(255), nullable=True)
