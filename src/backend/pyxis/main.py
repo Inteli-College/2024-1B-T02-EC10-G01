@@ -29,10 +29,6 @@ async def startup():
 async def read_root(user: dict = Depends(is_admin)):
     return {"message": "Pyxis is alive!"}
 
-@api_router.get("/protected")
-async def protected_route(user: dict = Depends(is_admin)):
-    return {"message": "Welcome to the protected route!", "user": user}
-
 app.include_router(api_router)
 
 if __name__ == "__main__":

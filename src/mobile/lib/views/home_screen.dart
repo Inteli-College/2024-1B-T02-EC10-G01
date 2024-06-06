@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 60,
         child: ElevatedButton(
           onPressed: () {
+            
             Navigator.pushNamed(context, '/medicine');
           },
           style: ElevatedButton.styleFrom(

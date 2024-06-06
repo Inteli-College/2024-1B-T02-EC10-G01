@@ -29,11 +29,10 @@ async def get_current_user(authorization: str = Header(...)):
     except ValueError:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid authorization header format.")
     
-    # Verify the token using your verification function
     user_info = verify_token(token)
+    
     if user_info is None:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-    print(user_info)
     return user_info
 
 async def is_admin(authorization: str = Header(...)):
@@ -53,24 +52,3 @@ async def is_agent(authorization: str = Header(...)):
     if user_info["role"] != "agent":
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="You are not authorized to access this resource.")
     return user_info
-
-async def publish_notification(title, body, payload, authorization: str = Header(...)):
-    user_info = await get_current_user(authorization)
-    try:
-    # Inicialize o SDK do Firebase com suas credenciais
-        cred = credentials.Certificate("./serviceAccountKey.json")
-        firebase_admin.initialize_app(cred)
-        message = messaging.Message(
-            notification=messaging.Notification(
-                title=str(title),
-                body=str(body),
-            ),
-            data={
-                'data': int(payload)
-            },
-            token= str(user_info['mobile_token']),
-        )
-        # Envie a mensagem
-        response = messaging.send(message)
-    except:
-        raise HTTPException(status_code=404, detail="Server Error")

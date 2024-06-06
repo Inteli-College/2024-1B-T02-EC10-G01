@@ -7,6 +7,7 @@ import 'package:asky/views/login_screen.dart';
 import 'package:asky/views/request_medicine_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:asky/views/qr_code.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -33,13 +34,15 @@ class MyApp extends StatelessWidget {
               navigatorKey: navigatorKey,
               title: 'Asky',
               theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-              initialRoute: session != null ? "/" : "/login",
+              initialRoute: session != null ? "/qrcode" : "/qrcode",
               routes: {
                 "/": (context) => HomeScreen(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),
-                "/medicine": (context) => RequestMedicine()
+                "/medicine": (context) => RequestMedicine(),
+                "/qrcode": (context) => BarcodeScannerSimple(),
+
               },
             );
           }

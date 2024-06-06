@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
+import 'package:asky/constants.dart';
 
 class AuthenticationApi {
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
@@ -15,7 +16,7 @@ class AuthenticationApi {
 
     final Map<String, dynamic> body = {"email": _email, "password": _password, "mobile_token": _mobile_token};
     final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/auth/login'),
+        Uri.parse(Constants.baseUrl + '/auth/login'),
         headers: {'Content-Type': "application/json"},
         body: jsonEncode(body));
 
@@ -26,6 +27,7 @@ class AuthenticationApi {
 
       await _secureStorage.write(
           key: "session", value: response.body, aOptions: _getAndroidOptions());
+      
     } else {
       print(response.body);
       throw Exception('Failed to auth');
