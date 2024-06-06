@@ -8,6 +8,8 @@ import 'package:asky/views/request_medicine_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:asky/views/qr_code.dart';
+import 'package:provider/provider.dart';
+import 'package:asky/stores/pyxis_store.dart'; // Import the store
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -22,15 +24,19 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final auth = AuthenticationApi();
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: auth.getToken(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var session = snapshot.data;
-            return MaterialApp(
+      future: auth.getToken(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          var session = snapshot.data;
+          return MultiProvider(
+            providers: [
+              Provider<PyxisStore>(create: (_) => PyxisStore()),
+            ],
+            child: MaterialApp(
               navigatorKey: navigatorKey,
               title: 'Asky',
               theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
@@ -42,11 +48,12 @@ class MyApp extends StatelessWidget {
                 "/login": (context) => LoginPage(),
                 "/medicine": (context) => RequestMedicine(),
                 "/qrcode": (context) => BarcodeScannerSimple(),
-
               },
-            );
-          }
-          return Container(child: const CircularProgressIndicator());
-        });
+            ),
+          );
+        }
+        return Container(child: const CircularProgressIndicator());
+      },
+    );
   }
 }
