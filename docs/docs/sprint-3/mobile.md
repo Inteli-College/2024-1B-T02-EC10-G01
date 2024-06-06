@@ -70,4 +70,4 @@ flutter pub get
 
 ## Vídeo
 
-<video src='../../static/ video/sprint3.mp4'>
+<video src='../../static/ video/sprint3.mp4'></video>
