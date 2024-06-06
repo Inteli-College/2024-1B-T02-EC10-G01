@@ -50,4 +50,34 @@ class RequestMedicineApi {
     }
 
 }
+
+Future<void> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
+   var token = await auth.getToken();
+
+  final String bearerToken = 'Bearer $token';
+  try {
+    final url = Uri.parse(Constants.baseUrl + '/requests/medicine/'); // Change to your API's URL
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': bearerToken,
+      },
+      body: json.encode({
+        'dispenser_id': pyxisId,
+        'medicine_id': medicine_id,
+        'emergency': emergency,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("Data sent successfully!");
+    } else {
+      print("Failed to send data. Status code: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("An error occurred: $e");
+  }
 }
+
+}
+

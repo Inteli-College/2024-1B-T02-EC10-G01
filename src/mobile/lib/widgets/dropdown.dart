@@ -4,8 +4,9 @@ import 'package:asky/constants.dart';
 class RequestDropdown extends StatefulWidget {
   final List<dynamic> items;
   final dynamic initialSelectedItem;
+  final ValueChanged<dynamic> onChanged;  // Callback to handle changes
 
-  RequestDropdown({required this.items, this.initialSelectedItem});
+  RequestDropdown({required this.items, this.initialSelectedItem, required this.onChanged});
 
   @override
   _RequestDropdownState createState() => _RequestDropdownState();
@@ -51,6 +52,7 @@ class _RequestDropdownState extends State<RequestDropdown> {
             setState(() {
               _selectedItem = newValue;
             });
+            widget.onChanged(newValue);  // Trigger the callback on change
           },
           items: widget.items.map<DropdownMenuItem<dynamic>>((dynamic value) {
             return DropdownMenuItem<dynamic>(

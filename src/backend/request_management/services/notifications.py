@@ -3,6 +3,8 @@ from firebase_admin import credentials, messaging
 
 async def publish_notification(title, body, mobile_token):
     # Inicialize o SDK do Firebase com suas credenciais
+        print("Enviando notificação")
+        print(mobile_token)
         cred = credentials.Certificate("./serviceAccountKey.json")
         firebase_admin.initialize_app(cred)
         message = messaging.Message(
@@ -11,9 +13,10 @@ async def publish_notification(title, body, mobile_token):
                 body=str(body),
             ),
             data={
-                'data': ''
+                'data': str(body)
             },
             token= mobile_token,
         )
         # Envie a mensagem
         messaging.send(message)
+        print("Notificação enviada")

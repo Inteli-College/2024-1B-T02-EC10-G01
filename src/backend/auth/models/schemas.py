@@ -11,6 +11,7 @@ class UserResponseModel(BaseModel):
     id: int
     email: str
     role: str
+    mobile_token: Optional[str] = None
 
 class LoginResponseModel(BaseModel):
     email: str

@@ -1,3 +1,4 @@
+import 'package:asky/api/request_medicine_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:asky/stores/pyxis_store.dart';
@@ -14,23 +15,27 @@ class RequestMedicine extends StatefulWidget {
 }
 
 class _RequestMedicineState extends State<RequestMedicine> {
-  bool toggleValue = false; // Initial value for the toggle
-  TextEditingController textEditingController =
-      TextEditingController(); // Controller for the input field
-  String inputFieldButtonText =
-      "Número de lote"; // Initial button text for the input field
+  bool toggleValue = false;
+  TextEditingController textEditingController = TextEditingController();
+  String inputFieldButtonText = "Número de lote";
+  dynamic selectedMedicine = ''; // Local state to hold selected medicine
+  RequestMedicineApi requestMedicineApi = RequestMedicineApi();
 
   void _handleToggle(bool newValue) {
     setState(() {
       toggleValue = newValue;
     });
-    // Additional actions based on toggle can be implemented here
+  }
+
+  void _handleDropdownChange(dynamic newValue) {
+    setState(() {
+      selectedMedicine = newValue; // Update local state with new selection
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final pyxisStore =
-        context.watch<PyxisStore>(); // Watch the store for changes
+    final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
       appBar: AppBar(
@@ -58,12 +63,9 @@ class _RequestMedicineState extends State<RequestMedicine> {
             ),
             SizedBox(height: 40),
             Center(
-              child: Observer(
-                builder: (_) {
-                  return RequestDropdown(
-                    items: pyxisStore.currentPyxisData['medicines'].toList(),
-                  );
-                },
+              child: RequestDropdown(
+                items: pyxisStore.currentPyxisData['medicines'].toList(),
+                onChanged: _handleDropdownChange,
               ),
             ),
             SizedBox(height: 40),
@@ -75,20 +77,16 @@ class _RequestMedicineState extends State<RequestMedicine> {
             ),
             SizedBox(height: 40),
             Visibility(
-              visible:
-                  toggleValue, // Controls visibility based on the toggle state
+              visible: toggleValue,
               child: Center(
                 child: Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // Ensures the column only takes the space it needs
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomInputField(
                       controller: textEditingController,
                       buttonText: inputFieldButtonText,
                     ),
-                    SizedBox(
-                        height:
-                            40), // Spacing between the input field and the next widget
+                    SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -96,9 +94,11 @@ class _RequestMedicineState extends State<RequestMedicine> {
             Center(
               child: StyledButton(
                 text: "Confirmar",
-                onPressed: () {
-                  print('Confirm Button Pressed!');
-                  // Add more actions here as needed
+                onPressed: () async {
+                  final batchNumber = toggleValue ? textEditingController.text : '';
+                  selectedMedicine = int.parse(selectedMedicine);
+                  await requestMedicineApi.sendRequest(pyxisStore.currentPyxisData['id'], selectedMedicine, toggleValue); 
+                  print('Confirm Button Pressed with Medicine: $selectedMedicine');
                 },
               ),
             ),
