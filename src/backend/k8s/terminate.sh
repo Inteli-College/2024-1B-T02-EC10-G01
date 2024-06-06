@@ -1,3 +1,3 @@
 kubectl delete namespace asky
-kubectl delete pvc --all    
-kubectl delete pv --all    
+kubectl delete pvc postgres-pv-claim    
+kubectl delete pv postgres-pv-volume    

@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-initdb-config
+  namespace: asky
+data:
+  initdb.sql: |
+    CREATE SCHEMA IF NOT EXISTS pyxis;
+    CREATE SCHEMA IF NOT EXISTS requests;
+    CREATE SCHEMA IF NOT EXISTS auth;
+
+    -- Set the default schema for the session
+    SET search_path TO pyxis;
+
+    -- Create tables within the 'pyxis' schema
+    CREATE TABLE IF NOT EXISTS dispenser (
+        id SERIAL PRIMARY KEY,
+        code VARCHAR(5) UNIQUE NOT NULL,
+        floor INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS medicine (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL,
+        dosage VARCHAR(255) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS material (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS dispenser_medicine (
+        dispenser_id INTEGER NOT NULL,
+        medicine_id INTEGER NOT NULL,
+        PRIMARY KEY (dispenser_id, medicine_id),
+        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+        FOREIGN KEY (medicine_id) REFERENCES medicine(id)
+    );
+
+    -- Insert data into 'dispenser'
+    INSERT INTO dispenser (code, floor) VALUES
+    ('A1B2C', 5),
+    ('D3E4F', 11),
+    ('G5H6I', 19),
+    ('J7K8L', 1),
+    ('M9N0O', 8);
+
+    -- Insert data into 'medicine'
+    INSERT INTO medicine (name, dosage) VALUES
+    ('Paracetamol', '500 mg'),
+    ('Ibuprofeno', '200 mg'),
+    ('Amoxicilina', '500 mg'),
+    ('Dipirona', '500 mg'),
+    ('Captopril', '25 mg');
+
+    -- Insert data into 'material'
+    INSERT INTO material (name) VALUES
+    ('Luvas de procedimento'),
+    ('Seringas de 5ml'),
+    ('Máscaras cirúrgicas'),
+    ('Cateter IV'),
+    ('Ataduras');
+
+    -- Associating medicines with dispensers
+    INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
+    (1, 1),
+    (1, 2),
+    (2, 2),
+    (2, 3),
+    (3, 4),
+    (4, 5),
+    (5, 1);
+
+    SET search_path TO auth;
+
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        role VARCHAR(100) NOT NULL,
+        created_at TIMESTAMP,
+        updated_at TIMESTAMP
+    );
+
+    -- Insert the provided entries with bcrypt hashed passwords
+    INSERT INTO users (id, email, password_hash, role) VALUES 
+    (1, 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
+    (2, 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
+    (3, 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
+
+    SELECT setval(pg_get_serial_sequence('users', 'id'), (SELECT MAX(id) FROM users));
