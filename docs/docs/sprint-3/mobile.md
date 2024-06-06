@@ -70,7 +70,4 @@ flutter pub get
 
 ## Vídeo
 
- <video width="600" controls>
-     <source src="https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99259251/9b489453-6397-483b-98f2-cf3bcd2393df" type="video/mp4">
-     Your browser does not support the video tag.
- </video>
+<video src='../../static/ video/sprint3.mp4'>
