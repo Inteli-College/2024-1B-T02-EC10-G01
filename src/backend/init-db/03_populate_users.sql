@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS auth.users (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(100) NOT NULL,
     created_at TIMESTAMP,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP,
+    mobile_token VARCHAR(255)
 );
 
 -- Insert the provided entries with bcrypt hashed passwords
