@@ -71,3 +71,5 @@ flutter pub get
 ## Vídeo
 
 <video src='../../static/video/sprint3.mp4?raw=true'></video>
+
+**Link do vídeo:** https://github.com/Inteli-College/2024-1B-T02-EC10-G01/blob/main/docs/static/%20video/sprint3.mp4
