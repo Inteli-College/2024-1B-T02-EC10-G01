@@ -57,7 +57,7 @@ class _HomeNurseState extends State<HomeNurse> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/camera');
+                Navigator.pushNamed(context, '/qrcode');
               },
               child: Icon(
                 Icons.add,
