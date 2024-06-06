@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
               navigatorKey: navigatorKey,
               title: 'Asky',
               theme: ThemeData(primarySwatch: customAskyBlue, useMaterial3: true),
-              initialRoute: session != null ? "/login" : "/qrcode",
+              initialRoute: "/login",
               routes: {
                 "/": (context) => HomeScreen(),
                 "/assistance": (context) => AssistanceScreen(),
