@@ -10,6 +10,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('TopBar: showBackButton: $showBackButton');
     return AppBar(
       leading: showBackButton ? Padding(  // Conditionally render the back button based on showBackButton
         padding: EdgeInsets.symmetric(vertical: 8.0),  // Maintained vertical padding

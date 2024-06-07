@@ -19,6 +19,7 @@ class LoginResponseModel(BaseModel):
     token_type: str
     mobile_token: Optional[str] = None
     expires_at: str
+    role: str
 
 class UserRoleEnum(enum.Enum):
     ADMIN = 'admin'

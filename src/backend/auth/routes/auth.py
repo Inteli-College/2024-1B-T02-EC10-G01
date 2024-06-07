@@ -70,6 +70,7 @@ async def login(
         token_type="bearer",
         mobile_token=request.mobile_token,
         expires_at=str(datetime.datetime.now() + timedelta(minutes=15)),
+        role=user["role"],
     )
 
 

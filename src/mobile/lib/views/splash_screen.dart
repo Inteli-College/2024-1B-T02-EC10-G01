@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       checkToken();
     });
   }
@@ -31,9 +31,11 @@ class _SplashScreenState extends State<SplashScreen> {
     print(session);
     if (session != null) {
       var sessionData = jsonDecode(session);
-      print(sessionData['expires_at']);
+      var expiresAt = DateTime.parse(sessionData['expires_at']);
+      print(expiresAt);
+      print(DateTime.now().toUtc());
       if (sessionData['expires_at'] != null &&
-          sessionData['expires_at'].isAfter(DateTime.now())) {
+          expiresAt.isAfter(DateTime.now().toUtc())) {
         // Token is valid
         if (sessionData['role'] == 'nurse') {
           Navigator.pushReplacementNamed(context, '/nurse');
