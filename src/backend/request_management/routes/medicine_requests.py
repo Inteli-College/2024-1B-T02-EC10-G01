@@ -28,8 +28,7 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
 @router.post("/")
 async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
     created_request = await create_request(session, request, user)
-    requests = await fetch_requests(session)
-    redis_client.setex("read_medicine_requests", 120, pickle.dumps(requests))
+    print(f"Created request: {created_request}")
     return created_request
 
 @router.get("/last")

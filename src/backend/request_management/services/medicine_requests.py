@@ -100,7 +100,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         await session.commit()
         print(new_request.to_dict())
         # publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token'])
-        asyncio.create_task(publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token']))
+       # asyncio.create_task(publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token']))
 
         try:
             channel = rabbitmq.get_channel()
@@ -125,6 +125,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
         
+        print('aFTR REDIS')
         
         return new_request
     
