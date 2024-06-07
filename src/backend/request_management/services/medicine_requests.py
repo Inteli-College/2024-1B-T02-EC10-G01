@@ -118,3 +118,67 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
         
         return new_request
+
+async def fetch_request(session: AsyncSession, request_id: int, user: dict):
+    async with aiohttp.ClientSession() as http_session:
+        stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
+        result = await session.execute(stmt)
+        request_result = result.scalar()
+
+
+        tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
+                    _fetch_medicine_data(request_result.medicine_id, http_session), 
+                    _fetch_user_data(user['sub'], http_session)]
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+        print(request_result.to_dict())
+        print(results)
+        # If no HTTPException, extract data from results
+        dispenser, medicine, user = results
+        print(user)
+        print(results)
+        request = {
+            "id": request_result.id,
+            "dispenser": dispenser,
+            "medicine": medicine,
+            "requested_by": user,
+            "status_id": request_result.status_id
+        }
+        return request
+
+async def fetch_last_user_request(session: AsyncSession, user: dict):
+    async with aiohttp.ClientSession() as http_session:
+        stmt = select(MedicineRequest).where(MedicineRequest.requested_by == user['id']).order_by(MedicineRequest.id.desc()).limit(1)
+        result = await session.execute(stmt)
+        request_result = result.scalar()
+
+        tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
+                    _fetch_medicine_data(request_result.medicine_id, http_session), 
+                    _fetch_user_data(user['sub'], http_session)]
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+
+        # If no HTTPException, extract data from results
+        dispenser, medicine, user = results
+        request = {
+            "id": request_result.id,
+            "dispenser": dispenser,
+            "medicine": medicine,
+            "requested_by": user,
+            "status_id": request_result.status_id
+        }
+        return request
