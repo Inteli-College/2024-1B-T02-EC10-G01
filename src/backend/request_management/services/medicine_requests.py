@@ -22,13 +22,17 @@ with open('./services/token.json', 'r') as file:
 
 async def _fetch_dispenser_data(dispenser_id: int, session: aiohttp.ClientSession):
     url = f"{gateway_url}/pyxis/dispensers/{dispenser_id}"
+    print(url)
     headers = {"Authorization": f"Bearer {token}"}
+    print('fetching dispenser')
     try:
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
+                print(await response.json())
                 return await response.json()  # Assuming JSON response
             else:
                 error_message = await response.text()
+                print(error_message)
                 raise HTTPException(status_code=response.status, detail=error_message)
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the medicine service: {str(e)}")
@@ -118,3 +122,67 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         
         
         return new_request
+    
+async def fetch_request(session: AsyncSession, request_id: int, user: dict):
+    async with aiohttp.ClientSession() as http_session:
+        stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
+        result = await session.execute(stmt)
+        request_result = result.scalar()
+        
+    
+        tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
+                    _fetch_medicine_data(request_result.medicine_id, http_session), 
+                    _fetch_user_data(user['sub'], http_session)]
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+        print(request_result.to_dict())
+        print(results)
+        # If no HTTPException, extract data from results
+        dispenser, medicine, user = results
+        print(user)
+        print(results)
+        request = {
+            "id": request_result.id,
+            "dispenser": dispenser,
+            "medicine": medicine,
+            "requested_by": user,
+            "status_id": request_result.status_id
+        }
+        return request
+
+async def fetch_last_user_request(session: AsyncSession, user: dict):
+    async with aiohttp.ClientSession() as http_session:
+        stmt = select(MedicineRequest).where(MedicineRequest.requested_by == user['id']).order_by(MedicineRequest.id.desc()).limit(1)
+        result = await session.execute(stmt)
+        request_result = result.scalar()
+        
+        tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
+                    _fetch_medicine_data(request_result.medicine_id, http_session), 
+                    _fetch_user_data(user['sub'], http_session)]
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+
+        # If no HTTPException, extract data from results
+        dispenser, medicine, user = results
+        request = {
+            "id": request_result.id,
+            "dispenser": dispenser,
+            "medicine": medicine,
+            "requested_by": user,
+            "status_id": request_result.status_id
+        }
+        return request

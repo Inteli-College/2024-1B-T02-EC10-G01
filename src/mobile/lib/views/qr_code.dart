@@ -1,11 +1,52 @@
-import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:asky/stores/pyxis_store.dart'; // Import the store
+import 'package:asky/api/request_medicine_api.dart';
 
+class GuideBoxPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    // Define the size of the box
+    double boxSize = size.width * 0.75; // Box takes up 75% of screen width
+
+    // Calculate positions
+    double left = (size.width - boxSize) / 2;
+    double top = (size.height - boxSize) / 2;
+    double right = left + boxSize;
+    double bottom = top + boxSize;
+
+    // Draw the edges of the box using short lines on each corner
+    double edgeLength = 20; // Length of each edge line
+
+    // Top-left corner
+    canvas.drawLine(Offset(left, top), Offset(left + edgeLength, top), paint); // Horizontal line
+    canvas.drawLine(Offset(left, top), Offset(left, top + edgeLength), paint); // Vertical line
+
+    // Top-right corner
+    canvas.drawLine(Offset(right, top), Offset(right - edgeLength, top), paint); // Horizontal line
+    canvas.drawLine(Offset(right, top), Offset(right, top + edgeLength), paint); // Vertical line
+
+    // Bottom-left corner
+    canvas.drawLine(Offset(left, bottom), Offset(left + edgeLength, bottom), paint); // Horizontal line
+    canvas.drawLine(Offset(left, bottom), Offset(left, bottom - edgeLength), paint); // Vertical line
+
+    // Bottom-right corner
+    canvas.drawLine(Offset(right, bottom), Offset(right - edgeLength, bottom), paint); // Horizontal line
+    canvas.drawLine(Offset(right, bottom), Offset(right, bottom - edgeLength), paint); // Vertical line
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
 class BarcodeScannerSimple extends StatefulWidget {
   const BarcodeScannerSimple({super.key});
 
@@ -27,15 +68,13 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   Widget _buildBarcode(Barcode? value) {
     if (value == null) {
       return const Text(
-        'Escaneie o QR Code do Pyxis',
-        overflow: TextOverflow.fade,
+        'Scan the QR Code',
         style: TextStyle(color: Colors.white),
       );
     }
 
     return Text(
       value.displayValue ?? 'No display value.',
-      overflow: TextOverflow.fade,
       style: const TextStyle(color: Colors.white),
     );
   }
@@ -43,65 +82,53 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   void _handleBarcode(BarcodeCapture barcodes) async {
     final pyxisStore = context.read<PyxisStore>(); // Get the store instance
     if (barcodes.barcodes.isNotEmpty && mounted) {
-      final barcodeValue =
-          barcodes.barcodes.firstOrNull?.displayValue != null
-            ? barcodes.barcodes.firstOrNull
-            : null;
+      final barcodeValue = barcodes.barcodes.firstOrNull;
+
       setState(() {
-        _barcode = barcodes.barcodes.firstOrNull?.displayValue != null
-            ? barcodes.barcodes.firstOrNull
-            : null;
+        _barcode = barcodeValue;
       });
 
       try {
-        // Parse the barcode value as JSON
         final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
-        final pyxisId = barcodeJson[
-            'dispenser_id']; // Assuming 'pyxisId' is the key you are looking for
+        final pyxisId = barcodeJson['dispenser_id'];
 
         if (pyxisId != null) {
-          var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId); // Make the call async
-          if (pyxisData == null) {
+          var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId);
+          if (pyxisData != null) {
+            pyxisStore.setCurrentPyxisData(pyxisData);
+            _controller.stop();
+            Navigator.pushNamed(context, '/medicine').then((_) {
+              _controller.start();
+            });
+          } else {
             print('Failed to fetch pyxis data');
-            return;
           }
-          pyxisStore.setCurrentPyxisData(
-              pyxisData); // Set the currentPyxisId in the store
-          _controller.stop(); // Stop the scanner before navigating
-          Navigator.pushNamed(
-            context,
-            '/medicine',
-          ).then((_) {
-            // Restart the scanner when coming back
-            _controller.start();
-          });
         } else {
-          // Handle the case where 'pyxisId' is not present in the JSON
           print('pyxisId not found in the barcode JSON');
         }
       } catch (e) {
-        // Handle JSON parsing error
-        print('Error: $e');
+        print('Error parsing JSON: $e');
       }
     }
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Escanear Pyxis')),
+      appBar: TopBar(),
       backgroundColor: Colors.black,
       body: Stack(
         children: [
           MobileScanner(
             controller: _controller,
             onDetect: _handleBarcode,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height),
+              painter: GuideBoxPainter(),
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -119,23 +146,21 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
           ),
           Observer(
             builder: (_) {
-              final pyxisStore =
-                  context.watch<PyxisStore>(); // Watch the store for changes
+              final pyxisStore = context.watch<PyxisStore>();
               return Align(
                 alignment: Alignment.topCenter,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.white,
-                  child: Text(
-                    'Barcode reading status: ${_barcode}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
+                child: Container(),
               );
             },
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

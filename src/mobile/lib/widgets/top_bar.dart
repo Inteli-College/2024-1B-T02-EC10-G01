@@ -1,24 +1,50 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
+import 'package:asky/constants.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
-  final String imagePath = "assets/logo.png";
+  final String? backRoute;
 
+  // Constructor with optional backRoute argument
+  TopBar({this.backRoute});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Center(
-        child: Image.asset(
-          imagePath,
-          width: 50,
-          height: 50,
+      leading: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0), // Maintained vertical padding
+        child: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            if (backRoute != null) {
+              Navigator.pushNamed(context, backRoute!); // Navigate to provided route
+            } else {
+              Navigator.maybePop(context); // Default back action
+            }
+          },
         ),
       ),
-      backgroundColor: Color(0xFF1A365D),
-      elevation: 0,
+      title: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0), // Maintained vertical padding
+        child: Center(
+          child: Image.asset(
+            'assets/logo.png', // Ensure the logo path is correct
+            height: 40,
+          ),
+        ),
+      ),
+      backgroundColor: Constants.askyBlue,
+      actions: <Widget>[
+        Opacity(
+          opacity: 0,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0), // Consistent vertical padding
+            child: IconButton(icon: Icon(Icons.arrow_back), onPressed: null),
+          ),
+        ),
+      ],
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 16.0); // Include extra height for padding
 }

@@ -79,5 +79,51 @@ Future<void> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
   }
 }
 
+Future<dynamic> getRequestById(int requestId) async {
+  var token = await auth.getToken();
+
+  final String bearer = 'Bearer $token';
+  
+  final response = await http.get(
+    Uri.parse(Constants.baseUrl + '/requests/medicine/$requestId'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': bearer,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    print(data);
+
+    return data ?? {};
+  } else {
+    print('Failed to fetch request. Status code: ${response.statusCode}');
+  }
+
 }
 
+
+
+Future<dynamic> getLastRequest() async {
+  var token = await auth.getToken();
+
+  final String bearer = 'Bearer $token';
+  final response = await http.get(
+    Uri.parse(Constants.baseUrl + '/requests/medicine/last'),
+    headers: {
+      'Authorization': bearer,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body);
+    print(data);
+
+    return data ?? {};
+  } else {
+    print('Failed to fetch request. Status code: ${response.statusCode}');
+  }
+
+  }
+  }

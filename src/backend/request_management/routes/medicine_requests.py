@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
 from models.schemas import CreateMedicineRequest
 from middleware import get_current_user, is_admin, is_nurse, is_agent
-from services.medicine_requests import fetch_requests, create_request
+from services.medicine_requests import fetch_requests, create_request, fetch_request, fetch_last_user_request
 import redis
 import pickle
 from services.notifications import publish_notification
@@ -31,3 +31,13 @@ async def create_medicine_request(request: CreateMedicineRequest, session: Async
     requests = await fetch_requests(session)
     redis_client.setex("read_medicine_requests", 120, pickle.dumps(requests))
     return created_request
+
+@router.get("/{id}")
+async def read_medicine_request(id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    request = await fetch_request(session, id, user)
+    return request if request else None
+
+@router.get("/last")
+async def read_last_medicine_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    request = await fetch_last_user_request(session, user)
+    return request

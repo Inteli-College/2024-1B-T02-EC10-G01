@@ -9,9 +9,12 @@ import 'package:asky/views/home_nurse.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:asky/views/qr_code.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:asky/stores/pyxis_store.dart'; // Import the store
 import 'package:asky/constants.dart';
+import 'package:asky/views/request_details_screen.dart';
+
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,7 +60,11 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
               title: 'Asky',
-              theme: ThemeData(primarySwatch: customAskyBlue, useMaterial3: true),
+              theme: ThemeData(primarySwatch: customAskyBlue, useMaterial3: true, 
+              scaffoldBackgroundColor: Constants.offWhite,
+              fontFamily: GoogleFonts.notoSans().fontFamily,
+              )
+              ,
               initialRoute: "/login",
               routes: {
                 "/": (context) => HomeNurse(),
@@ -66,6 +73,7 @@ class MyApp extends StatelessWidget {
                 "/login": (context) => LoginPage(),
                 "/medicine": (context) => RequestMedicine(),
                 "/qrcode": (context) => BarcodeScannerSimple(),
+                "/nurse_request": (context) => RequestDetailsScreen(),
               },
             ),
           );

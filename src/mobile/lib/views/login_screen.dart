@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
           ),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1),
@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                           onPressed: () async {
                             await authenticationApi
                                 .signIn(emailCtrl.text, passCtrl.text)
-                                .then((c) => Navigator.pushNamed(context, "/qrcode"));
+                                .then((c) => Navigator.pushNamed(context, "/"));
                           },
                           text: "Entrar",
                         ),

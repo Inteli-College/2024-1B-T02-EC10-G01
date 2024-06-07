@@ -1,4 +1,5 @@
 import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:asky/stores/pyxis_store.dart';
@@ -38,15 +39,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
     final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ASKY',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            )),
-        backgroundColor: Color(0xFF1A365D),
-        centerTitle: true,
-      ),
+      appBar: TopBar(),
       backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
