@@ -17,6 +17,7 @@ class RequestMedicine extends StatefulWidget {
 
 class _RequestMedicineState extends State<RequestMedicine> {
   bool toggleValue = false;
+  bool isLoading = false; // Add this line to manage loading state
   TextEditingController textEditingController = TextEditingController();
   String inputFieldButtonText = "Número de lote";
   dynamic selectedMedicine = ''; // Local state to hold selected medicine
@@ -29,9 +30,11 @@ class _RequestMedicineState extends State<RequestMedicine> {
   }
 
   void _handleDropdownChange(dynamic newValue) {
+    print(newValue);
     setState(() {
       selectedMedicine = newValue; // Update local state with new selection
     });
+    print(selectedMedicine);
   }
 
   @override
@@ -89,6 +92,10 @@ class _RequestMedicineState extends State<RequestMedicine> {
               child: StyledButton(
                 text: "Confirmar",
                 onPressed: () async {
+                  setState(() {
+                    isLoading =
+                        true; // Set loading to true when the request starts
+                  });
                   final batchNumber =
                       toggleValue ? textEditingController.text : '';
                   selectedMedicine = int.parse(selectedMedicine);
@@ -96,29 +103,32 @@ class _RequestMedicineState extends State<RequestMedicine> {
                       pyxisStore.currentPyxisData['id'],
                       selectedMedicine,
                       toggleValue);
+                  setState(() {
+                    isLoading =
+                        false; // Set loading to false when the request completes
+                  });
                   if (response != null) {
-                    // If successful, push to a named route with an id argument
+                    print(response);
+                    print(response['id']);
                     Navigator.of(context).pushNamed(
                       '/nurse_request',
-                      arguments: {
-                        'id': response['id'], // Make sure 'id' is a field in your response object
-                      },
+                      arguments: {'requestId': response['id'].toString()},
                     );
                   } else {
-                    // Handle error - showing a Snackbar as a popup notification
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Something went wrong!'),
-                        duration: Duration(
-                            seconds: 2), // Display duration of the SnackBar
-                        backgroundColor: Colors
-                            .red, // Optional: to set background color of SnackBar
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
                       ),
                     );
                   }
                 },
               ),
             ),
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Container(), // Show loading indicator when isLoading is true
           ],
         ),
       ),

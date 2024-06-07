@@ -30,7 +30,6 @@ async def get_current_user(authorization: str = Header(...)):
     user_info = verify_token(token)
     if user_info is None:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-    print(user_info)
     return user_info
 
 async def is_admin(authorization: str = Header(...)):

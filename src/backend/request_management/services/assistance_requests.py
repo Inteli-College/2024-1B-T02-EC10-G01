@@ -63,6 +63,8 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateAssistanceRequest, user: dict):
+    print('CREATE REQUEST')
+    print('REQUEST AS IT IS ' + str(request))
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                   _fetch_assistance_data(request.assistance_id, http_session), _fetch_user_data(user['sub'], http_session)]

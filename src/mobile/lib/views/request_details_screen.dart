@@ -15,7 +15,7 @@ import 'package:asky/views/history_page.dart';
 class RequestDetailsScreen extends StatefulWidget {
   final String requestId;
 
-  RequestDetailsScreen({Key? key, this.requestId = '1'}) : super(key: key);
+  RequestDetailsScreen({Key? key, required this.requestId}) : super(key: key);
 
   @override
   _RequestDetailsScreenState createState() => _RequestDetailsScreenState();
@@ -38,7 +38,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     RequestMedicineApi apiService = RequestMedicineApi(); // Create an instance of your API service
 
     return Scaffold(
-      appBar: TopBar(),
+      appBar: TopBar(backRoute: '/',),
       body: Observer(builder: (_) {
         return FutureBuilder<dynamic>(
           future: apiService.getRequestById(int.parse(widget.requestId)), // Fetching details using the requestId

@@ -18,6 +18,7 @@ gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
 
 with open('./services/token.json', 'r') as file:
     token = json.load(file)['token']
+
     
 
 async def _fetch_dispenser_data(dispenser_id: int, session: aiohttp.ClientSession):
@@ -43,6 +44,8 @@ async def _fetch_medicine_data(medicine_id: int, session: aiohttp.ClientSession)
     try:
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
+                print('RESPOSTA DO FETCH MEDICINE')
+                print(await response.json())
                 return await response.json()  # Assuming JSON response
             else:
                 error_message = await response.text()
@@ -69,6 +72,9 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
+    print('OIIIII TO AQUI')
+    print('eu recebi um ' + str(request.medicine_id))
+    print(request)
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                  _fetch_medicine_data(request.medicine_id, http_session), 
@@ -86,8 +92,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
                 
         # If no HTTPException, extract data from results
         dispenser, medicine, user = results
-        print(user)
-        print(results)
+        print(medicine)
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         new_status = MedicineStatusChange(status="pending")

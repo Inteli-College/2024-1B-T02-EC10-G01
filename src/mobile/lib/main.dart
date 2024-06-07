@@ -15,11 +15,10 @@ import 'package:asky/stores/pyxis_store.dart'; // Import the store
 import 'package:asky/constants.dart';
 import 'package:asky/views/request_details_screen.dart';
 
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Map<int, Color> askyBlueSwatch = {
-  50:  Constants.askyBlue.withOpacity(.1),
+  50: Constants.askyBlue.withOpacity(.1),
   100: Constants.askyBlue.withOpacity(.2),
   200: Constants.askyBlue.withOpacity(.3),
   300: Constants.askyBlue.withOpacity(.4),
@@ -31,7 +30,8 @@ Map<int, Color> askyBlueSwatch = {
   900: Constants.askyBlue.withOpacity(1),
 };
 
-final MaterialColor customAskyBlue = MaterialColor(Constants.askyBlue.value, askyBlueSwatch);
+final MaterialColor customAskyBlue =
+    MaterialColor(Constants.askyBlue.value, askyBlueSwatch);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,11 +60,12 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
               title: 'Asky',
-              theme: ThemeData(primarySwatch: customAskyBlue, useMaterial3: true, 
-              scaffoldBackgroundColor: Constants.offWhite,
-              fontFamily: GoogleFonts.notoSans().fontFamily,
-              )
-              ,
+              theme: ThemeData(
+                primarySwatch: customAskyBlue,
+                useMaterial3: true,
+                scaffoldBackgroundColor: Constants.offWhite,
+                fontFamily: GoogleFonts.notoSans().fontFamily,
+              ),
               initialRoute: "/login",
               routes: {
                 "/": (context) => HomeNurse(),
@@ -73,7 +74,13 @@ class MyApp extends StatelessWidget {
                 "/login": (context) => LoginPage(),
                 "/medicine": (context) => RequestMedicine(),
                 "/qrcode": (context) => BarcodeScannerSimple(),
-                "/nurse_request": (context) => RequestDetailsScreen(),
+                '/nurse_request': (context) {
+                  final args =
+                      ModalRoute.of(context)!.settings.arguments as Map;
+                  return RequestDetailsScreen(
+                    requestId: args['requestId'],
+                  );
+                },
               },
             ),
           );

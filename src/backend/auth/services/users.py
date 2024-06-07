@@ -16,8 +16,6 @@ async def get_user_by_email(session, email: str):
     stmt = select(User).filter(User.email == email)
     result = await session.execute(stmt)
     user = result.scalar()
-    print(user)
-    print(user.to_dict() if user else None)
     return user.to_dict() if user else None
 
 async def get_user_by_id(session, user_id: int):

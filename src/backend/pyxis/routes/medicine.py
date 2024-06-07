@@ -13,12 +13,7 @@ router = APIRouter(prefix="/medicines")
 
 @router.get("/{medicine_id}")
 async def read_medicine_by_id(medicine_id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
-    key = "read_medicine_by_id"
-    resultado = redis_client.get(key)
-    if resultado:
-        return pickle.loads(resultado)
     medicine = await fetch_medicine_by_id(session, medicine_id)
     if not medicine:
         raise HTTPException(status_code=404, detail="Medicine not found")
-    redis_client.setex(key, 120, pickle.dumps(medicine))
     return medicine

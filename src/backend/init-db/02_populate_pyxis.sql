@@ -62,7 +62,13 @@ INSERT INTO medicine (name, dosage) VALUES
 ('Ibuprofeno', '200 mg'),
 ('Amoxicilina', '500 mg'),
 ('Dipirona', '500 mg'),
-('Captopril', '25 mg');
+('Captopril', '25 mg'),
+('Losartana', '50 mg'),
+('Metformina', '500 mg'),
+('Atorvastatina', '20 mg'),
+('Sertralina', '50 mg'),
+('Omeprazol', '20 mg');
+
 
 -- Insert data into 'material'
 INSERT INTO material (name) VALUES
@@ -81,7 +87,12 @@ INSERT INTO assistance (description) VALUES
 INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
 (1, 1),
 (1, 2),
-(2, 2),
+(1, 4),
+(1, 5),
+(1, 6),
+(2, 10),
+(2, 5),
+(2, 4),
 (2, 3),
 (3, 4),
 (4, 5),

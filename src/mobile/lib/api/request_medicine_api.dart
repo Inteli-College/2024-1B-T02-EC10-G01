@@ -53,8 +53,13 @@ class RequestMedicineApi {
 
 Future<dynamic> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
    var token = await auth.getToken();
-
+  print('request data: ' + pyxisId.toString() + ' ' + medicine_id.toString() + ' ' + emergency.toString());
   final String bearerToken = 'Bearer $token';
+  print(json.encode({
+        'dispenser_id': pyxisId,
+        'medicine_id': medicine_id,
+        'emergency': emergency,
+      }),);
   try {
     final url = Uri.parse(Constants.baseUrl + '/requests/medicine/'); // Change to your API's URL
     final response = await http.post(
