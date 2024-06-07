@@ -49,7 +49,6 @@ class _HomeNurseState extends State<HomeNurse> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: TopBar(
-        imagePath: "assets/logo.png",
       ),
       body: Center(
         child: Column(

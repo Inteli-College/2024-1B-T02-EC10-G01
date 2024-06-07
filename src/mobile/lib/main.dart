@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
               Provider<PyxisStore>(create: (_) => PyxisStore()),
             ],
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               navigatorKey: navigatorKey,
               title: 'Asky',
               theme: ThemeData(primarySwatch: customAskyBlue, useMaterial3: true),

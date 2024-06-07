@@ -1,5 +1,8 @@
-import 'package:asky/api/authentication_api.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:asky/widgets/styled_button.dart';
+import 'package:asky/api/authentication_api.dart';
+import 'package:asky/constants.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -12,43 +15,91 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xff1A365D),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/logo.png", width: 300),
-              TextField(
-                controller: emailCtrl,
-                style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                    label: Text("E-mail"),
-                    labelStyle: TextStyle(color: Colors.white)),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Constants.gradientTop, Constants.gradientBottom],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  Image.asset("assets/logo.png", width: 300),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Entrar",
+                          style: GoogleFonts.notoSans(
+                            textStyle: Theme.of(context).textTheme.displayLarge,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        _buildTextField(emailCtrl, 'Email', context),
+                        SizedBox(height: 20),
+                        _buildTextField(passCtrl, 'Senha', context),
+                        SizedBox(height: 30),
+                        StyledButton(
+                          onPressed: () async {
+                            await authenticationApi
+                                .signIn(emailCtrl.text, passCtrl.text)
+                                .then((c) => Navigator.pushNamed(context, "/qrcode"));
+                          },
+                          text: "Entrar",
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: passCtrl,
-                style: const TextStyle(color: Colors.white),
-                obscureText: true,
-                decoration: const InputDecoration(
-                    label: Text("Senha"),
-                    labelStyle: TextStyle(color: Colors.white)),
-              ),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                  onPressed: () async {
-                    await authenticationApi
-                        .singIn(emailCtrl.text, passCtrl.text)
-                        .then((c) => Navigator.pushNamed(context, "/qrcode"));
-                  },
-                  style:
-                      ElevatedButton.styleFrom(fixedSize: const Size(200, 50)),
-                  child: const Text("Entrar"))
-            ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.notoSans(
+            textStyle: Theme.of(context).textTheme.displayLarge,
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(height: 5),
+        TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            labelStyle: const TextStyle(color: Colors.white),
+            filled: true,
+            fillColor: Colors.white,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -7,7 +7,7 @@ class AuthenticationApi {
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
-  Future<void> singIn(String _email, String _password) async {
+  Future<void> signIn(String _email, String _password) async {
     const _secureStorage = FlutterSecureStorage();
 
     var _mobile_token = await _secureStorage.read(

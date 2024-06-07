@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: TopBar(
-       imagePath: "assets/logo.png",
       ),
       body: Center(
         child: Column(

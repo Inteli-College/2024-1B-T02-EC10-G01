@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
-  final String imagePath;
+  final String imagePath = "assets/logo.png";
 
-  TopBar({required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
