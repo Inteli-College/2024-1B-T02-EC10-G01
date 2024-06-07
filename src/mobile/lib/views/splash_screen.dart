@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:asky/constants.dart';
 import 'dart:async';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -8,12 +11,43 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
+
     Timer(Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacementNamed('/login');
+      checkToken();
     });
+  }
+
+  void checkToken() async {
+    print("Checking token");
+    var session = await secureStorage.read(
+        key: "session", aOptions: _getAndroidOptions());
+    print(session);
+    if (session != null) {
+      var sessionData = jsonDecode(session);
+      print(sessionData['expires_at']);
+      if (sessionData['expires_at'] != null &&
+          sessionData['expires_at'].isAfter(DateTime.now())) {
+        // Token is valid
+        if (sessionData['role'] == 'nurse') {
+          Navigator.pushReplacementNamed(context, '/nurse');
+        } else {
+          // Token is expired or not set
+          Navigator.pushReplacementNamed(context, '/login');
+        }
+      } else {
+          // Token is expired or not set
+          Navigator.pushReplacementNamed(context, '/login');
+        }
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override

@@ -20,6 +20,7 @@ def create_access_token(data: dict, expire_minutes: int = 15):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=expire_minutes)  # Token validity
     to_encode.update({"exp": expire})
+    print(to_encode)
     encoded_jwt = jwt.encode(to_encode, private_key, algorithm="RS256")
     return encoded_jwt
 

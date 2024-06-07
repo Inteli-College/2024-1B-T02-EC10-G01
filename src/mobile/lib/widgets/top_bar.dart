@@ -1,17 +1,18 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:asky/constants.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String? backRoute;
+  final bool showBackButton;  // New parameter to control back button visibility
 
-  // Constructor with optional backRoute argument
-  TopBar({this.backRoute});
+  // Constructor with optional backRoute and showBackButton argument
+  TopBar({this.backRoute, this.showBackButton = true});  // Default is to show the back button
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0), // Maintained vertical padding
+      leading: showBackButton ? Padding(  // Conditionally render the back button based on showBackButton
+        padding: EdgeInsets.symmetric(vertical: 8.0),  // Maintained vertical padding
         child: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -22,12 +23,12 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             }
           },
         ),
-      ),
+      ) : null,  // If showBackButton is false, don't display the back button
       title: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0), // Maintained vertical padding
+        padding: EdgeInsets.symmetric(vertical: 8.0),  // Maintained vertical padding
         child: Center(
           child: Image.asset(
-            'assets/logo.png', // Ensure the logo path is correct
+            'assets/logo.png',  // Ensure the logo path is correct
             height: 40,
           ),
         ),
@@ -37,7 +38,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         Opacity(
           opacity: 0,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0), // Consistent vertical padding
+            padding: EdgeInsets.symmetric(vertical: 8.0),  // Consistent vertical padding
             child: IconButton(icon: Icon(Icons.arrow_back), onPressed: null),
           ),
         ),
@@ -46,5 +47,5 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + 16.0); // Include extra height for padding
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 16.0);  // Include extra height for padding
 }

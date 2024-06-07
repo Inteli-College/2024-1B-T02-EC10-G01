@@ -6,7 +6,7 @@ import json
 import os
 import aiohttp
 
-cred = credentials.Certificate("./serviceAccountKey.json")
+cred = credentials.Certificate("./services/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")

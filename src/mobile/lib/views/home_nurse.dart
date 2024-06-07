@@ -43,7 +43,7 @@ class _HomeNurseState extends State<HomeNurse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopBar(),
+      appBar: TopBar(showBackButton: false,),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex), // Displaying the widget based on selected index
       ),

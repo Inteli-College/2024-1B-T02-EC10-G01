@@ -21,13 +21,9 @@ class AuthenticationApi {
         body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(response.body);
-      print(data);
-
       await _secureStorage.write(
           key: "session", value: response.body, aOptions: _getAndroidOptions());
-      
+  
     } else {
       print(response.body);
       throw Exception('Failed to auth');
