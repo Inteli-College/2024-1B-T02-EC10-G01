@@ -91,9 +91,13 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
       try {
         final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
         final pyxisId = barcodeJson['dispenser_id'];
+        print('MY PYXIS ID');
+        print(pyxisId);
 
         if (pyxisId != null) {
           var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId);
+          print('GETTING PYXIS');
+          print(pyxisData);
           if (pyxisData != null) {
             pyxisStore.setCurrentPyxisData(pyxisData);
             _controller.stop();
