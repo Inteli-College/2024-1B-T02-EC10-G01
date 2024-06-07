@@ -20,12 +20,14 @@ async def register(request: UserRegistrationRequest, session: AsyncSession = Dep
 
 @router.post("/login", response_model=LoginResponseModel)
 async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_session)):
+    print("RECEBEMOS")
+    print(request.email)
+    print(request.mobile_token)
     user = await get_user_by_email(session, request.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     if not verify_password(request.password, user['password_hash']):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
-    
     await update_user_with_mobile_token(session, request.email, request.mobile_token)
 
     access_token = create_access_token(data={"sub": user['email'], "role": user['role'], "id": user['id'], "mobile_token": request.mobile_token})

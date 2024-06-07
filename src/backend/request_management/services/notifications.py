@@ -6,6 +6,9 @@ import json
 import os
 import aiohttp
 
+cred = credentials.Certificate("./serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
 
 with open('./services/token.json', 'r') as file:
@@ -26,39 +29,38 @@ async def _fetch_user_role_data(user_role: str, session: aiohttp.ClientSession):
 
 async def publish_notification_by_role(title, body, payload, role):
         async with aiohttp.ClientSession() as http_session:
-        # Inicialize o SDK do Firebase com suas credenciais
-            print("Enviando notificação...")
-            user_data = await _fetch_user_role_data(role, http_session)
-            sleep(6)
-            for token in user_data:
-                try:
-                    mobile_token_user = token if token else None
-                    print(mobile_token_user)
-                    cred = credentials.Certificate("./serviceAccountKey.json")
-                    firebase_admin.initialize_app(cred)
-                    message = messaging.Message(
-                        notification=messaging.Notification(
-                            title=str(title),
-                            body=str(body),
-                        ),
-                        data={
-                            'data': str(payload)
-                        },
-                        token= mobile_token_user,
-                    )
-                    # Envie a mensagem
-                    messaging.send(message)
-                except Exception as e:
-                    raise HTTPException(status_code=500, detail=f"Failed to publish notification: {str(e)}")
-            print("Notificação enviada.")
+            # Inicialize o SDK do Firebase com suas credenciais
+                print("Enviando notificação...")
+                user_data = await _fetch_user_role_data(role, http_session)
+                user_data= ["cVy9CvEVS8id4A1q_gboUz:APA91bH3d4HwbnZWxpiyhH5k5F_HEiQH9-N5UX0egyvgkjKmse3WpIisQq63XM6sxzvXE4b66uQ6HmT-som8fXokYmNivtCz8B-Zs9HtdfKG16_NXnqGyyMa9QMA5wt2Y2PH6AC1rjQO"]
+                sleep(6)
+                for token in user_data:
+                    try:
+                        mobile_token_user = token if token else None
+                        print(mobile_token_user)
+                        message = messaging.Message(
+                            notification=messaging.Notification(
+                                title=str(title),
+                                body=str(body),
+                            ),
+                            data={
+                                'data': str(payload)
+                            },
+                            token= mobile_token_user,
+                        )
+                        # Envie a mensagem
+                        messaging.send(message)
+                    except Exception as e:
+                        print("Exception", e)
+                        raise HTTPException(status_code=500, detail=f"Failed to publish notification: {str(e)}")
+                print("Notificação enviada.")
+ 
 
 async def publish_notification_to_user(title, body, mobile_token):
     # Inicialize o SDK do Firebase com suas credenciais
         print("Enviando notificação")
         sleep(5)
         print(mobile_token)
-        cred = credentials.Certificate("./serviceAccountKey.json")
-        firebase_admin.initialize_app(cred)
         message = messaging.Message(
             notification=messaging.Notification(
                 title=str(title),

@@ -107,7 +107,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     isLoading =
                         false; // Set loading to false when the request completes
                   });
-                  if (response != null) {
+                  if (response != Null) {
                     print(response);
                     print(response['id']);
                     Navigator.of(context).pushNamed(

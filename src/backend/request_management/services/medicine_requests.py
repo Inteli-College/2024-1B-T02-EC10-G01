@@ -116,7 +116,8 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         
         # publish_notification('Novo medicamento solicitado!', f'Estimativa de entrega: 15m', user['mobile_token'])
         asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
-        
+        # await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
+        print(new_request)
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):
