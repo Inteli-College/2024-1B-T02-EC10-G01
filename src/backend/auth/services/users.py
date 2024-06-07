@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
 from models.users import User
+from sqlalchemy import literal
 import json
+
 
 async def get_users(session: AsyncSession):
     stmt = select(User)
@@ -16,7 +18,20 @@ async def get_user_by_email(session, email: str):
     stmt = select(User).filter(User.email == email)
     result = await session.execute(stmt)
     user = result.scalar()
+    print(user)
+    print(user.to_dict() if user else None)
     return user.to_dict() if user else None
+
+async def get_users_by_role(session, role: str):
+    print("PEGANDO USUÁRIOS PELO ROLE: ", role)
+    stmt = select(User).filter(User.role == role)
+    result = await session.execute(stmt)
+    users = result.scalars().all()
+    tokens = []
+    for user in users:
+        tokens.append(user.mobile_token)
+        print("USUÁRIOS: ", user.mobile_token)
+    return tokens
 
 async def get_user_by_id(session, user_id: int):
     stmt = select(User).filter(User.id == user_id)
