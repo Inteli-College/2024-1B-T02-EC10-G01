@@ -51,7 +51,7 @@ class RequestMedicineApi {
 
 }
 
-Future<void> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
+Future<dynamic> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
    var token = await auth.getToken();
 
   final String bearerToken = 'Bearer $token';
@@ -70,12 +70,17 @@ Future<void> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
       }),
     );
     if (response.statusCode == 200) {
+
       print("Data sent successfully!");
+      var data = jsonDecode(response.body);
+      return data;
     } else {
       print("Failed to send data. Status code: ${response.statusCode}");
+      return Null;
     }
   } catch (e) {
     print("An error occurred: $e");
+    return Null;
   }
 }
 

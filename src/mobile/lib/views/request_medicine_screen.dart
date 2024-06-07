@@ -36,7 +36,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
 
   @override
   Widget build(BuildContext context) {
-    final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
+    final pyxisStore = context
+        .watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
       appBar: TopBar(),
@@ -88,10 +89,33 @@ class _RequestMedicineState extends State<RequestMedicine> {
               child: StyledButton(
                 text: "Confirmar",
                 onPressed: () async {
-                  final batchNumber = toggleValue ? textEditingController.text : '';
+                  final batchNumber =
+                      toggleValue ? textEditingController.text : '';
                   selectedMedicine = int.parse(selectedMedicine);
-                  await requestMedicineApi.sendRequest(pyxisStore.currentPyxisData['id'], selectedMedicine, toggleValue); 
-                  print('Confirm Button Pressed with Medicine: $selectedMedicine');
+                  var response = await requestMedicineApi.sendRequest(
+                      pyxisStore.currentPyxisData['id'],
+                      selectedMedicine,
+                      toggleValue);
+                  if (response != null) {
+                    // If successful, push to a named route with an id argument
+                    Navigator.of(context).pushNamed(
+                      '/nurse_request',
+                      arguments: {
+                        'id': response['id'], // Make sure 'id' is a field in your response object
+                      },
+                    );
+                  } else {
+                    // Handle error - showing a Snackbar as a popup notification
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Something went wrong!'),
+                        duration: Duration(
+                            seconds: 2), // Display duration of the SnackBar
+                        backgroundColor: Colors
+                            .red, // Optional: to set background color of SnackBar
+                      ),
+                    );
+                  }
                 },
               ),
             ),

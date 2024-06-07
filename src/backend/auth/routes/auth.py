@@ -28,7 +28,7 @@ async def login(request: UserLoginRequest, session: AsyncSession = Depends(get_s
     
     await update_user_with_mobile_token(session, request.email, request.mobile_token)
 
-    access_token = create_access_token(data={"sub": user['email'], "role": user['role'], "mobile_token": request.mobile_token})
+    access_token = create_access_token(data={"sub": user['email'], "role": user['role'], "id": user['id'], "mobile_token": request.mobile_token})
     return LoginResponseModel(email=user['email'], access_token=access_token, token_type="bearer", mobile_token=request.mobile_token)
 
 @router.get("/users/{user_email}", response_model=UserResponseModel)

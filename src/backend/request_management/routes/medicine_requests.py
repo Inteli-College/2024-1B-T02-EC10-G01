@@ -32,12 +32,14 @@ async def create_medicine_request(request: CreateMedicineRequest, session: Async
     redis_client.setex("read_medicine_requests", 120, pickle.dumps(requests))
     return created_request
 
+@router.get("/last")
+async def read_last_medicine_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    request = await fetch_last_user_request(session, user)
+    return request
+
+
 @router.get("/{id}")
 async def read_medicine_request(id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     request = await fetch_request(session, id, user)
     return request if request else None
 
-@router.get("/last")
-async def read_last_medicine_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
-    request = await fetch_last_user_request(session, user)
-    return request

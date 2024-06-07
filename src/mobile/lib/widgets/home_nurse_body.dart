@@ -16,9 +16,9 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Column(
+        child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
@@ -31,15 +31,14 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
               color: Color(0xFF1A365D),
             ),
             style: ElevatedButton.styleFrom(
-              shape: CircleBorder(
-                  side: BorderSide(
-                color: Color.fromRGBO(224, 224, 224, 0.25),
-                width: 1, // Border thickness
-              )),
-              padding: EdgeInsets.all(50),
-              backgroundColor: Colors.white,
-              elevation: 4
-            ),
+                shape: CircleBorder(
+                    side: BorderSide(
+                  color: Color.fromRGBO(224, 224, 224, 0.25),
+                  width: 1, // Border thickness
+                )),
+                padding: EdgeInsets.all(50),
+                backgroundColor: Colors.white,
+                elevation: 4),
           ),
           Padding(
             padding: const EdgeInsets.all(30.0),
@@ -52,26 +51,18 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
             ),
           ),
           SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Última solicitação:',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Color(0xFF1A365D),
-                ),
-              ),
-            ),
-          ),
           FutureBuilder(
               future: api.getLastRequest(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     var data = snapshot.data!;
-                    return LastRequestCard(medicineName: data['medicine']['name'], currentStep: 1, totalSteps: 4);
+                    return LastRequestCard(
+                        medicineName: data['medicine']['name'],
+                        currentStep: 2,
+                        totalSteps: 4,
+                        pyxis: data['dispenser']['code'],
+                        id: data['id'].toString());
                   } else {
                     return Text('Nenhuma solicitação encontrada');
                   }
@@ -79,7 +70,6 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                   return CircularProgressIndicator();
                 }
               }),
-              
         ],
       ),
     ));
