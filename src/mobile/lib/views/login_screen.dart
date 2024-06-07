@@ -49,13 +49,13 @@ class LoginPage extends StatelessWidget {
                         SizedBox(height: 30),
                         _buildTextField(emailCtrl, 'Email', context),
                         SizedBox(height: 20),
-                        _buildTextField(passCtrl, 'Senha', context),
+                        _buildTextField(passCtrl, 'Senha', context, isPassword: true),  // Now this field will hide the input
                         SizedBox(height: 30),
                         StyledButton(
                           onPressed: () async {
                             await authenticationApi
                                 .signIn(emailCtrl.text, passCtrl.text)
-                                .then((c) => Navigator.pushNamed(context, "/"));
+                                .then((c) => Navigator.pushNamed(context, "/nurse"));
                           },
                           text: "Entrar",
                         ),
@@ -70,36 +70,36 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildTextField(TextEditingController controller, String label, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.notoSans(
-            textStyle: Theme.of(context).textTheme.displayLarge,
-            fontSize: 16,
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
-          ),
+Widget _buildTextField(TextEditingController controller, String label, BuildContext context, {bool isPassword = false}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: GoogleFonts.notoSans(
+          textStyle: Theme.of(context).textTheme.displayLarge,
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+          color: Colors.white,
         ),
-        SizedBox(height: 5),
-        TextField(
-          controller: controller,
-          style: const TextStyle(color: Colors.black),
-          decoration: InputDecoration(
-            labelStyle: const TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.white,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      SizedBox(height: 5),
+      TextField(
+        controller: controller,
+        obscureText: isPassword,  // This will obscure the text if it's the password field
+        style: const TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          labelStyle: const TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.white,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 }

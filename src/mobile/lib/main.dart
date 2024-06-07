@@ -6,6 +6,7 @@ import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
 import 'package:asky/views/request_medicine_screen.dart';
 import 'package:asky/views/home_nurse.dart';
+import 'package:asky/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:asky/views/qr_code.dart';
@@ -66,9 +67,9 @@ class MyApp extends StatelessWidget {
                 scaffoldBackgroundColor: Constants.offWhite,
                 fontFamily: GoogleFonts.notoSans().fontFamily,
               ),
-              initialRoute: "/login",
+              home: SplashScreen(),
               routes: {
-                "/": (context) => HomeNurse(),
+                "/nurse": (context) => HomeNurse(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),

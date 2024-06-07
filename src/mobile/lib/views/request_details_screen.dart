@@ -38,7 +38,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     RequestMedicineApi apiService = RequestMedicineApi(); // Create an instance of your API service
 
     return Scaffold(
-      appBar: TopBar(backRoute: '/',),
+      appBar: TopBar(backRoute: '/nurse',),
       body: Observer(builder: (_) {
         return FutureBuilder<dynamic>(
           future: apiService.getRequestById(int.parse(widget.requestId)), // Fetching details using the requestId
