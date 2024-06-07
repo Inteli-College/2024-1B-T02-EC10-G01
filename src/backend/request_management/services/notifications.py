@@ -32,7 +32,6 @@ async def publish_notification_by_role(title, body, payload, role):
             # Inicialize o SDK do Firebase com suas credenciais
                 print("Enviando notificação...")
                 user_data = await _fetch_user_role_data(role, http_session)
-                user_data= ["cVy9CvEVS8id4A1q_gboUz:APA91bH3d4HwbnZWxpiyhH5k5F_HEiQH9-N5UX0egyvgkjKmse3WpIisQq63XM6sxzvXE4b66uQ6HmT-som8fXokYmNivtCz8B-Zs9HtdfKG16_NXnqGyyMa9QMA5wt2Y2PH6AC1rjQO"]
                 sleep(6)
                 for token in user_data:
                     try:
