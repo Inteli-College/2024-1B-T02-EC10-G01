@@ -38,9 +38,12 @@ jobs:
 
       - name: Create Firebase service account file
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: |
-          echo "${FIREBASE_SERVICE_ACCOUNT}" > ./src/backend/firebase-service-account.json
+          echo "${FIREBASE_SECRET}" > ./src/backend/serviceAccountKey.json
+          echo "Service account key file created at: $(pwd)/src/backend/serviceAccountKey.json"
+          echo "SERVICE_ACCOUNT_KEY_PATH=$(pwd)/src/backend/serviceAccountKey.json" >> $GITHUB_ENV
+    
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
