@@ -16,6 +16,7 @@ spec:
       containers:
       - name: auth
         image: elisaflemer/asky-auth:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8003
         env:
@@ -84,6 +85,8 @@ spec:
       containers:
       - name: pyxis
         image: elisaflemer/asky-pyxis:latest
+        imagePullPolicy: Always
+
         ports:
         - containerPort: 8001
         env:
@@ -91,6 +94,11 @@ spec:
           value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
         - name: GATEWAY_URL
           value: "http://gateway.asky.svc.cluster.local:80"
+        - name: FIREBASE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firebase-secret
+              key: firebase-key.json
 
 ---
 
@@ -111,7 +119,9 @@ spec:
     spec:
       containers:
       - name: request-management
-        image: elisaflemer/asky-request-management:latest
+        image: elisaflemer/asky-request_management:latest
+      readOnly: true
+        imagePullPolicy: Always
         ports:
         - containerPort: 8001
         env:
@@ -119,3 +129,8 @@ spec:
           value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
         - name: GATEWAY_URL
           value: "http://gateway.asky.svc.cluster.local:80"
+        - name: FIREBASE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firebase-secret
+              key: firebase-key.json

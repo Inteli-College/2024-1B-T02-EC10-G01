@@ -5,8 +5,12 @@ from time import sleep
 import json
 import os
 import aiohttp
+import dotenv
 
-cred = credentials.Certificate("./services/serviceAccountKey.json")
+dotenv.load_dotenv()
+
+service_account_path = os.getenv('FIREBASE_KEY', "./services/serviceAccountKey.json")
+cred = credentials.Certificate(service_account_path)
 firebase_admin.initialize_app(cred)
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")

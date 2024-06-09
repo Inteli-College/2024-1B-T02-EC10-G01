@@ -10,9 +10,9 @@ data:
     CREATE SCHEMA IF NOT EXISTS auth;
 
     -- Set the default schema for the session
-SET search_path TO pyxis;
+    SET search_path TO pyxis;
 
-    -- Create tables within the 'hospital' schema
+    -- Create tables within the 'pyxis' schema
     CREATE TABLE IF NOT EXISTS pyxis.dispenser (
         id SERIAL PRIMARY KEY,
         code VARCHAR(5) UNIQUE NOT NULL,
@@ -39,36 +39,36 @@ SET search_path TO pyxis;
         dispenser_id INTEGER NOT NULL,
         medicine_id INTEGER NOT NULL,
         PRIMARY KEY (dispenser_id, medicine_id),
-        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
-        FOREIGN KEY (medicine_id) REFERENCES medicine(id)
+        FOREIGN KEY (dispenser_id) REFERENCES pyxis.dispenser(id),
+        FOREIGN KEY (medicine_id) REFERENCES pyxis.medicine(id)
     );
 
     CREATE TABLE IF NOT EXISTS pyxis.dispenser_material (
         dispenser_id INTEGER NOT NULL,
         material_id INTEGER NOT NULL,
         PRIMARY KEY (dispenser_id, material_id),
-        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
-        FOREIGN KEY (material_id) REFERENCES material(id)
+        FOREIGN KEY (dispenser_id) REFERENCES pyxis.dispenser(id),
+        FOREIGN KEY (material_id) REFERENCES pyxis.material(id)
     );
 
     CREATE TABLE IF NOT EXISTS pyxis.dispenser_assistance (
         dispenser_id INTEGER NOT NULL,
         assistance_id INTEGER NOT NULL,
         PRIMARY KEY (dispenser_id, assistance_id),
-        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
-        FOREIGN KEY (assistance_id) REFERENCES assistance(id)
+        FOREIGN KEY (dispenser_id) REFERENCES pyxis.dispenser(id),
+        FOREIGN KEY (assistance_id) REFERENCES pyxis.assistance(id)
     );
 
-    -- Insert data into 'dispenser'
-    INSERT INTO dispenser (code, floor) VALUES
+    -- Populate 'dispenser' table
+    INSERT INTO pyxis.dispenser (code, floor) VALUES
     ('A1B2C', 5),
     ('D3E4F', 11),
     ('G5H6I', 19),
     ('J7K8L', 1),
     ('M9N0O', 8);
 
-    -- Insert data into 'medicine'
-    INSERT INTO medicine (name, dosage) VALUES
+    -- Populate 'medicine' table
+    INSERT INTO pyxis.medicine (name, dosage) VALUES
     ('Paracetamol', '500 mg'),
     ('Ibuprofeno', '200 mg'),
     ('Amoxicilina', '500 mg'),
@@ -80,22 +80,22 @@ SET search_path TO pyxis;
     ('Sertralina', '50 mg'),
     ('Omeprazol', '20 mg');
 
-
-    -- Insert data into 'material'
-    INSERT INTO material (name) VALUES
+    -- Populate 'material' table
+    INSERT INTO pyxis.material (name) VALUES
     ('Luvas de procedimento'),
     ('Seringas de 5ml'),
     ('Máscaras cirúrgicas'),
     ('Cateter IV'),
     ('Ataduras');
 
-    INSERT INTO assistance (description) VALUES
+    -- Populate 'assistance' table
+    INSERT INTO pyxis.assistance (description) VALUES
     ('Manutenção'),
     ('Dúvidas'),
     ('Divergência');
 
     -- Associating medicines with dispensers
-    INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
+    INSERT INTO pyxis.dispenser_medicine (dispenser_id, medicine_id) VALUES
     (1, 1),
     (1, 2),
     (1, 4),
@@ -109,7 +109,8 @@ SET search_path TO pyxis;
     (4, 5),
     (5, 1);
 
-    INSERT INTO dispenser_material (dispenser_id, material_id) VALUES
+    -- Associating materials with dispensers
+    INSERT INTO pyxis.dispenser_material (dispenser_id, material_id) VALUES
     (1, 1),
     (1, 2),
     (2, 2),
@@ -118,7 +119,8 @@ SET search_path TO pyxis;
     (4, 5),
     (5, 1);
 
-    INSERT INTO dispenser_assistance (dispenser_id, assistance_id) VALUES
+    -- Associating assistance requests with dispensers
+    INSERT INTO pyxis.dispenser_assistance (dispenser_id, assistance_id) VALUES
     (1, 1),
     (1, 2),
     (1, 3),
@@ -129,8 +131,7 @@ SET search_path TO pyxis;
     (3, 2),
     (3, 3);
 
-    -- Commit all changes (necessary if you are using transactional SQL or certain SQL environments)
-    COMMIT;
+    -- Set the default schema to 'auth' and create 'users' table
     SET search_path TO auth;
 
     CREATE TABLE IF NOT EXISTS auth.users (
@@ -144,11 +145,11 @@ SET search_path TO pyxis;
         mobile_token VARCHAR(255)
     );
 
-    -- Insert the provided entries with bcrypt hashed passwords
-    INSERT INTO users (id, name, email, password_hash, role) VALUES 
-    (1, 'Larissa Morais', 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
-    (2, 'Neide Santos', 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
-    (3, 'Pedro Ferreira', 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
+    -- Populate 'users' table with bcrypt hashed passwords
+    INSERT INTO auth.users (name, email, password_hash, role) VALUES 
+    ('Larissa Morais', 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
+    ('Neide Santos', 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
+    ('Pedro Ferreira', 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
 
+    -- Ensure the 'id' sequence for the 'users' table is set correctly
     SELECT setval(pg_get_serial_sequence('auth.users', 'id'), (SELECT MAX(id) FROM auth.users));
-
