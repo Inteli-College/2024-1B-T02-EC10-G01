@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+COPY ./serviceAccountKey.json .
+
 RUN pip install -r requirements.txt
 
 COPY . .

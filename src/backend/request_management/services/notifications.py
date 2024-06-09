@@ -9,7 +9,7 @@ import dotenv
 
 dotenv.load_dotenv()
 
-cred = credentials.Certificate("../serviceAccountKey.json")
+cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
