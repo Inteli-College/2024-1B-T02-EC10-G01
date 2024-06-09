@@ -16,7 +16,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        service: [request_management, pyxis, another_service] # Define your service folders here
+        service: [request_management, pyxis, auth] 
 
     steps:
       - name: Check out the repo
