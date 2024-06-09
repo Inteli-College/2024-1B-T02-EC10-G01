@@ -1,7 +1,7 @@
 import 'package:asky/api/authentication_api.dart';
 import 'package:asky/api/firebase_api.dart';
+import 'package:asky/views/choose_request.dart';
 import 'package:asky/views/history_page.dart';
-import 'package:asky/views/home_screen.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
 import 'package:asky/views/request_medicine_screen.dart';
@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
               home: SplashScreen(),
               routes: {
                 "/nurse": (context) => HomeNurse(),
+                "/choosse_request":(context) => ChooseRequestScreen(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),
