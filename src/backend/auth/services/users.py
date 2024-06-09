@@ -18,19 +18,15 @@ async def get_user_by_email(session, email: str):
     stmt = select(User).filter(User.email == email)
     result = await session.execute(stmt)
     user = result.scalar()
-    print(user)
-    print(user.to_dict() if user else None)
     return user.to_dict() if user else None
 
 async def get_users_by_role(session, role: str):
-    print("PEGANDO USUÁRIOS PELO ROLE: ", role)
     stmt = select(User).filter(User.role == role)
     result = await session.execute(stmt)
     users = result.scalars().all()
     tokens = []
     for user in users:
         tokens.append(user.mobile_token)
-        print("USUÁRIOS: ", user.mobile_token)
     return tokens
 
 async def get_user_by_id(session, user_id: int):
@@ -38,14 +34,14 @@ async def get_user_by_id(session, user_id: int):
     result = await session.execute(stmt)
     user = result.scalar()
     user = user.to_dict() if user else None
-    return {"id": user["id"], "email": user["email"], "role": user["role"], "mobile_token": user["mobile_token"]}
+    return user
 
 async def create_user(session, email: str, password_hash: str, role: str):
     user = User(email=email, password_hash=password_hash, role=role)
     session.add(user)
     await session.commit()
     await session.refresh(user)
-    return {"id": user.id, "email": user.email, "role": user.role}
+    return user.to_dict()
 
 async def update_user_with_mobile_token(session, email: str, mobile_token: str):
     stmt = select(User).filter(User.email == email)

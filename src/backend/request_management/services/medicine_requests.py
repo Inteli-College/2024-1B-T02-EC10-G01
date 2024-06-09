@@ -82,14 +82,12 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
                 
         # If no HTTPException, extract data from results
         dispenser, medicine, user = results
-        print(user)
-        print(results)
+
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         new_status = MedicineStatusChange(status="pending")
         session.add(new_request)
         await session.commit()
-        print(new_request.to_dict())
 
         try:
             channel = rabbitmq.get_channel()
@@ -116,7 +114,6 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         
         asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
         # await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
-        print(new_request)
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):

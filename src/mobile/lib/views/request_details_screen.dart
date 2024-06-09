@@ -78,7 +78,8 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                     details: {
                       'Item': requestData['medicine']['name'],
                       'Pyxis': requestData['dispenser']['code'] + ' | Andar ' + requestData['dispenser']['floor'].toString(),
-                      'Enfermeiro': requestData['requested_by']['email'],
+                      'Enfermeiro': requestData['requested_by']['name'],
+                      'Data': requestData['created_at'],
                     },
                   ),
                    SizedBox(height: 40),

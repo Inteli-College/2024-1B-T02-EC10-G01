@@ -80,41 +80,41 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   }
 
   void _handleBarcode(BarcodeCapture barcodes) async {
-  final pyxisStore = context.read<PyxisStore>(); // Get the store instance
-  if (barcodes.barcodes.isNotEmpty && mounted) {
-    final barcodeValue = barcodes.barcodes.firstOrNull;
+    final pyxisStore = context.read<PyxisStore>(); // Get the store instance
+    if (barcodes.barcodes.isNotEmpty && mounted) {
+      final barcodeValue = barcodes.barcodes.firstOrNull;
 
-    setState(() {
-      _barcode = barcodeValue;
-    });
+      setState(() {
+        _barcode = barcodeValue;
+      });
 
-    try {
-      final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
-      final pyxisId = barcodeJson['dispenser_id'];
+      try {
+        final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
+        final pyxisId = barcodeJson['dispenser_id'];
+        print('MY PYXIS ID');
+        print(pyxisId);
 
-      if (pyxisId != null) {
-        var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId);
-        if (pyxisData != null) {
-          pyxisStore.setCurrentPyxisData(pyxisData);
-          _controller.stop();
-          Navigator.pushNamed(context, '/medicine').then((_) {
-            setState(() {
-              _barcode = null; // Reset the barcode data
-              _controller.start(); // Restart the scanner
+        if (pyxisId != null) {
+          var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId);
+          print('GETTING PYXIS');
+          print(pyxisData);
+          if (pyxisData != null) {
+            pyxisStore.setCurrentPyxisData(pyxisData);
+            _controller.stop();
+            Navigator.pushNamed(context, '/medicine').then((_) {
+              _controller.start();
             });
-          });
+          } else {
+            print('Failed to fetch pyxis data');
+          }
         } else {
-          print('Failed to fetch pyxis data');
+          print('pyxisId not found in the barcode JSON');
         }
-      } else {
-        print('pyxisId not found in the barcode JSON');
+      } catch (e) {
+        print('Error parsing JSON: $e');
       }
-    } catch (e) {
-      print('Error parsing JSON: $e');
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

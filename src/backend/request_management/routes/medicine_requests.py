@@ -27,7 +27,7 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
 async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
     created_request = await create_request(session, request, user)
     print(f"Created request: {created_request}")
-    return created_request
+    return created_request.to_dict()
 
 @router.get("/last")
 async def read_last_medicine_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
