@@ -55,3 +55,4 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/elisaflemer/asky-${{ matrix.service }}:latest
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}

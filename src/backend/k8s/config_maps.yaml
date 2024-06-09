@@ -10,32 +10,53 @@ data:
     CREATE SCHEMA IF NOT EXISTS auth;
 
     -- Set the default schema for the session
-    SET search_path TO pyxis;
+SET search_path TO pyxis;
 
-    -- Create tables within the 'pyxis' schema
-    CREATE TABLE IF NOT EXISTS dispenser (
+    -- Create tables within the 'hospital' schema
+    CREATE TABLE IF NOT EXISTS pyxis.dispenser (
         id SERIAL PRIMARY KEY,
         code VARCHAR(5) UNIQUE NOT NULL,
         floor INTEGER NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS medicine (
+    CREATE TABLE IF NOT EXISTS pyxis.medicine (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         dosage VARCHAR(255) NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS material (
+    CREATE TABLE IF NOT EXISTS pyxis.material (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS dispenser_medicine (
+    CREATE TABLE IF NOT EXISTS pyxis.assistance (
+        id SERIAL PRIMARY KEY,
+        description VARCHAR(255) UNIQUE NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS pyxis.dispenser_medicine (
         dispenser_id INTEGER NOT NULL,
         medicine_id INTEGER NOT NULL,
         PRIMARY KEY (dispenser_id, medicine_id),
         FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
         FOREIGN KEY (medicine_id) REFERENCES medicine(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS pyxis.dispenser_material (
+        dispenser_id INTEGER NOT NULL,
+        material_id INTEGER NOT NULL,
+        PRIMARY KEY (dispenser_id, material_id),
+        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+        FOREIGN KEY (material_id) REFERENCES material(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS pyxis.dispenser_assistance (
+        dispenser_id INTEGER NOT NULL,
+        assistance_id INTEGER NOT NULL,
+        PRIMARY KEY (dispenser_id, assistance_id),
+        FOREIGN KEY (dispenser_id) REFERENCES dispenser(id),
+        FOREIGN KEY (assistance_id) REFERENCES assistance(id)
     );
 
     -- Insert data into 'dispenser'
@@ -52,7 +73,13 @@ data:
     ('Ibuprofeno', '200 mg'),
     ('Amoxicilina', '500 mg'),
     ('Dipirona', '500 mg'),
-    ('Captopril', '25 mg');
+    ('Captopril', '25 mg'),
+    ('Losartana', '50 mg'),
+    ('Metformina', '500 mg'),
+    ('Atorvastatina', '20 mg'),
+    ('Sertralina', '50 mg'),
+    ('Omeprazol', '20 mg');
+
 
     -- Insert data into 'material'
     INSERT INTO material (name) VALUES
@@ -62,8 +89,27 @@ data:
     ('Cateter IV'),
     ('Ataduras');
 
+    INSERT INTO assistance (description) VALUES
+    ('Manutenção'),
+    ('Dúvidas'),
+    ('Divergência');
+
     -- Associating medicines with dispensers
     INSERT INTO dispenser_medicine (dispenser_id, medicine_id) VALUES
+    (1, 1),
+    (1, 2),
+    (1, 4),
+    (1, 5),
+    (1, 6),
+    (2, 10),
+    (2, 5),
+    (2, 4),
+    (2, 3),
+    (3, 4),
+    (4, 5),
+    (5, 1);
+
+    INSERT INTO dispenser_material (dispenser_id, material_id) VALUES
     (1, 1),
     (1, 2),
     (2, 2),
@@ -72,21 +118,37 @@ data:
     (4, 5),
     (5, 1);
 
+    INSERT INTO dispenser_assistance (dispenser_id, assistance_id) VALUES
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (2, 1),
+    (2, 2),
+    (2, 3),
+    (3, 1),
+    (3, 2),
+    (3, 3);
+
+    -- Commit all changes (necessary if you are using transactional SQL or certain SQL environments)
+    COMMIT;
     SET search_path TO auth;
 
-    CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE IF NOT EXISTS auth.users (
         id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         role VARCHAR(100) NOT NULL,
         created_at TIMESTAMP,
-        updated_at TIMESTAMP
+        updated_at TIMESTAMP,
+        mobile_token VARCHAR(255)
     );
 
     -- Insert the provided entries with bcrypt hashed passwords
-    INSERT INTO users (id, email, password_hash, role) VALUES 
-    (1, 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
-    (2, 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
-    (3, 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
+    INSERT INTO users (id, name, email, password_hash, role) VALUES 
+    (1, 'Larissa Morais', 'admin@admin.com', '$2b$12$1kdVBvyvbLdvRUB3mmoCw.Eb9EYTlSbNskq9EueQR7Z.kt8.mvEam', 'admin'),
+    (2, 'Neide Santos', 'nurse@nurse.com', '$2b$12$RnEDdfRZppccKkjbzmL0QOqzUmNzg73sWwbd6PnQJEfj2Cxl.6sIq', 'nurse'),
+    (3, 'Pedro Ferreira', 'agent@agent.com', '$2b$12$odk8pcSN25kBrtN7uI/UOO146EeDACNp4qyXu5AXTsWPHHqjRIohS', 'agent');
 
-    SELECT setval(pg_get_serial_sequence('users', 'id'), (SELECT MAX(id) FROM users));
+    SELECT setval(pg_get_serial_sequence('auth.users', 'id'), (SELECT MAX(id) FROM auth.users));
+
