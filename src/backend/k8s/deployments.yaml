@@ -120,7 +120,6 @@ spec:
       containers:
       - name: request-management
         image: elisaflemer/asky-request_management:latest
-      readOnly: true
         imagePullPolicy: Always
         ports:
         - containerPort: 8001
