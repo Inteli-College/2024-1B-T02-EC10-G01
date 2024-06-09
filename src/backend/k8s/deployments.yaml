@@ -64,6 +64,7 @@ spec:
       - name: postgres-initdb
         configMap:
           name: postgres-initdb-config
+          
 
 ---
 
@@ -94,11 +95,14 @@ spec:
           value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
         - name: GATEWAY_URL
           value: "http://gateway.asky.svc.cluster.local:80"
-        - name: FIREBASE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: firebase-secret
-              key: firebase-key.json
+        volumeMounts:
+        - name: firebase-key
+          mountPath: "/var/secrets"
+          readOnly: true
+      volumes:
+      - name: firebase-key
+        secret:
+          secretName: firebase-secret
 
 ---
 
@@ -128,8 +132,11 @@ spec:
           value: "postgresql+asyncpg://postgres:postgres@postgres.asky.svc.cluster.local/asky"
         - name: GATEWAY_URL
           value: "http://gateway.asky.svc.cluster.local:80"
-        - name: FIREBASE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: firebase-secret
-              key: firebase-key.json
+        volumeMounts:
+        - name: firebase-key
+          mountPath: "/var/secrets"
+          readOnly: true
+      volumes:
+      - name: firebase-key
+        secret:
+          secretName: firebase-secret

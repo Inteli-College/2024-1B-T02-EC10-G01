@@ -23,6 +23,8 @@ kubectl wait --for=condition=Ready pod -l app=postgres -n asky --timeout=300s
 echo "PostgreSQL pod is ready. Checking logs..."
 kubectl logs -l app=postgres -n asky
 
+kubectl apply -f firebase-secret.yaml
+
 # Apply the Deployment for the backend
 kubectl apply -f deployments.yaml
 
