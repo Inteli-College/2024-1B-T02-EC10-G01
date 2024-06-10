@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:asky/widgets/bottom_bar.dart';
 import 'package:asky/widgets/home_nurse_body.dart';
+import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_bottom_bar.dart';
 import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_home_page_body.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _PharmacyHomePageState extends State<PharmacyHomePage> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex), // Displaying the widget based on selected index
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: PharmacyCustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
           print('Index: $index');
