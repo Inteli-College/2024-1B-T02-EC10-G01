@@ -9,7 +9,6 @@ class User(Base):
     __table_args__ = {'schema': 'auth'}
     
     id = Column(Integer, primary_key=True, index=True, unique=True, nullable=False, autoincrement=True)
-    name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     role = Column(String(100), nullable=False)
@@ -21,7 +20,6 @@ class User(Base):
         """Return dictionary representation of the User."""
         return {
             "id": self.id,
-            "name": self.name,
             "email": self.email,
             "role": self.role if self.role else None,  # Accessing enum value
             "created_at": self.created_at.isoformat() if self.created_at else None,  # Format datetime as string

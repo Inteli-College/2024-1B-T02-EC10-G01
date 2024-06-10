@@ -30,23 +30,24 @@ class _SplashScreenState extends State<SplashScreen> {
         key: "session", aOptions: _getAndroidOptions());
     print(session);
     if (session != null) {
-      var sessionData = jsonDecode(session);
-      var expiresAt = DateTime.parse(sessionData['expires_at']);
-      print(expiresAt);
-      print(DateTime.now().toUtc());
-      if (sessionData['expires_at'] != null &&
-          expiresAt.isAfter(DateTime.now().toUtc())) {
-        // Token is valid
-        if (sessionData['role'] == 'nurse') {
-          Navigator.pushReplacementNamed(context, '/nurse');
-        } else {
-          // Token is expired or not set
-          Navigator.pushReplacementNamed(context, '/login');
-        }
-      } else {
-          // Token is expired or not set
-          Navigator.pushReplacementNamed(context, '/login');
-        }
+      Navigator.pushReplacementNamed(context, '/nurse');
+      // var sessionData = jsonDecode(session);
+      // var expiresAt = DateTime.parse(sessionData['expires_at']);
+      // print(expiresAt);
+      // print(DateTime.now().toUtc());
+      // if (sessionData['expires_at'] != null &&
+      //     expiresAt.isAfter(DateTime.now().toUtc())) {
+      //   // Token is valid
+      //   if (sessionData['role'] == 'nurse') {
+      //     Navigator.pushReplacementNamed(context, '/nurse');
+      //   } else {
+      //     // Token is expired or not set
+      //     Navigator.pushReplacementNamed(context, '/login');
+      //   }
+      // } else {
+      //     // Token is expired or not set
+      //     Navigator.pushReplacementNamed(context, '/login');
+      //   }
     } else {
       Navigator.pushReplacementNamed(context, '/login');
     }

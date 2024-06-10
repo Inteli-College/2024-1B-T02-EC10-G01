@@ -13,27 +13,38 @@ redis_client = redis.Redis(host='redis', port=6379, db=0)
 
 router = APIRouter(prefix="/medicine")
 
+import json
+
 @router.get("/")
 async def read_medicine_requests(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     key = "read_medicine_requests"
     resultado = redis_client.get(key)
     if resultado:
-        return pickle.loads(resultado)
+        return json.loads(resultado)
+    
     requests = await fetch_requests(session)
-    redis_client.setex(key, 120, pickle.dumps(requests))
-    return [request.to_dict() for request in requests]
+    request_dicts = [request.to_dict() for request in requests]
+    redis_client.setex(key, 60, json.dumps(request_dicts))
+    return request_dicts
 
 @router.post("/")
 async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+    key = "read_medicine_requests"
     created_request = await create_request(session, request, user)
     print(f"Created request: {created_request}")
+    
+    # Update cache with the new list of requests after adding the new one
+    requests = await fetch_requests(session)
+    request_dicts = [request.to_dict() for request in requests]
+    redis_client.setex(key, 60, json.dumps(request_dicts))
     return created_request.to_dict()
+
+
 
 @router.get("/last")
 async def read_last_medicine_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     request = await fetch_last_user_request(session, user)
     return request
-
 
 @router.get("/{id}")
 async def read_medicine_request(id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
