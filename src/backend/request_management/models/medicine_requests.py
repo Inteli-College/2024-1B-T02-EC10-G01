@@ -15,7 +15,6 @@ class MedicineRequest(Base):
     status_id = Column(Integer, ForeignKey('requests.medicine_status.id'))
     emergency = Column(Boolean, default=False)
     status = relationship("MedicineStatusChange", uselist=False, back_populates="request")
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
     def to_dict(self):
@@ -26,8 +25,7 @@ class MedicineRequest(Base):
             "medicine_id": self.medicine_id,
             "emergency": self.emergency,
             "status_id": self.status_id,
-            "created_at": self.created_at.isoformat()
-        }
+            }
     
 class MedicineStatusChange(Base):
     __tablename__ = 'medicine_status'
