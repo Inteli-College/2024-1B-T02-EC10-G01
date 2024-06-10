@@ -8,6 +8,7 @@ class AuthenticationApi {
         encryptedSharedPreferences: true,
       );
   Future<void> signIn(String _email, String _password) async {
+    print('inside sign in');
     const _secureStorage = FlutterSecureStorage();
 
     var _mobile_token = await _secureStorage.read(
@@ -18,6 +19,7 @@ class AuthenticationApi {
       "password": _password,
       "mobile_token": _mobile_token
     };
+    print(Constants.baseUrl + '/auth/login');
     final response = await http.post(
         Uri.parse(Constants.baseUrl + '/auth/login'),
         headers: {'Content-Type': "application/json"},

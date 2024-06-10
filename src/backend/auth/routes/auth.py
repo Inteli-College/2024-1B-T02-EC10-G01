@@ -43,6 +43,7 @@ async def register(
 async def login(
     request: UserLoginRequest, session: AsyncSession = Depends(get_session)
 ):
+    print('INSIDE AUTH')
     user = await get_user_by_email(session, request.email)
     if not user:
         raise HTTPException(
