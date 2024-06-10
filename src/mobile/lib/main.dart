@@ -5,6 +5,7 @@ import 'package:asky/views/history_page.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
 import 'package:asky/views/request_medicine_screen.dart';
+import 'package:asky/views/request_material_screen.dart';
 import 'package:asky/views/home_nurse.dart';
 import 'package:asky/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -70,11 +71,12 @@ class MyApp extends StatelessWidget {
               home: SplashScreen(),
               routes: {
                 "/nurse": (context) => HomeNurse(),
-                "/choosse_request":(context) => ChooseRequestScreen(),
+                "/choose_request":(context) => ChooseRequestScreen(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),
                 "/medicine": (context) => RequestMedicine(),
+                "/material": (context) => RequestMaterial(),
                 "/qrcode": (context) => BarcodeScannerSimple(),
                 '/nurse_request': (context) {
                   final args =

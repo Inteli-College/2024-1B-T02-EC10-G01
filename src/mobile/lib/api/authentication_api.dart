@@ -11,10 +11,13 @@ class AuthenticationApi {
     const _secureStorage = FlutterSecureStorage();
 
     var _mobile_token = await _secureStorage.read(
-        key: "mobile_token", aOptions: _getAndroidOptions()
-      );
+        key: "mobile_token", aOptions: _getAndroidOptions());
 
-    final Map<String, dynamic> body = {"email": _email, "password": _password, "mobile_token": _mobile_token};
+    final Map<String, dynamic> body = {
+      "email": _email,
+      "password": _password,
+      "mobile_token": _mobile_token
+    };
     final response = await http.post(
         Uri.parse(Constants.baseUrl + '/auth/login'),
         headers: {'Content-Type': "application/json"},
@@ -23,7 +26,6 @@ class AuthenticationApi {
     if (response.statusCode == 200) {
       await _secureStorage.write(
           key: "session", value: response.body, aOptions: _getAndroidOptions());
-  
     } else {
       print(response.body);
       throw Exception('Failed to auth');

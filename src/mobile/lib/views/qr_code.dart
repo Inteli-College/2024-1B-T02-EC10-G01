@@ -101,7 +101,7 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
           if (pyxisData != null) {
             pyxisStore.setCurrentPyxisData(pyxisData);
             _controller.stop();
-            Navigator.pushNamed(context, '/choosse_request').then((_) {
+            Navigator.pushNamed(context, '/choose_request').then((_) {
               _controller.start();
             });
           } else {
