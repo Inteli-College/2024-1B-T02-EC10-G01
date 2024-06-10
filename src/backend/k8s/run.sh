@@ -1,7 +1,5 @@
 #!/bin/bash
 
-kubectl apply -f namespace.yaml
-
 # Create the PersistentVolume and PersistentVolumeClaim
 kubectl apply -f persistent_volumes_and_claims.yaml
 
@@ -13,15 +11,15 @@ kubectl apply -f postgres-deployment.yaml
 kubectl apply -f postgres-service.yaml
 
 # Monitor the status of the deployment
-kubectl get pods -n asky
+kubectl get pods 
 
 # Wait for the PostgreSQL pod to be in a running state
 echo "Waiting for PostgreSQL pod to be ready..."
-kubectl wait --for=condition=Ready pod -l app=postgres -n asky --timeout=300s
+kubectl wait --for=condition=Ready pod -l app=postgres --timeout=300s
 
 # Once the pod is ready, check the logs to ensure initialization was successful
 echo "PostgreSQL pod is ready. Checking logs..."
-kubectl logs -l app=postgres -n asky
+kubectl logs -l app=postgres 
 
 kubectl apply -f firebase-secret.yaml
 
@@ -31,4 +29,10 @@ kubectl apply -f deployments.yaml
 # Apply the Service for the backend
 kubectl apply -f services.yaml
 
+# helm install filebeat ./logging/filebeat -n default
+# helm install logstash ./logging/logstash -n default
+# helm install elasticsearch ./logging/elasticsearch -n default
+#helm install kibana ./logging/kibana -n default
+
 kubectl apply -f ingress.yaml
+
