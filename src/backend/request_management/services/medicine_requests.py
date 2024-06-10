@@ -86,6 +86,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         new_status = MedicineStatusChange(status="pending")
+        new_request.status = new_status
         session.add(new_request)
         await session.commit()
 

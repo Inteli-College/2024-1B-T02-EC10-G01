@@ -1,0 +1,12 @@
+{
+    "position": 2,
+    "label": "Backend",
+    "collapsible": true,
+    "collapsed": true,
+    "className": "red",
+    "link": {
+      "type": "generated-index",
+      "title": "Artefatos de backend da Sprint 4",
+      "slug": "/sprint-4/architecture/backend"
+    }
+  }

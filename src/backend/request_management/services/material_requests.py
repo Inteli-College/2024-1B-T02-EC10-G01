@@ -70,7 +70,7 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         dispenser = results[0]
         material = results[1]
         user = results[2]
-        print(results)
+        print("RESULTS " + results)
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
         new_status = MaterialStatusChange(status="pending")

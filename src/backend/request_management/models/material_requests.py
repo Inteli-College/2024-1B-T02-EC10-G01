@@ -13,7 +13,6 @@ class MaterialRequest(Base):
     requested_by = Column(Integer)
     material_id = Column(Integer)
     status_id = Column(Integer, ForeignKey('requests.material_status.id'))
-    emergency = Column(Boolean, default=False)
     status = relationship("MaterialStatusChange", uselist=False, back_populates="request")
 
     def to_dict(self):
@@ -22,7 +21,6 @@ class MaterialRequest(Base):
             "dispenser_id": self.dispenser_id,
             "requested_by": self.requested_by,
             "material_id": self.material_id,
-            "emergency": self.emergency,
             "status_id": self.status_id
         }
 
