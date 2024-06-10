@@ -6,7 +6,7 @@ import 'package:asky/constants.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
-  final authenticationApi = AuthenticationApi();
+  final AuthenticationApi authenticationApi = AuthenticationApi();
 
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
@@ -49,13 +49,36 @@ class LoginPage extends StatelessWidget {
                         SizedBox(height: 30),
                         _buildTextField(emailCtrl, 'Email', context),
                         SizedBox(height: 20),
-                        _buildTextField(passCtrl, 'Senha', context, isPassword: true),  // Now this field will hide the input
+                        _buildTextField(passCtrl, 'Senha', context, isPassword: true),
                         SizedBox(height: 30),
                         StyledButton(
                           onPressed: () async {
-                            await authenticationApi
-                                .signIn(emailCtrl.text, passCtrl.text)
-                                .then((c) => Navigator.pushNamed(context, "/nurse"));
+                            try {
+                              String? role = await authenticationApi.signIn(emailCtrl.text, passCtrl.text);
+                              if (role == 'nurse') {
+                                Navigator.pushNamed(context, '/nurse');
+                              } else if (role == 'agent') {
+                                Navigator.pushNamed(context, '/pharmacy_home');
+                              } else {
+                                throw Exception('Unknown role');
+                              }
+                            } catch (e) {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: Text('Login Failed'),
+                                  content: Text('$e'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           text: "Entrar",
                         ),
@@ -70,36 +93,37 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-Widget _buildTextField(TextEditingController controller, String label, BuildContext context, {bool isPassword = false}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        label,
-        style: GoogleFonts.notoSans(
-          textStyle: Theme.of(context).textTheme.displayLarge,
-          fontSize: 16,
-          fontWeight: FontWeight.w300,
-          color: Colors.white,
-        ),
-      ),
-      SizedBox(height: 5),
-      TextField(
-        controller: controller,
-        obscureText: isPassword,  // This will obscure the text if it's the password field
-        style: const TextStyle(color: Colors.black),
-        decoration: InputDecoration(
-          labelStyle: const TextStyle(color: Colors.white),
-          filled: true,
-          fillColor: Colors.white,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+
+  Widget _buildTextField(TextEditingController controller, String label, BuildContext context, {bool isPassword = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.notoSans(
+            textStyle: Theme.of(context).textTheme.displayLarge,
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+            color: Colors.white,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-      ),
-    ],
-  );
-}
+        SizedBox(height: 5),
+        TextField(
+          controller: controller,
+          obscureText: isPassword,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            labelStyle: const TextStyle(color: Colors.white),
+            filled: true,
+            fillColor: Colors.white,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
 }

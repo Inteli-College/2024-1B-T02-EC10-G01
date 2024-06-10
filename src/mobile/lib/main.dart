@@ -4,6 +4,7 @@ import 'package:asky/views/choose_request.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
+import 'package:asky/views/pharmacy_flow/pharmacy_home_page.dart';
 import 'package:asky/views/request_medicine_screen.dart';
 import 'package:asky/views/home_nurse.dart';
 import 'package:asky/views/splash_screen.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
                 scaffoldBackgroundColor: Constants.offWhite,
                 fontFamily: GoogleFonts.notoSans().fontFamily,
               ),
-              home: SplashScreen(),
+              home: LoginPage(),
               routes: {
                 "/nurse": (context) => HomeNurse(),
                 "/choosse_request":(context) => ChooseRequestScreen(),
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
                     requestId: args['requestId'],
                   );
                 },
+                "/pharmacy_home": (context) => PharmacyHomePage(),
               },
             ),
           );
