@@ -41,7 +41,7 @@ class LastRequestCard extends StatelessWidget {
             Navigator.pushNamed(
               context,
               '/nurse_request', // This is the route name for RequestDetailsScreen
-              arguments: {'requestId': id} // Passing id as an argument
+              arguments: {'requestId': id, 'type': requestType} // Passing id as an argument
             );
           },
           child: Card(

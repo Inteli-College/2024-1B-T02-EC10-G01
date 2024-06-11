@@ -92,7 +92,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
         material_query = (
             select(
                 MaterialRequest.id,
-                literal(None).label("dispenser_id"),  # No dispenser_id for material requests
+                MaterialRequest.dispenser_id,
                 MaterialRequest.material_id,
                 MaterialRequest.status_id,
                 MaterialRequest.created_at,
@@ -121,7 +121,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "created_at": request_result[4],
                 "batch_number": request_result[5],
                 "emergency": request_result[6],
-                "request_type": request_result[7]
+                "request_type": request_type
             }
         else:
             request_dict = {
@@ -132,7 +132,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "created_at": request_result[4],
                 "batch_number": None,  # No batch_number for material requests
                 "emergency": None,
-                "request_type": request_result[7]
+                "request_type": request_type
             }
             
         print(f"Request dict: {request_dict}")
@@ -141,6 +141,8 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
         print(request_dict)
         
         dispenser_id = request_dict.get("dispenser_id")
+        
+        print(f"DISPENSER ID: {dispenser_id}")
         if dispenser_id is not None:
             dispenser_data_task = _fetch_dispenser_data(int(dispenser_id), http_session)
         else:
@@ -153,7 +155,9 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
 
         user_data_task = _fetch_user_data(user['sub'], http_session)
 
-        tasks = [task for task in [dispenser_data_task, item_data_task, user_data_task] if task is not None]
+        tasks = [task for task in [dispenser_data_task, item_data_task, user_data_task] if task is not None]\
+    
+        print('after tasks')
 
         try:
             results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -168,6 +172,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
         item = results[1 if dispenser_data_task else 0]
         user_data = results[-1]
 
+        print('AAAAAAAAAAAAAAA')
         request = {
             "id": request_dict['id'],
             "dispenser": dispenser,
@@ -177,5 +182,8 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
             "created_at": request_dict['created_at'],
             "batch_number": request_dict['batch_number'] if request_type == "medicine" else None,
             "emergency": request_dict['emergency'],
+            "request_type": request_dict['request_type']
         }
+        print('oi ')
+        print(f"last Request: {request}")
         return request
