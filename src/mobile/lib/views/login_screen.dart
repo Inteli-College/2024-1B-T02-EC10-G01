@@ -49,12 +49,14 @@ class LoginPage extends StatelessWidget {
                         SizedBox(height: 30),
                         _buildTextField(emailCtrl, 'Email', context),
                         SizedBox(height: 20),
-                        _buildTextField(passCtrl, 'Senha', context, isPassword: true),
+                        _buildTextField(passCtrl, 'Senha', context,
+                            isPassword: true),
                         SizedBox(height: 30),
                         StyledButton(
                           onPressed: () async {
                             try {
-                              String? role = await authenticationApi.signIn(emailCtrl.text, passCtrl.text);
+                              String role = await authenticationApi.signIn(
+                                  emailCtrl.text, passCtrl.text);
                               if (role == 'nurse') {
                                 Navigator.pushNamed(context, '/nurse');
                               } else if (role == 'agent') {
@@ -94,7 +96,9 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, BuildContext context, {bool isPassword = false}) {
+  Widget _buildTextField(
+      TextEditingController controller, String label, BuildContext context,
+      {bool isPassword = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,7 +124,8 @@ class LoginPage extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
         ),
       ],

@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:asky/views/pharmacy_flow/in_progress.dart';
+import 'package:asky/views/pharmacy_flow/to_accept.dart';
 import 'package:asky/widgets/bottom_bar.dart';
 import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_bottom_bar.dart';
@@ -8,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:asky/api/authentication_api.dart';
-import 'package:asky/api/request_last_solicitation.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/top_bar.dart';
@@ -27,7 +28,8 @@ class _PharmacyHomePageState extends State<PharmacyHomePage> {
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
     PharmacyHomePageBody(),
-    HistoryPage(),
+    AcceptSolicitationPage(),
+    ViewSolicitationPage(),
     Text('USER', style: optionStyle),
   ];
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class AcceptSolicitationCard extends StatelessWidget {
+class ViewSolicitationCard extends StatelessWidget {
   final String medicineName;
   final String floor;
   final String pyxis;
   final String isUrgent;  // 'Urgente' or 'Comum'
   
-  const AcceptSolicitationCard({
+  const ViewSolicitationCard({
     Key? key,
     required this.medicineName,
     required this.floor,
@@ -43,24 +43,7 @@ class AcceptSolicitationCard extends StatelessWidget {
               Text(isUrgent, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: isUrgent == 'Urgente' ? Colors.red : Colors.black)),
             ],
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              margin: EdgeInsets.only(top: 30), 
-              child: FloatingActionButton(
-                onPressed: () {
-                  //
-                  //
-                  //
-                  //
-                },
-                child: Text('Aceitar', style: TextStyle(color: Colors.white)), // Text color set to white
-                backgroundColor: Color(0xFF1A365D), // Hex color converted to Flutter color
-                // Removed mini: true to use default size, adjust if a specific size is needed
-              ),
-            ),
-          ),
+          
         ],
       ),
     );

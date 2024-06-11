@@ -4,7 +4,9 @@ import 'package:asky/views/choose_request.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/login_screen.dart';
+import 'package:asky/views/pharmacy_flow/in_progress.dart';
 import 'package:asky/views/pharmacy_flow/pharmacy_home_page.dart';
+import 'package:asky/views/pharmacy_flow/to_accept.dart';
 import 'package:asky/views/request_medicine_screen.dart';
 import 'package:asky/views/request_material_screen.dart';
 import 'package:asky/views/home_nurse.dart';
@@ -88,6 +90,8 @@ class MyApp extends StatelessWidget {
                   );
                 },
                 "/pharmacy_home": (context) => PharmacyHomePage(),
+                "/accept_solicitation": (context) => AcceptSolicitationPage(),
+                "/view_solicitation": (context) => ViewSolicitationPage(),
               },
             ),
           );
