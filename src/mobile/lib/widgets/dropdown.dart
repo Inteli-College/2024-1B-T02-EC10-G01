@@ -4,9 +4,15 @@ import 'package:asky/constants.dart';
 class RequestDropdown extends StatefulWidget {
   final List<dynamic> items;
   final dynamic initialSelectedItem;
-  final ValueChanged<dynamic> onChanged;  // Callback to handle changes
+  final ValueChanged<dynamic> onChanged;
+  final String dropdownType; // Optional argument for dropdown type
 
-  RequestDropdown({required this.items, this.initialSelectedItem, required this.onChanged});
+  RequestDropdown({
+    required this.items,
+    this.initialSelectedItem,
+    required this.onChanged,
+    this.dropdownType = 'medicine', // Default value set to 'medicine'
+  });
 
   @override
   _RequestDropdownState createState() => _RequestDropdownState();
@@ -18,7 +24,6 @@ class _RequestDropdownState extends State<RequestDropdown> {
   @override
   void initState() {
     super.initState();
-    // Initialize _selectedItem with the widget's initialSelectedItem if provided.
     _selectedItem = widget.initialSelectedItem;
   }
 
@@ -46,13 +51,16 @@ class _RequestDropdownState extends State<RequestDropdown> {
         child: DropdownButton<dynamic>(
           isExpanded: true,
           value: _selectedItem,
-          hint: Text('Selecione o medicamento', style: TextStyle(color: Constants.askyBlue)),
+          hint: Text(
+            'Selecione o medicamento',
+            style: TextStyle(color: Constants.askyBlue),
+          ),
           icon: Icon(Icons.arrow_drop_down, color: Constants.askyBlue),
           onChanged: (dynamic newValue) {
             setState(() {
               _selectedItem = newValue;
             });
-            widget.onChanged(newValue);  // Trigger the callback on change
+            widget.onChanged(newValue);
           },
           items: widget.items.map<DropdownMenuItem<dynamic>>((dynamic value) {
             return DropdownMenuItem<dynamic>(
@@ -61,7 +69,9 @@ class _RequestDropdownState extends State<RequestDropdown> {
                 color: Colors.white,
                 padding: EdgeInsets.all(8),
                 child: Text(
-                  value['name'].toString() + ' ' + value['dosage'].toString(),
+                  widget.dropdownType == 'medicine'
+                      ? '${value['name']} ${value['dosage']}'
+                      : value['name'].toString(),
                   style: TextStyle(color: Constants.askyBlue),
                 ),
               ),

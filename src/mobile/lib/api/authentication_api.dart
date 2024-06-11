@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:asky/constants.dart';
+import 'package:flutter/material.dart';
 
 class AuthenticationApi {
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
@@ -55,5 +56,28 @@ class AuthenticationApi {
       return session["access_token"];
     }
     return null;
+  }
+
+  Future<bool> checkToken() async {
+    const secureStorage = FlutterSecureStorage();
+    print("Checking token");
+    var session = await secureStorage.read(key: "session", aOptions: _getAndroidOptions());
+    print(session);
+    if (session != null) {
+      var sessionData = jsonDecode(session);
+      var expiresAt = DateTime.parse(sessionData['expires_at']);
+      print(expiresAt);
+      print(DateTime.now().toUtc());
+      print(expiresAt.isAfter(DateTime.now().toUtc()));
+      if (expiresAt.isAfter(DateTime.now().toUtc())) {
+
+        return true;
+      } else {  
+        return false;
+
+      }
+    } else {
+      return false;
+    }
   }
 }

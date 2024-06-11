@@ -1,8 +1,8 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:asky/constants.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:asky/api/authentication_api.dart';
+import 'package:asky/constants.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,42 +10,42 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // Secure storage options for Android
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
+
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  final AuthenticationApi auth = AuthenticationApi();
 
   @override
   void initState() {
     super.initState();
+    startTimer();
+  }
+
+  // Start a timer to delay the navigation
+  void startTimer() {
     Timer(Duration(seconds: 1), () {
-      checkToken();
+      _checkAndNavigate();
     });
   }
 
-  void checkToken() async {
-    print("Checking token");
-    var session = await secureStorage.read(
-        key: "session", aOptions: _getAndroidOptions());
-    print(session);
-    if (session != null) {
-      var sessionData = jsonDecode(session);
-      var expiresAt = DateTime.parse(sessionData['expires_at']);
-      print(expiresAt);
-      print(DateTime.now().toUtc());
-      if (expiresAt.isAfter(DateTime.now().toUtc())) {
-        // Token is valid
-        if (sessionData['role'] == 'nurse') {
-          Navigator.pushReplacementNamed(context, '/nurse');
-        } else {
-          Navigator.pushReplacementNamed(context, '/login');
-        }
+  // Check the token and navigate accordingly
+  Future<void> _checkAndNavigate() async {
+    try {
+      bool isValid = await auth.checkToken();
+      if (!mounted) return;  // Ensure the widget is still mounted before using context
+      if (isValid) {
+        Navigator.pushReplacementNamed(context, '/nurse');
       } else {
-        // Token is expired
         Navigator.pushReplacementNamed(context, '/login');
       }
-    } else {
-      // No session found
+    } catch (e) {
+      // Handle any errors that occur during token check
+      print('Error checking token: $e');
+      // Optionally, navigate to an error page or show a message
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/login');
     }
   }

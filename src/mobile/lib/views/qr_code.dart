@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:asky/stores/pyxis_store.dart'; // Import the store
 import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/api/authentication_api.dart';
+
 
 class GuideBoxPainter extends CustomPainter {
   @override
@@ -58,11 +60,20 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   Barcode? _barcode;
   late MobileScannerController _controller;
   RequestMedicineApi requestMedicineApi = RequestMedicineApi();
+  final AuthenticationApi auth = AuthenticationApi();
 
   @override
   void initState() {
     super.initState();
+    _checkToken();
     _controller = MobileScannerController();
+  }
+
+  Future<void> _checkToken() async {
+    if (!await auth.checkToken()) {
+      print('Token is invalid');
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   Widget _buildBarcode(Barcode? value) {

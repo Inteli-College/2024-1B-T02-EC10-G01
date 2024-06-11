@@ -16,21 +16,13 @@ class RequestMaterial extends StatefulWidget {
 }
 
 class _RequestMaterialState extends State<RequestMaterial> {
-  //bool toggleValue = false;
   bool isLoading = false; // Add this line to manage loading state
   TextEditingController textEditingController = TextEditingController();
-  //String inputFieldButtonText = "Número de lote";
   dynamic selectedMaterial = ''; // Local state to hold selected material
   RequestMaterialApi requestMaterialApi = RequestMaterialApi();
 
-  // void _handleToggle(bool newValue) {
-  //   setState(() {
-  //     toggleValue = newValue;
-  //   });
-  // }
 
   void _handleDropdownChange(dynamic newValue) {
-    print(newValue);
     setState(() {
       selectedMaterial = newValue; // Update local state with new selection
     });
@@ -63,31 +55,10 @@ class _RequestMaterialState extends State<RequestMaterial> {
               child: RequestDropdown(
                 items: pyxisStore.currentPyxisData['materials'].toList(),
                 onChanged: _handleDropdownChange,
+                dropdownType: 'material',
               ),
             ),
             SizedBox(height: 40),
-            // Center(
-            //   child: RequestToggle(
-            //     initialValue: toggleValue,
-            //     onToggle: _handleToggle,
-            //   ),
-            // ),
-            // SizedBox(height: 40),
-            // Visibility(
-            //   visible: toggleValue,
-            //   child: Center(
-            //     child: Column(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         CustomInputField(
-            //           controller: textEditingController,
-            //           buttonText: inputFieldButtonText,
-            //         ),
-            //         SizedBox(height: 40),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             Center(
               child: StyledButton(
                 text: "Confirmar",
@@ -96,8 +67,6 @@ class _RequestMaterialState extends State<RequestMaterial> {
                     isLoading =
                         true; // Set loading to true when the request starts
                   });
-                  // final batchNumber =
-                  //     toggleValue ? textEditingController.text : '';
                   selectedMaterial = int.parse(selectedMaterial);
                   var response = await requestMaterialApi.sendRequest(
                       pyxisStore.currentPyxisData['id'],

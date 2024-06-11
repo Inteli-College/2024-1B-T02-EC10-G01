@@ -1,3 +1,4 @@
+import 'package:asky/api/request_material_api.dart';
 import 'package:asky/constants.dart';
 import 'package:asky/widgets/read_feedback.dart';
 import 'package:asky/widgets/request_details_box.dart';
@@ -35,13 +36,14 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RequestMedicineApi apiService = RequestMedicineApi(); // Create an instance of your API service
+    RequestMedicineApi medicineApi = RequestMedicineApi(); // Create an instance of your API service
+    RequestMaterialApi requestMaterialApi = RequestMaterialApi();
 
     return Scaffold(
       appBar: TopBar(backRoute: '/nurse',),
       body: Observer(builder: (_) {
         return FutureBuilder<dynamic>(
-          future: apiService.getRequestById(int.parse(widget.requestId)), // Fetching details using the requestId
+          future: medicineApi.getRequestById(int.parse(widget.requestId)), // Fetching details using the requestId
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

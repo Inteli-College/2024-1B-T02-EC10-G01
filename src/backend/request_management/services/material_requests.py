@@ -63,6 +63,7 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateMaterialRequest, user: dict):
+    print('INSIDE CREATE MATERIAL REQUEST')
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                   _fetch_material_data(request.material_id, http_session), _fetch_user_data(user['sub'], http_session)]
@@ -78,6 +79,8 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
                 
         # If no HTTPException, extract data from results
         dispenser, material, user = results
+        
+        print('HERE')
 
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
@@ -86,7 +89,8 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         session.add(new_request)
         await session.commit()
         await session.refresh(new_request)
-        
+        print('HERE 2')
+        print(new_request)
         try:
             channel = rabbitmq.get_channel()
             exchange_name = 'material_requests'
