@@ -84,7 +84,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
               detailsData['Emergência'] = 'Não';
             }
 
-            if (requestData['batch_number'] != '') {
+            if (requestData['batch_number'] != null && requestData['batch_number'] != '') {
               detailsData['Lote'] = requestData['batch_number'];
             }
 

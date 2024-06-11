@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
                 scaffoldBackgroundColor: Constants.offWhite,
                 fontFamily: GoogleFonts.notoSans().fontFamily,
               ),
-              home: LoginPage(),
+              home: SplashScreen(),
               routes: {
                 "/nurse": (context) => HomeNurse(),
                 "/choose_request":(context) => ChooseRequestScreen(),

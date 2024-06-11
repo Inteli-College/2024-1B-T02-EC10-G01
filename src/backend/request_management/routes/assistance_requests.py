@@ -34,7 +34,7 @@ async def create_assistance_request(request: CreateAssistanceRequest, session: A
     # redis_client.setex(key, 60, json.dumps(request_dicts))
     return created_request.to_dict()
 
-@router.post("/feedback")
-async def create_assistance_feedback(assistance_id:session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
-    key = 'read_assistance_requests'
-    created_feedback = await create_feedback(session, request, user)
+# @router.post("/feedback")
+# async def create_assistance_feedback(request session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+#     key = 'read_assistance_requests'
+#     created_feedback = await create_feedback(session, request, user)

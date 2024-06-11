@@ -12,6 +12,7 @@ class RequestMaterialApi implements RequestApi {
   Future<List<dynamic>> getHistory() async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
+    print('INSIDE MATERIAL API');
     final response = await http.post(
       Uri.parse(Constants.baseUrl + '/requests/material/'),
       headers: {

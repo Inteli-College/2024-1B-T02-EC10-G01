@@ -70,9 +70,10 @@ class _PharmacyHomePageBodyState extends State<PharmacyHomePageBody> {
                         if (snapshot.hasData) {
                           var data = snapshot.data!;
                           return LastRequestCard(
-                              medicineName: data['medicine']['name'],
+                              item: data['item'],
                               currentStep: 2,
                               totalSteps: 4,
+                              requestType: data['item']['type'],
                               pyxis: data['dispenser']['code'],
                               id: data['id'].toString());
                         } else {
