@@ -39,7 +39,7 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/qrcode');
+                    Navigator.pushNamed(context, '/choose_request');
                   },
                   child: Icon(Icons.add, size: 100, color: Color(0xFF1A365D)),
                   style: ElevatedButton.styleFrom(

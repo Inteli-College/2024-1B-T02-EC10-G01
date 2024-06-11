@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:asky/constants.dart';
 import 'dart:async';
@@ -15,10 +14,10 @@ class _SplashScreenState extends State<SplashScreen> {
         encryptedSharedPreferences: true,
       );
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
-
     Timer(Duration(seconds: 1), () {
       checkToken();
     });
@@ -30,25 +29,23 @@ class _SplashScreenState extends State<SplashScreen> {
         key: "session", aOptions: _getAndroidOptions());
     print(session);
     if (session != null) {
-      Navigator.pushReplacementNamed(context, '/nurse');
       var sessionData = jsonDecode(session);
       var expiresAt = DateTime.parse(sessionData['expires_at']);
       print(expiresAt);
       print(DateTime.now().toUtc());
-      if (sessionData['expires_at'] != null &&
-          !expiresAt.isAfter(DateTime.now().toUtc())) {
+      if (expiresAt.isAfter(DateTime.now().toUtc())) {
         // Token is valid
         if (sessionData['role'] == 'nurse') {
           Navigator.pushReplacementNamed(context, '/nurse');
         } else {
-          // Token is expired or not set
           Navigator.pushReplacementNamed(context, '/login');
         }
       } else {
-        // Token is expired or not set
+        // Token is expired
         Navigator.pushReplacementNamed(context, '/login');
       }
     } else {
+      // No session found
       Navigator.pushReplacementNamed(context, '/login');
     }
   }
