@@ -102,7 +102,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
                 'medicine_id': new_request.medicine_id,
                 'requested_by': new_request.requested_by,
                 'status': new_status.status,
-                'created_at': new_request.created_at.isoformat()
+                'created_at': new_request.created_at
             }
             channel.basic_publish(
                 exchange=exchange_name,
@@ -147,9 +147,10 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
         request = {
             "id": request_result.id,
             "dispenser": dispenser,
-            "medicine": medicine,
+            "item": medicine,
             "requested_by": user,
-            "status_id": request_result.status_id
+            "status_id": request_result.status_id,
+            "created_at": request_result.created_at
         }
         return request
 
@@ -179,6 +180,7 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "dispenser": dispenser,
             "medicine": medicine,
             "requested_by": user,
-            "status_id": request_result.status_id
+            "status_id": request_result.status_id,
+            "created_at": request_result.created_at
         }
         return request

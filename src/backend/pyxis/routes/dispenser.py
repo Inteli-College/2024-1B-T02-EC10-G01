@@ -16,11 +16,11 @@ router = APIRouter(prefix="/dispensers")
 @router.get("/")
 async def read_dispensers(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     key = "read_dispensers"
-    resultado = redis_client.get(key)
-    if resultado:
-        return pickle.loads(resultado)
+    # resultado = redis_client.get(key)
+    # if resultado:
+    #     return pickle.loads(resultado)
     dispensers = await fetch_dispensers(session)
-    redis_client.setex(key, 120, pickle.dumps(dispensers))
+    # redis_client.setex(key, 120, pickle.dumps(dispensers))
     return [dispenser.to_dict() for dispenser in dispensers]
 
 @router.get("/{dispenser_id}/qr")

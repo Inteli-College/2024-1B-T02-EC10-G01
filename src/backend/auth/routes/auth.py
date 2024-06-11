@@ -36,7 +36,7 @@ async def register(
 
     hashed_password = hash_password(request.password)
     user = await create_user(session, request.email, hashed_password, request.role)
-    return UserResponseModel(id=user["id"], email=user["email"], role=user["role"])
+    return UserResponseModel(id=user["id"], email=user["email"], role=user["role"], name=user["name"])
 
 
 @router.post("/login", response_model=LoginResponseModel)
@@ -72,6 +72,7 @@ async def login(
         mobile_token=request.mobile_token,
         expires_at=str(datetime.datetime.now() + timedelta(minutes=15)),
         role=user["role"],
+        name=user["name"]
     )
 
 
@@ -87,6 +88,8 @@ async def get_user(user_email: str, session: AsyncSession = Depends(get_session)
         email=user["email"],
         role=user["role"],
         mobile_token=user["mobile_token"],
+        name = user["name"]
+        
     )
 
 

@@ -5,6 +5,7 @@ class CreateMedicineRequest(BaseModel):
     dispenser_id: int
     medicine_id: int
     emergency: bool
+    created_at: str
 
 class MedicineRequestSchema(BaseModel):
     id: int
@@ -28,6 +29,7 @@ class MaterialRequestSchema(BaseModel):
 class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
     assistance_id: int
+    created_at: str
 
 class AssistanceRequestSchema(BaseModel):
     id: int

@@ -15,13 +15,13 @@ router = APIRouter(prefix="/medicine")
 @router.get("/")
 async def read_medicine_requests(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     key = "read_medicine_requests"
-    resultado = redis_client.get(key)
-    if resultado:
-        return json.loads(resultado)
+    # resultado = redis_client.get(key)
+    # if resultado:
+    #     return json.loads(resultado)
     
     requests = await fetch_requests(session)
     request_dicts = [request.to_dict() for request in requests]
-    redis_client.setex(key, 60, json.dumps(request_dicts))
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return request_dicts
 
 @router.post("/")
@@ -29,10 +29,10 @@ async def create_medicine_request(request: CreateMedicineRequest, session: Async
     key = "read_medicine_requests"
     created_request = await create_request(session, request, user)
 
-    requests = await fetch_requests(session)
-    request_dicts = [request.to_dict() for request in requests]
-    redis_client.setex(key, 60, json.dumps(request_dicts))
-    return created_request.to_dict()
+    # requests = await fetch_requests(session)
+    # request_dicts = [request.to_dict() for request in requests]
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
+    return created_request
 
 
 

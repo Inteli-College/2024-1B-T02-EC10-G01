@@ -2,15 +2,15 @@ import 'package:asky/api/authentication_api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:asky/constants.dart';
+import 'request_api.dart';
 
-class RequestMedicineApi {
+class RequestMedicineApi implements RequestApi {
   final auth = AuthenticationApi();
 
+  @override
   Future<List<dynamic>> getHistory() async {
     var token = await auth.getToken();
-
     final String bearerToken = 'Bearer $token';
-
     final response = await http.post(
       Uri.parse(Constants.baseUrl + '/requests/medicine/'),
       headers: {
@@ -21,18 +21,16 @@ class RequestMedicineApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
       return data;
     } else {
       throw Exception('Failed to fetch history');
     }
   }
 
+  @override
   Future<Map> getPyxisByPyxisId(int pyxisId) async {
     var token = await auth.getToken();
-
     final String bearerToken = 'Bearer $token';
-
     final response = await http.get(
       Uri.parse(Constants.baseUrl + '/pyxis/dispensers/$pyxisId'),
       headers: {
@@ -43,97 +41,72 @@ class RequestMedicineApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
       return data;
     } else {
       throw Exception('Failed to fetch medicines');
     }
+  }
 
-}
-
-Future<dynamic> sendRequest(int pyxisId, int medicine_id, bool emergency) async {
-   var token = await auth.getToken();
-  print('request data: ' + pyxisId.toString() + ' ' + medicine_id.toString() + ' ' + emergency.toString());
-  final String bearerToken = 'Bearer $token';
-  print(json.encode({
-        'dispenser_id': pyxisId,
-        'medicine_id': medicine_id,
-        'emergency': emergency,
-      }),);
-  try {
-    final url = Uri.parse(Constants.baseUrl + '/requests/medicine/'); // Change to your API's URL
+  @override
+  Future<dynamic> sendRequest(int pyxisId, int medicineId, {bool emergency = false}) async {
+    var token = await auth.getToken();
+    final String bearerToken = 'Bearer $token';
     final response = await http.post(
-      url,
+      Uri.parse(Constants.baseUrl + '/requests/medicine/'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': bearerToken,
       },
       body: json.encode({
         'dispenser_id': pyxisId,
-        'medicine_id': medicine_id,
+        'medicine_id': medicineId,
         'emergency': emergency,
       }),
     );
     if (response.statusCode == 200) {
-
-      print("Data sent successfully!");
       var data = jsonDecode(response.body);
       return data;
     } else {
-      print("Failed to send data. Status code: ${response.statusCode}");
-      return Null;
+      throw Exception('Failed to send request');
     }
-  } catch (e) {
-    print("An error occurred: $e");
-    return Null;
+  }
+
+  @override
+  Future<dynamic> getRequestById(int requestId) async {
+    var token = await auth.getToken();
+    final String bearer = 'Bearer $token';
+    final response = await http.get(
+      Uri.parse(Constants.baseUrl + '/requests/medicine/$requestId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': bearer,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return data ?? {};
+    } else {
+      throw Exception('Failed to fetch request');
+    }
+  }
+
+  @override
+  Future<dynamic> getLastRequest() async {
+    var token = await auth.getToken();
+    final String bearer = 'Bearer $token';
+    final response = await http.get(
+      Uri.parse(Constants.baseUrl + '/requests/medicine/last'),
+      headers: {
+        'Authorization': bearer,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return data ?? {};
+    } else {
+      throw Exception('Failed to fetch last request');
+    }
   }
 }
-
-Future<dynamic> getRequestById(int requestId) async {
-  var token = await auth.getToken();
-
-  final String bearer = 'Bearer $token';
-  
-  final response = await http.get(
-    Uri.parse(Constants.baseUrl + '/requests/medicine/$requestId'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': bearer,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    print(data);
-
-    return data ?? {};
-  } else {
-    print('Failed to fetch request. Status code: ${response.statusCode}');
-  }
-
-}
-
-
-
-Future<dynamic> getLastRequest() async {
-  var token = await auth.getToken();
-
-  final String bearer = 'Bearer $token';
-  final response = await http.get(
-    Uri.parse(Constants.baseUrl + '/requests/medicine/last'),
-    headers: {
-      'Authorization': bearer,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    print(data);
-
-    return data ?? {};
-  } else {
-    print('Failed to fetch request. Status code: ${response.statusCode}');
-  }
-
-  }
-  }

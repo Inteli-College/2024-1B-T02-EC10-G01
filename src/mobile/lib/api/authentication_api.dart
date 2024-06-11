@@ -58,26 +58,34 @@ class AuthenticationApi {
     return null;
   }
 
-  Future<bool> checkToken() async {
-    const secureStorage = FlutterSecureStorage();
-    print("Checking token");
+ Future<bool> checkToken() async {
+  const secureStorage = FlutterSecureStorage();
+  print("Checking token");
+
+  try {
     var session = await secureStorage.read(key: "session", aOptions: _getAndroidOptions());
-    print(session);
+    print("Session data: $session");
+
     if (session != null) {
       var sessionData = jsonDecode(session);
-      var expiresAt = DateTime.parse(sessionData['expires_at']);
-      print(expiresAt);
-      print(DateTime.now().toUtc());
-      print(expiresAt.isAfter(DateTime.now().toUtc()));
-      if (expiresAt.isAfter(DateTime.now().toUtc())) {
+      var expiresAt = DateTime.parse(sessionData['expires_at']).subtract(Duration(hours: 3));
+      var now = DateTime.now();
+      
+      print("Expires at: $expiresAt");
+      print("Current time: $now");
 
-        return true;
-      } else {  
-        return false;
+      bool isAfter = expiresAt.isAfter(now);
+      print("Expires at is after current time: $isAfter");
 
-      }
+      return isAfter;
     } else {
+      print("No session found.");
       return false;
     }
+  } catch (e) {
+    print("Error checking token: $e");
+    return false;
   }
+}
+
 }

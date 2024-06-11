@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailsBox extends StatelessWidget {
   final Map<String, String> details;
@@ -39,6 +40,12 @@ class DetailsBox extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: details.entries.map((entry) {
+              String formattedValue = entry.value;
+              if (entry.key == 'Data') {
+                DateTime parsedDate = DateTime.parse(entry.value);
+                formattedValue = DateFormat('dd-MM-yyyy – kk:mm').format(parsedDate);
+              }
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
@@ -54,7 +61,7 @@ class DetailsBox extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        entry.value,
+                        formattedValue,
                         style: TextStyle(
                           color: Colors.black87,
                         ),

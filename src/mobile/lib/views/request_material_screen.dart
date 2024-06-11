@@ -21,7 +21,6 @@ class _RequestMaterialState extends State<RequestMaterial> {
   dynamic selectedMaterial = ''; // Local state to hold selected material
   RequestMaterialApi requestMaterialApi = RequestMaterialApi();
 
-
   void _handleDropdownChange(dynamic newValue) {
     setState(() {
       selectedMaterial = newValue; // Update local state with new selection
@@ -69,19 +68,21 @@ class _RequestMaterialState extends State<RequestMaterial> {
                   });
                   selectedMaterial = int.parse(selectedMaterial);
                   var response = await requestMaterialApi.sendRequest(
-                      pyxisStore.currentPyxisData['id'],
-                      selectedMaterial,
-                      );
+                    pyxisStore.currentPyxisData['id'],
+                    selectedMaterial,
+                  );
                   setState(() {
                     isLoading =
                         false; // Set loading to false when the request completes
                   });
                   if (response != Null) {
                     print(response);
-                    print(response['id']);
                     Navigator.of(context).pushNamed(
                       '/nurse_request',
-                      arguments: {'requestId': response['id'].toString()},
+                      arguments: {
+                        'requestId': response['id'].toString(),
+                        'type': 'material'
+                      },
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

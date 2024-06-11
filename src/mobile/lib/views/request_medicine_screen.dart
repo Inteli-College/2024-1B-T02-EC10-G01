@@ -39,8 +39,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
 
   @override
   Widget build(BuildContext context) {
-    final pyxisStore = context
-        .watch<PyxisStore>(); // Continue to watch the store for other changes
+    final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
       appBar: TopBar(),
@@ -93,31 +92,54 @@ class _RequestMedicineState extends State<RequestMedicine> {
                 text: "Confirmar",
                 onPressed: () async {
                   setState(() {
-                    isLoading =
-                        true; // Set loading to true when the request starts
+                    isLoading = true; // Set loading to true when the request starts
                   });
-                  final batchNumber =
-                      toggleValue ? textEditingController.text : '';
-                  selectedMedicine = int.parse(selectedMedicine);
-                  var response = await requestMedicineApi.sendRequest(
-                      pyxisStore.currentPyxisData['id'],
-                      selectedMedicine,
-                      toggleValue);
-                  setState(() {
-                    isLoading =
-                        false; // Set loading to false when the request completes
-                  });
-                  if (response != Null) {
-                    print(response);
-                    print(response['id']);
-                    Navigator.of(context).pushNamed(
-                      '/nurse_request',
-                      arguments: {'requestId': response['id'].toString()},
-                    );
-                  } else {
+                  final batchNumber = toggleValue ? textEditingController.text : '';
+                  if (toggleValue && batchNumber.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Something went wrong!'),
+                        content: Text('Número de lote é obrigatório!'),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    setState(() {
+                      isLoading = false;
+                    });
+                    return;
+                  }
+                  try {
+                    final selectedMedicineInt = int.parse(selectedMedicine);
+                    var response = await requestMedicineApi.sendRequest(
+                        pyxisStore.currentPyxisData['id'],
+                        selectedMedicineInt,
+                        emergency: toggleValue,);
+                    setState(() {
+                      isLoading = false; // Set loading to false when the request completes
+                    });
+                    if (response != null) {
+                      print(response);
+                      print(response['id']);
+                      Navigator.of(context).pushNamed(
+                        '/nurse_request',
+                        arguments: {'requestId': response['id'].toString()},
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Something went wrong!'),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Invalid medicine selection!'),
                         duration: Duration(seconds: 2),
                         backgroundColor: Colors.red,
                       ),

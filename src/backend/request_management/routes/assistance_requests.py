@@ -15,13 +15,13 @@ router = APIRouter(prefix="/assistance")
 @router.get("/")
 async def read_assistance_requests(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     key = "read_assistance_requests"
-    resultado = redis_client.get(key)
-    if resultado:
-        return json.loads(resultado)
+    # resultado = redis_client.get(key)
+    # if resultado:
+    #     return json.loads(resultado)
     
     requests = await fetch_requests(session)
     request_dicts = [request.to_dict() for request in requests]
-    redis_client.setex(key, 60, json.dumps(request_dicts))
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return request_dicts
 
 @router.post("/")
@@ -29,7 +29,7 @@ async def create_assistance_request(request: CreateAssistanceRequest, session: A
     key = 'read_assistance_requests'
     created_request = await create_request(session, request, user)
     
-    requests = await fetch_requests(session)
-    request_dicts = [request.to_dict() for request in requests]
-    redis_client.setex(key, 60, json.dumps(request_dicts))
+    # requests = await fetch_requests(session)
+    # request_dicts = [request.to_dict() for request in requests]
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return created_request.to_dict()

@@ -12,9 +12,11 @@ class UserResponseModel(BaseModel):
     email: str
     role: str
     mobile_token: Optional[str] = None
+    name: str
 
 class LoginResponseModel(BaseModel):
     email: str
+    name: str
     access_token: str
     token_type: str
     mobile_token: Optional[str] = None
