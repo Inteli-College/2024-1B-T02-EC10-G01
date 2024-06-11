@@ -50,7 +50,6 @@ class _HomeNurseState extends State<HomeNurse> {
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
-          print('Index: $index');
           setState(() {
             _selectedIndex = index;
           });
