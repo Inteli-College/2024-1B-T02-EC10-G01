@@ -9,10 +9,12 @@ import 'package:asky/widgets/dropdown.dart';
 import 'package:asky/widgets/toggle.dart';
 import 'package:asky/widgets/styled_button.dart';
 import 'package:asky/widgets/input.dart'; // Ensure your custom input widget is imported correctly
+import 'package:asky/api/authentication_api.dart';
 
 class RequestMedicine extends StatefulWidget {
   @override
   _RequestMedicineState createState() => _RequestMedicineState();
+  
 }
 
 class _RequestMedicineState extends State<RequestMedicine> {
@@ -22,6 +24,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   String inputFieldButtonText = "Número de lote";
   dynamic selectedMedicine = ''; // Local state to hold selected medicine
   RequestMedicineApi requestMedicineApi = RequestMedicineApi();
+  final AuthenticationApi auth = AuthenticationApi();
 
   void _handleToggle(bool newValue) {
     setState(() {
@@ -33,6 +36,19 @@ class _RequestMedicineState extends State<RequestMedicine> {
     setState(() {
       selectedMedicine = newValue; // Update local state with new selection
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
+  Future<void> _checkToken() async {
+    if (!await auth.checkToken()) {
+      print('Token is invalid');
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override

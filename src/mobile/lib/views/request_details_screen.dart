@@ -63,17 +63,28 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
 
             var requestData = snapshot.data;
 
+                        // Parse the original date
+            DateTime createdAt = DateTime.parse(requestData['created_at']);
+
+            // Subtract three hours
+            DateTime createdAtMinus3Hours = createdAt.subtract(Duration(hours: 3));
+
             Map<String, String> detailsData = {
               'Item': requestData['item']['name'],
               'Pyxis': requestData['dispenser']['code'] +
                   ' | Andar ' +
                   requestData['dispenser']['floor'].toString(),
               'Enfermeiro': requestData['requested_by']['name'],
-              'Data': requestData['created_at'],
-              'Emergência': requestData['emergency'] ? 'Sim' : 'Não',
+              'Data': createdAtMinus3Hours.toString(),
             };
 
-            if (requestData['batch_number'] != null) {
+            if (requestData['emergency'] != null) {
+              detailsData['Emergência'] = 'Sim';
+            } else {
+              detailsData['Emergência'] = 'Não';
+            }
+
+            if (requestData['batch_number'] != '') {
               detailsData['Lote'] = requestData['batch_number'];
             }
 

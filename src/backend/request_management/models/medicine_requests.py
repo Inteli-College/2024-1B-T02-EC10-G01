@@ -19,7 +19,7 @@ class MedicineRequest(Base):
     status = relationship(
         "MedicineStatusChange", uselist=False, back_populates="request"
     )
-    created_at = Column(DateTime, default=datetime.datetime.now())
+    created_at = Column(DateTime, default=func.now())
     batch_number = Column(String, nullable=True)
 
     def to_dict(self):
@@ -31,7 +31,7 @@ class MedicineRequest(Base):
             "emergency": self.emergency,
             "status_id": self.status_id,
             "created_at": self.created_at,
-            "batch_numnber": self.batch_number,
+            "batch_number": self.batch_number,
         }
 
 class MedicineStatusChange(Base):

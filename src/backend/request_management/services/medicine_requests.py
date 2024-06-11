@@ -123,8 +123,6 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
     async with aiohttp.ClientSession() as http_session:
-        print('INSIDE FETCH REQUEST')
-        print(request_id)
         stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
