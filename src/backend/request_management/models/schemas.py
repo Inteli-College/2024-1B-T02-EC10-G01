@@ -17,6 +17,7 @@ class MedicineRequestSchema(BaseModel):
     emergency: bool
     batch_number: str = None
     created_at: str
+    feedback: str
 
 class CreateMaterialRequest(BaseModel):
     dispenser_id: int
@@ -28,6 +29,7 @@ class MaterialRequestSchema(BaseModel):
     requested_by: dict
     material: dict
     status: str
+    feedback: str
 
 class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
@@ -40,6 +42,7 @@ class AssistanceRequestSchema(BaseModel):
     assistance: dict
     status: str
     created_at: str
+    feedback: str
 
 class UpdateStatus(BaseModel):
     id: int

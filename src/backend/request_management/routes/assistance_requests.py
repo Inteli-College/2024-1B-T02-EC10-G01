@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
 from models.schemas import CreateAssistanceRequest
 from middleware import get_current_user, is_admin, is_nurse, is_agent
-from services.assistance_requests import fetch_requests, create_request
+from services.assistance_requests import fetch_requests, create_request, create_feedback
 import redis
 import json
 
@@ -33,3 +33,8 @@ async def create_assistance_request(request: CreateAssistanceRequest, session: A
     # request_dicts = [request.to_dict() for request in requests]
     # redis_client.setex(key, 60, json.dumps(request_dicts))
     return created_request.to_dict()
+
+@router.post("/feedback")
+async def create_assistance_feedback(assistance_id:session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+    key = 'read_assistance_requests'
+    created_feedback = await create_feedback(session, request, user)

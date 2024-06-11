@@ -2,7 +2,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.assistance_requests import AssistanceRequest, AssistanceStatusChange
-from models.schemas import CreateAssistanceRequest, AssistanceRequestSchema
+from models.schemas import CreateAssistanceRequest
 from fastapi import HTTPException
 import aiohttp
 import asyncio
@@ -97,8 +97,8 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
                 'assistance_id': new_request.assistance_id,
                 'requested_by': new_request.requested_by,
                 'status': new_status.status,
-                'created_at': new_request.created_at.isoformat()
-
+                'created_at': new_request.created_at.isoformat(),
+                'feedback': new_request.feedback,
             }
             channel.basic_publish(
                 exchange=exchange_name,
@@ -112,3 +112,22 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
             raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
 
         return new_request
+    
+async def create_feedback(assistance_id: int, feedback: str, session: aiohttp.ClientSession, user: dict):
+    stmt = select(AssistanceRequest).where(AssistanceRequest.id == assistance_id)
+    result = await session.execute(stmt)
+    assistance_request = result.scalars().first()
+
+    if not assistance_request:
+        raise HTTPException(status_code=404, detail="Assistance request not found")
+
+    # Update the feedback column
+    assistance_request.feedback = feedback
+
+    # Commit the changes to the database
+    session.add(assistance_request)
+    await session.commit()
+    await session.refresh(assistance_request)
+
+    return assistance_request
+

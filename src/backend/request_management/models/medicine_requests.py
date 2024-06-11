@@ -21,6 +21,7 @@ class MedicineRequest(Base):
     )
     created_at = Column(DateTime, default=datetime.datetime.now())
     batch_number = Column(String, nullable=True)
+    feedback = Column(String, default="Nenhum feedback disponível.")
 
     def to_dict(self):
         return {
@@ -32,6 +33,7 @@ class MedicineRequest(Base):
             "status_id": self.status_id,
             "created_at": self.created_at,
             "batch_numnber": self.batch_number,
+            "feedback": self.feedback
         }
 
 class MedicineStatusChange(Base):

@@ -16,6 +16,7 @@ class MaterialRequest(Base):
     status_id = Column(Integer, ForeignKey('requests.material_status.id'))
     status = relationship("MaterialStatusChange", uselist=False, back_populates="request")
     created_at = Column(DateTime, default=datetime.datetime.now())
+    feedback = Column(String, default="Nenhum feedback disponível.")
 
     def to_dict(self):
         return {
@@ -24,7 +25,8 @@ class MaterialRequest(Base):
             "requested_by": self.requested_by,
             "material_id": self.material_id,
             "status_id": self.status_id,
-            "created_at": self.created_at.isoformat() if self.created_at else None
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "feedback": self.feedback
         }
 
 class MaterialStatusChange(Base):
