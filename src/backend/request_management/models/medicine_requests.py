@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.sql import func
 from database import Base
 from sqlalchemy import desc  # Import desc
+import datetime
 
 class MedicineRequest(Base):
     __tablename__ = 'medicine_requests'
@@ -12,10 +13,10 @@ class MedicineRequest(Base):
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
     medicine_id = Column(Integer)
-    status_id = Column(Integer, ForeignKey('requests.medicine_status.id'))
     emergency = Column(Boolean, default=False)
+    status_id = Column(Integer, ForeignKey('requests.medicine_status.id'))
     status = relationship("MedicineStatusChange", uselist=False, back_populates="request")
-
+    created_at = Column(DateTime, default=datetime.datetime.now())
 
     def to_dict(self):
         return {
@@ -25,6 +26,7 @@ class MedicineRequest(Base):
             "medicine_id": self.medicine_id,
             "emergency": self.emergency,
             "status_id": self.status_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None
             }
     
 class MedicineStatusChange(Base):

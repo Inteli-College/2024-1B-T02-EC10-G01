@@ -66,11 +66,19 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                   _fetch_material_data(request.material_id, http_session), _fetch_user_data(user['sub'], http_session)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        dispenser = results[0]
-        material = results[1]
-        user = results[2]
-        print("RESULTS " + results)
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+                
+        # If no HTTPException, extract data from results
+        dispenser, material, user = results
+
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
         new_status = MaterialStatusChange(status="pending")
@@ -78,6 +86,7 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         session.add(new_request)
         await session.commit()
         await session.refresh(new_request)
+        
         try:
             channel = rabbitmq.get_channel()
             exchange_name = 'material_requests'
@@ -88,7 +97,9 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
                 'dispenser_id': new_request.dispenser_id,
                 'material_id': new_request.material_id,
                 'requested_by': new_request.requested_by,
-                'status': new_status.status
+                'status': new_status.status,
+                'created_at': new_request.created_at.isoformat()
+
             }
             channel.basic_publish(
                 exchange=exchange_name,
