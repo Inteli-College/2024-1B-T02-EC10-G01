@@ -19,7 +19,7 @@ class MedicineRequest(Base):
     status = relationship(
         "MedicineStatusChange", uselist=False, back_populates="request"
     )
-    created_at = Column(DateTime, default=datetime.datetime.now())
+    created_at = Column(DateTime, default=func.now())
     batch_number = Column(String, nullable=True)
     feedback = Column(String, default="Nenhum feedback disponível.")
 
