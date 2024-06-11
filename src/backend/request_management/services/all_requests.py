@@ -73,10 +73,15 @@ async def _fetch_material_data(material_id: int, session: aiohttp.ClientSession)
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the material service: {str(e)}")
     
-async def _fetch_status_changes(request_id: int, session: AsyncSession):
-    stmt = select(MedicineStatusChange).where(MedicineStatusChange.request_id == request_id)
+async def _fetch_status_changes(request_id: int, type: str, session: AsyncSession):
+    if type == "medicine":
+        stmt = select(MedicineStatusChange).filter(MedicineStatusChange.request_id == request_id)
+    else:
+        stmt = select(MaterialStatusChange).filter(MaterialStatusChange.request_id == request_id)
+    
     result = await session.execute(stmt)
-    return result.scalars().all()
+    status_changes = result.scalars().all()
+    return status_changes
 
 async def fetch_latest_request(session: AsyncSession, user: dict):
     async with aiohttp.ClientSession() as http_session:
@@ -150,7 +155,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
 
         user_data_task = _fetch_user_data(user['sub'], http_session)
         
-        status_changes_task = _fetch_status_changes(request_dict['id'], session)
+        status_changes_task = _fetch_status_changes(request_dict['id'], request_type, session)
 
         tasks = [dispenser_data_task, item_data_task, user_data_task, status_changes_task]
     
