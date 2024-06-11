@@ -37,7 +37,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
 
   @override
   Widget build(BuildContext context) {
-    final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
+    final pyxisStore = context
+        .watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
       appBar: TopBar(),
@@ -90,9 +91,11 @@ class _RequestMedicineState extends State<RequestMedicine> {
                 text: "Confirmar",
                 onPressed: () async {
                   setState(() {
-                    isLoading = true; // Set loading to true when the request starts
+                    isLoading =
+                        true; // Set loading to true when the request starts
                   });
-                  final batchNumber = toggleValue ? textEditingController.text : '';
+                  final batchNumber =
+                      toggleValue ? textEditingController.text : '';
                   if (toggleValue && batchNumber.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -109,17 +112,32 @@ class _RequestMedicineState extends State<RequestMedicine> {
                   try {
                     final selectedMedicineInt = int.parse(selectedMedicine);
                     var response = await requestMedicineApi.sendRequest(
-                        pyxisStore.currentPyxisData['id'],
-                        selectedMedicineInt,
-                        emergency: toggleValue,);
+                      pyxisStore.currentPyxisData['id'],
+                      selectedMedicineInt,
+                      emergency: toggleValue,
+                    );
                     setState(() {
-                      isLoading = false; // Set loading to false when the request completes
+                      isLoading =
+                          false; // Set loading to false when the request completes
                     });
-                    if (response != null) {               
-                      Navigator.of(context).pushNamed(
-                        '/nurse_request',
-                        arguments: {'requestId': response['id'].toString()},
-                      );
+                    if (response != null) {
+                      print('INDO PARA REQUESTS');
+                      print(response);
+                      print(response['medicine_id']);
+                      print(response['medicine_id'].toString());
+                      var medicineId = response['medicine_id'];
+                      if (medicineId != null) {
+                        print('Medicine ID: $medicineId');
+                        print('Medicine ID (String): ${medicineId.toString()}');
+
+                        Navigator.of(context).pushNamed(
+                          '/nurse_request',
+                          arguments: {'requestId': medicineId.toString()},
+                        );
+                      } else {
+                        print('Error: Medicine ID is null');
+                        // Handle the case where medicine_id is null
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -133,6 +151,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     setState(() {
                       isLoading = false;
                     });
+                    print('ERROR: $e');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Invalid medicine selection!'),

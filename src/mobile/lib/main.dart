@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
                       ModalRoute.of(context)!.settings.arguments as Map;
                   return RequestDetailsScreen(
                     requestId: args['requestId'],
-                    type: args['type'],
+                    type: args['type'] ?? 'medicine',
                   );
                 },
               },

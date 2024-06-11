@@ -66,6 +66,7 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
+    print('INSIDE CREATE REQUEST')
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                  _fetch_medicine_data(request.medicine_id, http_session), 
@@ -87,36 +88,38 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
         new_status = MedicineStatusChange(status="pending")
-        new_request.status = new_status
+        print('NEW STATUS:', new_status)
+        new_request.status_id = new_status.id
         session.add(new_request)
         await session.commit()
+        print(new_request)
 
-        try:
-            channel = rabbitmq.get_channel()
-            exchange_name = 'medicine_requests'
-            channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-            routing_key = 'request.new'
-            message = {
-                'id': new_request.id,
-                'dispenser_id': new_request.dispenser_id,
-                'medicine_id': new_request.medicine_id,
-                'requested_by': new_request.requested_by,
-                'status': new_status.status,
-                'created_at': new_request.created_at
-            }
-            channel.basic_publish(
-                exchange=exchange_name,
-                routing_key=routing_key,
-                body=json.dumps(message),
-                properties=pika.BasicProperties(
-                    delivery_mode=2,  # make message persistent
-                )
-            )
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
+        # try:
+        #     channel = rabbitmq.get_channel()
+        #     exchange_name = 'medicine_requests'
+        #     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+        #     routing_key = 'request.new'
+        #     message = {
+        #         'id': new_request.id,
+        #         'dispenser_id': new_request.dispenser_id,
+        #         'medicine_id': new_request.medicine_id,
+        #         'requested_by': new_request.requested_by,
+        #         'status': new_status.status,
+        #         'created_at': new_request.created_at
+        #     }
+        #     channel.basic_publish(
+        #         exchange=exchange_name,
+        #         routing_key=routing_key,
+        #         body=json.dumps(message),
+        #         properties=pika.BasicProperties(
+        #             delivery_mode=2,  # make message persistent
+        #         )
+        #     )
+        # except Exception as e:
+        #     raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
         
         asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
-        # await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
+        #await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    

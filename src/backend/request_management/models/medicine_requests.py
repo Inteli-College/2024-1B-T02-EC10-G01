@@ -26,7 +26,7 @@ class MedicineRequest(Base):
             "medicine_id": self.medicine_id,
             "emergency": self.emergency,
             "status_id": self.status_id,
-            "created_at": self.created_at.isoformat() if self.created_at else None
+            "created_at": self.created_at
             }
     
 class MedicineStatusChange(Base):

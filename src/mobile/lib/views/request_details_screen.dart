@@ -22,7 +22,6 @@ class RequestDetailsScreen extends StatefulWidget {
   @override
   _RequestDetailsScreenState createState() => _RequestDetailsScreenState();
 }
-
 class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
   int _selectedIndex = 0;
 
@@ -34,9 +33,15 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    print('RequestDetailsScreen initialized with requestId: ${widget.requestId} and type: ${widget.type}');
+  }
+
+  @override
   Widget build(BuildContext context) {
     final RequestApi api = widget.type == 'material' ? RequestMaterialApi() : RequestMedicineApi();
-
+    print('Building RequestDetailsScreen with requestId: ${widget.requestId}');
 
     return Scaffold(
       appBar: TopBar(backRoute: '/nurse'),

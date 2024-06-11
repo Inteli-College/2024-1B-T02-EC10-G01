@@ -49,6 +49,7 @@ class RequestMedicineApi implements RequestApi {
 
   @override
   Future<dynamic> sendRequest(int pyxisId, int medicineId, {bool emergency = false}) async {
+  
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
@@ -65,6 +66,7 @@ class RequestMedicineApi implements RequestApi {
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
       return data;
     } else {
       throw Exception('Failed to send request');
@@ -73,6 +75,7 @@ class RequestMedicineApi implements RequestApi {
 
   @override
   Future<dynamic> getRequestById(int requestId) async {
+    print('requestId: $requestId');
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
     final response = await http.get(
@@ -85,6 +88,7 @@ class RequestMedicineApi implements RequestApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
       return data ?? {};
     } else {
       throw Exception('Failed to fetch request');
