@@ -9,7 +9,6 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('TopBar: showBackButton: $showBackButton');
     return Padding(
       padding: EdgeInsets.only(bottom: 20.0),  // Add bottom padding here
       child: AppBar(

@@ -9,6 +9,7 @@ class User(Base):
     __table_args__ = {'schema': 'auth'}
     
     id = Column(Integer, primary_key=True, index=True, unique=True, nullable=False, autoincrement=True)
+    name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     role = Column(String(100), nullable=False)
@@ -21,6 +22,7 @@ class User(Base):
         return {
             "id": self.id,
             "email": self.email,
+            "name": self.name,
             "role": self.role if self.role else None,  # Accessing enum value
             "created_at": self.created_at.isoformat() if self.created_at else None,  # Format datetime as string
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,

@@ -20,7 +20,6 @@ services:
  
   pyxis:
     build: ./pyxis
-    # image: pyxis
     ports:
       - "8001:8001"
     environment:
@@ -32,7 +31,6 @@ services:
 
   auth:
     build: ./auth
-    # image: auth
     ports:
       - "8003:8003"
     environment:
@@ -44,7 +42,6 @@ services:
   
   request_management:
     build: ./request_management
-    # image: request_management
     ports:
       - "8002:8002"
     environment:
@@ -54,17 +51,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-  
-  logger-service:
-    build:
-      context: ./logger
-    environment:
-      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres/asky"
-    ports:
-      - "8004:8004"
-    depends_on:
-      - rabbitmq
-      - postgres
 
   gateway:
     build: ./gateway
@@ -81,8 +67,8 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq
     ports:
-      - "5672:5672"   # RabbitMQ default port
-      - "15672:15672" # RabbitMQ Management Plugin port
+      - "5672:5672"  
+      - "15672:15672" 
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
@@ -92,6 +78,3 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
-
-volumes:
-  postgres_data:

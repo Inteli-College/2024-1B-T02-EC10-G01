@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:asky/stores/pyxis_store.dart'; // Import the store
 import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/api/authentication_api.dart';
+
 
 class GuideBoxPainter extends CustomPainter {
   @override
@@ -58,11 +60,20 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
   Barcode? _barcode;
   late MobileScannerController _controller;
   RequestMedicineApi requestMedicineApi = RequestMedicineApi();
+  final AuthenticationApi auth = AuthenticationApi();
 
   @override
   void initState() {
     super.initState();
+    _checkToken();
     _controller = MobileScannerController();
+  }
+
+  Future<void> _checkToken() async {
+    if (!await auth.checkToken()) {
+      print('Token is invalid');
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   Widget _buildBarcode(Barcode? value) {
@@ -91,17 +102,13 @@ class _BarcodeScannerSimpleState extends State<BarcodeScannerSimple> {
       try {
         final Map<dynamic, dynamic> barcodeJson = jsonDecode(_barcode?.displayValue ?? '');
         final pyxisId = barcodeJson['dispenser_id'];
-        print('MY PYXIS ID');
-        print(pyxisId);
 
         if (pyxisId != null) {
           var pyxisData = await requestMedicineApi.getPyxisByPyxisId(pyxisId);
-          print('GETTING PYXIS');
-          print(pyxisData);
           if (pyxisData != null) {
             pyxisStore.setCurrentPyxisData(pyxisData);
             _controller.stop();
-            Navigator.pushNamed(context, '/choosse_request').then((_) {
+            Navigator.pushNamed(context, '/choose_request').then((_) {
               _controller.start();
             });
           } else {

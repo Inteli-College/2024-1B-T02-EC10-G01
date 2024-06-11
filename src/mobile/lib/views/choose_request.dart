@@ -1,62 +1,65 @@
-import 'dart:ui';
-import 'package:asky/widgets/bottom_bar.dart';
-import 'package:asky/widgets/choose_request_body%20copy.dart';
-import 'package:asky/widgets/home_nurse_body.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:asky/api/authentication_api.dart';
-import 'package:asky/api/request_last_solicitation.dart';
-import 'package:asky/views/assistance_screen.dart';
-import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/top_bar.dart';
-import 'package:asky/widgets/bottom_bar.dart'; // Assuming this widget exists and is stored as a separate file
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:asky/widgets/styled_button.dart';
 
-class ChooseRequestScreen extends StatefulWidget {
-  ChooseRequestScreen({Key? key}) : super(key: key);
-
-  @override
-  State<ChooseRequestScreen> createState() => _ChooseRequestScreenState();
-}
-
-class _ChooseRequestScreenState extends State<ChooseRequestScreen> {
-  int _selectedIndex = 0;
-
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-  static final List<Widget> _widgetOptions = <Widget>[
-    ChooseRequestBody(),
-    HistoryPage(),
-    Text('USER', style: optionStyle),
-  ];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final int? notificationIndex = ModalRoute.of(context)?.settings.arguments as int?;
-    if (notificationIndex != null) {
-      setState(() {
-        _selectedIndex = notificationIndex;
-      });
-    }
-  }
-
+class ChooseRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopBar(showBackButton: false),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex), // Displaying the widget based on selected index
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onTabChange: (int index) {
-          print('Index: $index');
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-    );
+        appBar: TopBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Do que você precisa?", // Displaying the request ID
+                  style: GoogleFonts.notoSans(
+                    textStyle: Theme.of(context).textTheme.displayLarge,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 40),
+                Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StyledButton(
+                        text: "Medicamentos",
+                        buttonType: ButtonType.optional,
+                        onPressed: () async {
+                          Navigator.of(context).pushNamed(
+                            '/medicine',
+                          );
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      StyledButton(
+                        text: "Materiais",
+                        buttonType: ButtonType.optional,
+                        onPressed: () async {
+                          Navigator.of(context).pushNamed(
+                            '/material',
+                          );
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      StyledButton(
+                        text: "Assistência",
+                        buttonType: ButtonType.optional,
+                        onPressed: () async {
+                          Navigator.of(context).pushNamed(
+                            '/assistance',
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
+        ));
   }
 }

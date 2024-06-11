@@ -39,7 +39,6 @@ async def publish_notification_by_role(title, body, payload, role):
                 for token in user_data:
                     try:
                         mobile_token_user = token if token else None
-                        print(mobile_token_user)
                         message = messaging.Message(
                             notification=messaging.Notification(
                                 title=str(title),
@@ -60,9 +59,7 @@ async def publish_notification_by_role(title, body, payload, role):
 
 async def publish_notification_to_user(title, body, mobile_token):
     # Inicialize o SDK do Firebase com suas credenciais
-        print("Enviando notificação")
         sleep(5)
-        print(mobile_token)
         message = messaging.Message(
             notification=messaging.Notification(
                 title=str(title),

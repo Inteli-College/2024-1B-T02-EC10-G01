@@ -1,3 +1,6 @@
+import 'package:asky/api/request_api.dart';
+import 'package:asky/api/request_material_api.dart';
+import 'package:asky/api/request_medicine_api.dart';
 import 'package:asky/constants.dart';
 import 'package:asky/widgets/read_feedback.dart';
 import 'package:asky/widgets/request_details_box.dart';
@@ -5,25 +8,22 @@ import 'package:asky/widgets/status_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:asky/widgets/top_bar.dart';
-import 'package:asky/widgets/bottom_bar.dart'; // Make sure this is the correct import path
-import 'package:asky/stores/request_store.dart';
+import 'package:asky/widgets/bottom_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:asky/api/request_medicine_api.dart';
-import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:asky/views/history_page.dart';
+import 'package:asky/widgets/home_nurse_body.dart';
 
 class RequestDetailsScreen extends StatefulWidget {
   final String requestId;
+  final String type;
 
-  RequestDetailsScreen({Key? key, required this.requestId}) : super(key: key);
+  RequestDetailsScreen({Key? key, required this.requestId, this.type = 'medicine'}) : super(key: key);
 
   @override
   _RequestDetailsScreenState createState() => _RequestDetailsScreenState();
 }
-
 class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
-  int _selectedIndex = 0;  // Assuming the details screen is at index 0, adjust as necessary
-
+  int _selectedIndex = 0;
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
@@ -32,16 +32,22 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     Text('USER', style: optionStyle),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    print('RequestDetailsScreen initialized with requestId: ${widget.requestId} and type: ${widget.type}');
+  }
 
   @override
   Widget build(BuildContext context) {
-    RequestMedicineApi apiService = RequestMedicineApi(); // Create an instance of your API service
+    final RequestApi api = widget.type == 'material' ? RequestMaterialApi() : RequestMedicineApi();
+    print('Building RequestDetailsScreen with requestId: ${widget.requestId}');
 
     return Scaffold(
-      appBar: TopBar(backRoute: '/nurse',),
+      appBar: TopBar(backRoute: '/nurse'),
       body: Observer(builder: (_) {
         return FutureBuilder<dynamic>(
-          future: apiService.getRequestById(int.parse(widget.requestId)), // Fetching details using the requestId
+          future: api.getRequestById(int.parse(widget.requestId)),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -49,8 +55,8 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
 
-            // Decode the data if needed and display it
-            var requestData = snapshot.data; // Assuming this is the result decoded as needed
+            var requestData = snapshot.data;
+
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
               child: Column(
@@ -58,14 +64,14 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Solicitação #${widget.requestId}", // Displaying the request ID
+                    "Solicitação #${widget.requestId}",
                     style: GoogleFonts.notoSans(
                       textStyle: Theme.of(context).textTheme.displayLarge,
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                   SizedBox(height: 20),
+                  SizedBox(height: 20),
                   StatusProgressBar(
                     currentStep: 1,
                     totalSteps: 4,
@@ -76,13 +82,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   SizedBox(height: 40),
                   DetailsBox(
                     details: {
-                      'Item': requestData['medicine']['name'],
+                      'Item': requestData['item']['name'],
                       'Pyxis': requestData['dispenser']['code'] + ' | Andar ' + requestData['dispenser']['floor'].toString(),
-                      'Enfermeiro': requestData['requested_by']['email'],
-                      // 'Data': requestData['created_at'],
+                      'Enfermeiro': requestData['requested_by']['name'],
+                      'Data': requestData['created_at'],
                     },
                   ),
-                   SizedBox(height: 40),
+                  SizedBox(height: 40),
                   ReadFeedbackWidget(),
                 ],
               ),
@@ -90,7 +96,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
           },
         );
       }),
-      bottomNavigationBar: CustomBottomNavigationBar(  // Adjust with actual implementation details
+      bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
           setState(() {

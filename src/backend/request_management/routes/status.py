@@ -17,21 +17,27 @@ import json
 
 @router.put("/medicine")
 async def update_medicine_status_request(request: UpdateStatus, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    # key = "read_medicine_requests"
     updated_request = await update_medicine_status(session, request)
-    requests = await fetch_requests(session)
-    redis_client.setex("read_medicine_requests", 60, json.dumps([req.to_dict() for req in requests]))
+    # requests = await fetch_requests(session)
+    # request_dicts = [request.to_dict() for request in requests]
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return updated_request
 
 @router.put("/material")
 async def update_material_status_request(request: UpdateStatus, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    # key = "read_material_requests"
     updated_request = await update_material_status(session, request)
-    requests = await fetch_requests(session)
-    redis_client.setex("read_material_requests", 60, json.dumps([req.to_dict() for req in requests]))
+    # requests = await fetch_requests(session)
+    # request_dicts = [request.to_dict() for request in requests]
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return updated_request
 
 @router.put("/assistance")
 async def update_assistance_status_request(request: UpdateStatus, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    # key = "read_assistance_requests"
     updated_request = await update_assistance_status(session, request)
-    requests = await fetch_requests(session)
-    redis_client.setex("read_assistance_requests", 60, json.dumps([req.to_dict() for req in requests]))
+    # requests = await fetch_requests(session)
+    # request_dicts = [request.to_dict() for request in requests]
+    # redis_client.setex(key, 60, json.dumps(request_dicts))
     return updated_request

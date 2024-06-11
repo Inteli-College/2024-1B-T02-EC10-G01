@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth
-  namespace: asky
 spec:
   replicas: 1
   selector:
@@ -31,7 +30,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-  namespace: asky
 spec:
   replicas: 1
   selector:
@@ -72,7 +70,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pyxis
-  namespace: asky
 spec:
   replicas: 1
   selector:
@@ -110,7 +107,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: request-management
-  namespace: asky
 spec:
   replicas: 1
   selector:

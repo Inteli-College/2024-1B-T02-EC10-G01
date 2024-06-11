@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:asky/api/authentication_api.dart';
-import 'package:asky/api/request_last_solicitation.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/top_bar.dart';
@@ -50,7 +49,6 @@ class _HomeNurseState extends State<HomeNurse> {
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
-          print('Index: $index');
           setState(() {
             _selectedIndex = index;
           });

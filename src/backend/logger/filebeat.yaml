@@ -1,0 +1,15 @@
+filebeat.autodiscover:
+  providers:
+    - type: kubernetes
+      hints.enabled: true
+      templates:
+        - condition:
+            equals:
+              kubernetes.namespace: default
+          config:
+            - type: container
+              paths:
+                - /var/log/containers/*-${data.kubernetes.container.id}.log
+
+output.logstash:
+  hosts: ["http://192.168.49.2:30774"]

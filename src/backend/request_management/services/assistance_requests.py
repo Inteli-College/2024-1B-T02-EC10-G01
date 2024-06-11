@@ -63,16 +63,22 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateAssistanceRequest, user: dict):
-    print('CREATE REQUEST')
-    print('REQUEST AS IT IS ' + str(request))
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                   _fetch_assistance_data(request.assistance_id, http_session), _fetch_user_data(user['sub'], http_session)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        dispenser = results[0]
-        assistance = results[1]
-        user = results[2]
-        print(results)
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch data: {str(e)}")
+
+        # Check for HTTPException errors in results
+        for result in results:
+            if isinstance(result, HTTPException):
+                raise result  # Raise the HTTPException
+                
+        # If no HTTPException, extract data from results
+        dispenser, assistance, user = results
+
         # add the request to the database
         new_request = AssistanceRequest(dispenser_id=dispenser['id'], assistance_id=assistance['id'], requested_by=user['id'])
         new_status = AssistanceStatusChange(status="pending")
@@ -90,7 +96,9 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
                 'dispenser_id': new_request.dispenser_id,
                 'assistance_id': new_request.assistance_id,
                 'requested_by': new_request.requested_by,
-                'status': new_status.status
+                'status': new_status.status,
+                'created_at': new_request.created_at.isoformat()
+
             }
             channel.basic_publish(
                 exchange=exchange_name,
