@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.sql import func
 from database import Base
 from sqlalchemy import desc  # Import desc
+import datetime
 
 class MaterialRequest(Base):
     __tablename__ = 'material_requests'
@@ -14,6 +15,7 @@ class MaterialRequest(Base):
     material_id = Column(Integer)
     status_id = Column(Integer, ForeignKey('requests.material_status.id'))
     status = relationship("MaterialStatusChange", uselist=False, back_populates="request")
+    created_at = Column(DateTime, default=datetime.datetime.now())
 
     def to_dict(self):
         return {
@@ -21,7 +23,8 @@ class MaterialRequest(Base):
             "dispenser_id": self.dispenser_id,
             "requested_by": self.requested_by,
             "material_id": self.material_id,
-            "status_id": self.status_id
+            "status_id": self.status_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None
         }
 
 class MaterialStatusChange(Base):

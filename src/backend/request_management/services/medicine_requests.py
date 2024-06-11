@@ -12,6 +12,7 @@ from middleware import is_nurse, is_agent, is_admin
 from rabbitmq import rabbitmq
 import pika
 from services.notifications import publish_notification_by_role
+import datetime
 
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
@@ -100,7 +101,8 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
                 'dispenser_id': new_request.dispenser_id,
                 'medicine_id': new_request.medicine_id,
                 'requested_by': new_request.requested_by,
-                'status': new_status.status
+                'status': new_status.status,
+                'created_at': new_request.created_at.isoformat()
             }
             channel.basic_publish(
                 exchange=exchange_name,
@@ -117,7 +119,7 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         # await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
         return new_request
 
-async def fetch_request(session: AsyncSession, request_id: int, user: dict):
+async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
     async with aiohttp.ClientSession() as http_session:
         stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
         result = await session.execute(stmt)
