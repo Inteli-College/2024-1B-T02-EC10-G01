@@ -62,6 +62,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
             }
 
             var requestData = snapshot.data;
+            print('Request data: $requestData');
 
                         // Parse the original date
             DateTime createdAt = DateTime.parse(requestData['created_at']);

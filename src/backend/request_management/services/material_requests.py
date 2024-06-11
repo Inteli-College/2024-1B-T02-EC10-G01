@@ -82,11 +82,15 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
 
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
-        new_status = MaterialStatusChange(status="pending")
-        new_request.status = new_status
         session.add(new_request)
         await session.commit()
-        await session.refresh(new_request)
+        print('New request committed')
+        new_status = MaterialStatusChange(request_id=new_request.id)
+        session.add(new_status)
+        await session.commit()
+        print('New status committed')
+        print(new_request)
+        
 
         # try:
         #     channel = rabbitmq.get_channel()
@@ -143,8 +147,9 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "dispenser": dispenser,
             "item": material,
             "requested_by": user,
-            "status_id": request_result.status_id,
-            "created_at": request_result.created_at
+            "status_changes": request_result.status_changes,
+            "created_at": request_result.created_at,
+            "feedback": request_result.feedback
         }
         return request
     
@@ -174,7 +179,8 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "dispenser": dispenser,
             "medicine": medicine,
             "requested_by": user,
-            "status_id": request_result.status_id,
-            "created_at": request_result.created_at
+            "created_at": request_result.created_at,
+            "feedback": request_result.feedback,
+            "status_changes": request_result.status_changes
         }
         return request

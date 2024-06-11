@@ -32,7 +32,7 @@ async def create_material_request(request: CreateMaterialRequest, session: Async
     # requests = await fetch_requests(session)
     # request_dicts = [request.to_dict() for request in requests]
     # redis_client.setex(key, 60, json.dumps(request_dicts))
-    return created_request.to_dict()
+    return created_request
 
 @router.get("/last")
 async def read_last_material_request(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):

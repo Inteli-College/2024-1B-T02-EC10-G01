@@ -72,6 +72,11 @@ async def _fetch_material_data(material_id: int, session: aiohttp.ClientSession)
                 raise HTTPException(status_code=response.status, detail=error_message)
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the material service: {str(e)}")
+    
+async def _fetch_status_changes(request_id: int, session: AsyncSession):
+    stmt = select(MedicineStatusChange).where(MedicineStatusChange.request_id == request_id)
+    result = await session.execute(stmt)
+    return result.scalars().all()
 
 async def fetch_latest_request(session: AsyncSession, user: dict):
     async with aiohttp.ClientSession() as http_session:
@@ -81,7 +86,6 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 MedicineRequest.id,
                 MedicineRequest.dispenser_id,
                 MedicineRequest.medicine_id,
-                MedicineRequest.status_id,
                 MedicineRequest.created_at,
                 MedicineRequest.batch_number,
                 MedicineRequest.emergency,
@@ -94,7 +98,6 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 MaterialRequest.id,
                 MaterialRequest.dispenser_id,
                 MaterialRequest.material_id,
-                MaterialRequest.status_id,
                 MaterialRequest.created_at,
                 literal(None).label("batch_number"),  # No batch_number for material requests
                 literal(None).label("emergency"),
@@ -117,7 +120,6 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "id": request_result[0],
                 "dispenser_id": request_result[1],
                 "medicine_id": request_result[2],
-                "status_id": request_result[3],
                 "created_at": request_result[4],
                 "batch_number": request_result[5],
                 "emergency": request_result[6],
@@ -128,21 +130,14 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "id": request_result[0],
                 "dispenser_id": request_result[1], # No dispenser_id for material requests
                 "material_id": request_result[2],
-                "status_id": request_result[3],
                 "created_at": request_result[4],
                 "batch_number": None,  # No batch_number for material requests
                 "emergency": None,
                 "request_type": request_type
             }
-            
-        print(f"Request dict: {request_dict}")
-        print(type(request_dict))
-        print(f'dispenser_id: {request_dict["dispenser_id"]}')
-        print(request_dict)
         
         dispenser_id = request_dict.get("dispenser_id")
         
-        print(f"DISPENSER ID: {dispenser_id}")
         if dispenser_id is not None:
             dispenser_data_task = _fetch_dispenser_data(int(dispenser_id), http_session)
         else:
@@ -154,11 +149,11 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
             item_data_task = _fetch_material_data(int(request_dict['material_id']), http_session)  # Adjust to fetch material data
 
         user_data_task = _fetch_user_data(user['sub'], http_session)
+        
+        status_changes_task = _fetch_status_changes(request_dict['id'], session)
 
-        tasks = [task for task in [dispenser_data_task, item_data_task, user_data_task] if task is not None]\
+        tasks = [dispenser_data_task, item_data_task, user_data_task, status_changes_task]
     
-        print('after tasks')
-
         try:
             results = await asyncio.gather(*tasks, return_exceptions=True)
         except Exception as e:
@@ -168,17 +163,17 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
             if isinstance(result, HTTPException):
                 raise result
 
-        dispenser = results[0] if dispenser_data_task else None
-        item = results[1 if dispenser_data_task else 0]
-        user_data = results[-1]
+        dispenser = results[0] 
+        item = results[1]
+        user_data = results[2]
+        status_changes = results[3]
 
-        print('AAAAAAAAAAAAAAA')
         request = {
             "id": request_dict['id'],
             "dispenser": dispenser,
             "item": item,
             "requested_by": user_data,
-            "status_id": request_dict['status_id'],
+            "status_changes": status_changes,
             "created_at": request_dict['created_at'],
             "batch_number": request_dict['batch_number'] if request_type == "medicine" else None,
             "emergency": request_dict['emergency'],

@@ -162,7 +162,8 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "status_changes": request_result.status_changes,
             "created_at": request_result.created_at,
             "batch_number": request_result.batch_number,
-            "emergency": request_result.emergency
+            "emergency": request_result.emergency,
+            "feedback": request_result.feedback
             
         }
         return request
@@ -195,9 +196,11 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "dispenser": dispenser,
             "medicine": medicine,
             "requested_by": user,
-            "status_id": request_result.status_id,
             "created_at": request_result.created_at,
             "batch_number": request_result.batch_number,
-            "emergency": request_result.emergency
+            "emergency": request_result.emergency,
+            "feedback": request_result.feedback,
+            "status_changes": request_result.status_changes
+            
         }
         return request
