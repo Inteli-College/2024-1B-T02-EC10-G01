@@ -43,7 +43,6 @@ async def register(
 async def login(
     request: UserLoginRequest, session: AsyncSession = Depends(get_session)
 ):
-    print('INSIDE AUTH')
     user = await get_user_by_email(session, request.email)
     if not user:
         raise HTTPException(
@@ -63,8 +62,7 @@ async def login(
             "mobile_token": request.mobile_token,
         }
     )
-    print('EIIIIII')
-    print(datetime.datetime.now() + timedelta(minutes=15))
+
     return LoginResponseModel(
         email=user["email"],
         access_token=access_token,

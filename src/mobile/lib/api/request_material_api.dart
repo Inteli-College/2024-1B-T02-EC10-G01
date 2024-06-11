@@ -12,7 +12,6 @@ class RequestMaterialApi implements RequestApi {
   Future<List<dynamic>> getHistory() async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
-    print('INSIDE MATERIAL API');
     final response = await http.post(
       Uri.parse(Constants.baseUrl + '/requests/material/'),
       headers: {
@@ -74,7 +73,6 @@ class RequestMaterialApi implements RequestApi {
 
   @override
   Future<dynamic> getRequestById(int requestId) async {
-    print('INSIDE GET REQUEST BY ID');
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
     final response = await http.get(
@@ -86,9 +84,7 @@ class RequestMaterialApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      print('INSIDE GET REQUEST BY ID 200');
       var data = jsonDecode(response.body);
-      print(data);
       return data ?? {};
     } else {
       throw Exception('Failed to fetch request');

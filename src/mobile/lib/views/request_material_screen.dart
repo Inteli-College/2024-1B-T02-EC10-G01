@@ -76,7 +76,6 @@ class _RequestMaterialState extends State<RequestMaterial> {
                         false; // Set loading to false when the request completes
                   });
                   if (response != Null) {
-                    print(response);
                     Navigator.of(context).pushNamed(
                       '/nurse_request',
                       arguments: {

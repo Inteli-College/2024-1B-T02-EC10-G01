@@ -138,12 +138,10 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
         for result in results:
             if isinstance(result, HTTPException):
                 raise result  # Raise the HTTPException
-        print(request_result.to_dict())
-        print(results)
+
         # If no HTTPException, extract data from results
         dispenser, medicine, user = results
-        print(user)
-        print(results)
+
         request = {
             "id": request_result.id,
             "dispenser": dispenser,

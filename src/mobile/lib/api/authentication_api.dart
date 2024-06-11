@@ -9,7 +9,6 @@ class AuthenticationApi {
         encryptedSharedPreferences: true,
       );
   Future<void> signIn(String _email, String _password) async {
-    print('inside sign in');
     const _secureStorage = FlutterSecureStorage();
 
     var _mobile_token = await _secureStorage.read(
@@ -20,7 +19,6 @@ class AuthenticationApi {
       "password": _password,
       "mobile_token": _mobile_token
     };
-    print(Constants.baseUrl + '/auth/login');
     final response = await http.post(
         Uri.parse(Constants.baseUrl + '/auth/login'),
         headers: {'Content-Type': "application/json"},
@@ -30,7 +28,6 @@ class AuthenticationApi {
       await _secureStorage.write(
           key: "session", value: response.body, aOptions: _getAndroidOptions());
     } else {
-      print(response.body);
       throw Exception('Failed to auth');
     }
   }
@@ -41,7 +38,6 @@ class AuthenticationApi {
       await _secureStorage.delete(
           key: "session", aOptions: _getAndroidOptions());
     } catch (e) {
-      print("impossible to do sign out");
     }
   }
 
@@ -60,30 +56,24 @@ class AuthenticationApi {
 
  Future<bool> checkToken() async {
   const secureStorage = FlutterSecureStorage();
-  print("Checking token");
 
   try {
     var session = await secureStorage.read(key: "session", aOptions: _getAndroidOptions());
-    print("Session data: $session");
 
     if (session != null) {
       var sessionData = jsonDecode(session);
       var expiresAt = DateTime.parse(sessionData['expires_at']).subtract(Duration(hours: 3));
       var now = DateTime.now();
       
-      print("Expires at: $expiresAt");
-      print("Current time: $now");
+   
 
       bool isAfter = expiresAt.isAfter(now);
-      print("Expires at is after current time: $isAfter");
 
       return isAfter;
     } else {
-      print("No session found.");
       return false;
     }
   } catch (e) {
-    print("Error checking token: $e");
     return false;
   }
 }

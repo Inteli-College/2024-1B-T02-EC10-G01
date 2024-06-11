@@ -79,7 +79,6 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         # If no HTTPException, extract data from results
         dispenser, material, user = results
         
-        print('HERE')
 
         # add the request to the database
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
@@ -88,8 +87,7 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         session.add(new_request)
         await session.commit()
         await session.refresh(new_request)
-        print('HERE 2')
-        print(new_request.to_dict())
+
         # try:
         #     channel = rabbitmq.get_channel()
         #     exchange_name = 'material_requests'
@@ -119,7 +117,6 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
     
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
     async with aiohttp.ClientSession() as http_session:
-        print('INSIDE FETCH REQUEST')
         stmt = select(MaterialRequest).where(MaterialRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
@@ -137,12 +134,10 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
         for result in results:
             if isinstance(result, HTTPException):
                 raise result  # Raise the HTTPException
-        print(request_result.to_dict())
-        print(results)
+
         # If no HTTPException, extract data from results
         dispenser, material, user = results
-        print(user)
-        print(results)
+
         request = {
             "id": request_result.id,
             "dispenser": dispenser,
@@ -151,7 +146,6 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "status_id": request_result.status_id,
             "created_at": request_result.created_at
         }
-        print(request)
         return request
     
 async def fetch_last_user_request(session: AsyncSession, user: dict):

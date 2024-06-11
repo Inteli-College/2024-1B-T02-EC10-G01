@@ -26,7 +26,6 @@ async def read_material_requests(session: AsyncSession = Depends(get_session), u
 
 @router.post("/")
 async def create_material_request(request: CreateMaterialRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
-    print('INSIDE CREATE MATERIAL REQUEST')
     key = 'read_material_requests'
     created_request = await create_request(session, request, user)
 

@@ -36,13 +36,11 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final RequestApi api = widget.type == 'material' ? RequestMaterialApi() : RequestMedicineApi();
-    print("Request type: ${widget.type}");
-    print("Request ID: ${widget.requestId}");
+
 
     return Scaffold(
       appBar: TopBar(backRoute: '/nurse'),
       body: Observer(builder: (_) {
-        print('HI');
         return FutureBuilder<dynamic>(
           future: api.getRequestById(int.parse(widget.requestId)),
           builder: (context, snapshot) {
@@ -53,11 +51,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
             }
 
             var requestData = snapshot.data;
-            print(requestData);
-            print(requestData['item']['name']);
-            print(requestData['dispenser']['code']);
-            print(requestData['dispenser']['floor']);
-            print(requestData['requested_by']['name']);
+
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
               child: Column(

@@ -30,11 +30,9 @@ class _RequestMedicineState extends State<RequestMedicine> {
   }
 
   void _handleDropdownChange(dynamic newValue) {
-    print(newValue);
     setState(() {
       selectedMedicine = newValue; // Update local state with new selection
     });
-    print(selectedMedicine);
   }
 
   @override
@@ -117,9 +115,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     setState(() {
                       isLoading = false; // Set loading to false when the request completes
                     });
-                    if (response != null) {
-                      print(response);
-                      print(response['id']);
+                    if (response != null) {               
                       Navigator.of(context).pushNamed(
                         '/nurse_request',
                         arguments: {'requestId': response['id'].toString()},
