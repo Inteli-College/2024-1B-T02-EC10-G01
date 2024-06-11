@@ -5,7 +5,7 @@ from database import get_session, engine, Base
 from models.schemas import CreateMedicineRequest, UpdateStatus
 from middleware import get_current_user, is_admin, is_nurse, is_agent
 from services.medicine_requests import fetch_requests
-from services.status import update_assistance_status, update_material_status, update_medicine_status
+from services.status import update_assistance_status, update_material_status, update_medicine_status, _fetch_status
 import redis
 import pickle
 
@@ -41,3 +41,9 @@ async def update_assistance_status_request(request: UpdateStatus, session: Async
     # request_dicts = [request.to_dict() for request in requests]
     # redis_client.setex(key, 60, json.dumps(request_dicts))
     return updated_request
+
+
+@router.get("/{type}/{status_id}")
+async def read_status(type: str, status_id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    status = await _fetch_status(session, status_id, type)
+    return status

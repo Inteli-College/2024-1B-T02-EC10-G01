@@ -95,7 +95,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Solicitação #${widget.requestId}",
+                    "Solicitação de ${widget.type == 'material' ? 'material' : 'medicamento'}",
                     style: GoogleFonts.notoSans(
                       textStyle: Theme.of(context).textTheme.displayLarge,
                       fontSize: 24,
@@ -104,9 +104,9 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   ),
                   SizedBox(height: 20),
                   StatusProgressBar(
-                    currentStep: 1,
-                    totalSteps: 4,
-                    labels: ['Solicitado', 'Aceito', 'Em preparo', 'Entregue'],
+                    currentStep: getIndexFromStatus(requestData['status_changes'].last['status']) + 1,
+                    totalSteps: getStatusLabels().length,
+                    labels: getStatusLabels(),
                     activeColor: Constants.askyBlue,
                     inactiveColor: Colors.grey,
                   ),

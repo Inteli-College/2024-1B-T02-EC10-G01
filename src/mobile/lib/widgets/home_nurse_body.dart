@@ -69,7 +69,6 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
                           var data = snapshot.data!;
-                          print('DATA: $data');
                           return LastRequestCard(
                               item: data['item']['name'],
                               currentStep: 2,

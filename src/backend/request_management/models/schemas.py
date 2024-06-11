@@ -47,3 +47,12 @@ class AssistanceRequestSchema(BaseModel):
 class UpdateStatus(BaseModel):
     id: int
     status: str
+    
+class Status(enum.Enum):
+    pending = 'pending'
+    accepted = 'accepted'
+    rejected = 'rejected'
+    completed = 'completed'
+    preparing = 'preparing'
+    inTransit = 'inTransit'
+

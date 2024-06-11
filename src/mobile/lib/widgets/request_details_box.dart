@@ -45,7 +45,6 @@ class DetailsBox extends StatelessWidget {
                 DateTime parsedDate = DateTime.parse(entry.value);
                 formattedValue = DateFormat('dd-MM-yyyy – kk:mm').format(parsedDate);
               }
-
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(

@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.medicine_requests import MedicineRequest, MedicineStatusChange
+from models.medicine_requests import MedicineRequest, MedicineStatusChange, Status
 from models.schemas import CreateMedicineRequest, MedicineRequestSchema
 from fastapi import HTTPException
 import aiohttp
@@ -59,6 +59,11 @@ async def _fetch_user_data(user_email: str, session: aiohttp.ClientSession):
                 raise HTTPException(status_code=response.status, detail=error_message)
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the auth service: {str(e)}")
+    
+async def _fetch_status(status_id: int, session: AsyncSession):
+    stmt = select(MedicineStatusChange).where(MedicineStatusChange.id == status_id)
+    result = await session.execute(stmt)
+    return result.scalar_one()
 
 async def fetch_requests(session: AsyncSession):
     stmt = select(MedicineRequest)
@@ -88,9 +93,12 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
 
         # add the request to the database
         new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'], batch_number=request.batch_number, emergency=request.emergency)
-        new_status = MedicineStatusChange(status="pending")
-        new_request.status_id = new_status.id
+        
         session.add(new_request)
+        await session.commit()
+        
+        new_status = MedicineStatusChange(request_id=new_request.id)
+        session.add(new_status)
         await session.commit()
 
         # try:
@@ -122,15 +130,17 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
+    print('inside fetch request')
     async with aiohttp.ClientSession() as http_session:
         stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
-        print(request_result)
+        print(request_result.to_dict())
 
         tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
                     _fetch_medicine_data(request_result.medicine_id, http_session), 
-                    _fetch_user_data(user['sub'], http_session)]
+                    _fetch_user_data(user['sub'], http_session),
+                   ]
         try:
             results = await asyncio.gather(*tasks, return_exceptions=True)
         except Exception as e:
@@ -149,7 +159,7 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "dispenser": dispenser,
             "item": medicine,
             "requested_by": user,
-            "status_id": request_result.status_id,
+            "status_changes": request_result.status_changes,
             "created_at": request_result.created_at,
             "batch_number": request_result.batch_number,
             "emergency": request_result.emergency
@@ -166,6 +176,8 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
         tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
                     _fetch_medicine_data(request_result.medicine_id, http_session), 
                     _fetch_user_data(user['sub'], http_session)]
+        
+        
         try:
             results = await asyncio.gather(*tasks, return_exceptions=True)
         except Exception as e:

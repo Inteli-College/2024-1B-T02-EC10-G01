@@ -1,10 +1,9 @@
-from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+import enum
 from database import Base
-from sqlalchemy import desc  # Import desc
-import datetime
-
+from models.schemas import Status
 
 class MedicineRequest(Base):
     __tablename__ = "medicine_requests"
@@ -15,34 +14,52 @@ class MedicineRequest(Base):
     requested_by = Column(Integer)
     medicine_id = Column(Integer)
     emergency = Column(Boolean, default=False)
-    status_id = Column(Integer, ForeignKey("requests.medicine_status.id"))
-    status = relationship(
-        "MedicineStatusChange", uselist=False, back_populates="request"
-    )
     created_at = Column(DateTime, default=func.now())
     batch_number = Column(String, nullable=True)
-    feedback = Column(String, default="Nenhum feedback disponível.")
+    feedback = Column(String, default="No feedback available.")
 
+    # Define a one-to-many relationship with selectin loading
+    status_changes = relationship(
+        "MedicineStatusChange",
+        back_populates="request",
+        lazy="selectin",
+        foreign_keys="[MedicineStatusChange.request_id]"
+    )
+    
     def to_dict(self):
         return {
             "id": self.id,
-            "dispenser_id": self.dispenser_id,
+            "dispenser": self.dispenser_id,
             "requested_by": self.requested_by,
-            "medicine_id": self.medicine_id,
+            "medicine": self.medicine_id,
+            "status_changes": [status_change.to_dict() for status_change in self.status_changes],
             "emergency": self.emergency,
-            "status_id": self.status_id,
-            "created_at": self.created_at,
-            "batch_numnber": self.batch_number,
+            "batch_number": self.batch_number,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
             "feedback": self.feedback
         }
 
 class MedicineStatusChange(Base):
-    __tablename__ = "medicine_status"
+    __tablename__ = "medicine_status_changes"
     __table_args__ = {"schema": "requests"}
 
     id = Column(Integer, primary_key=True)
-    status = Column(String, default="pending")
-    request = relationship("MedicineRequest", uselist=False, back_populates="status")
+    status = Column(String, default=Status.pending.value)
+    created_at = Column(DateTime, default=func.now())
+    request_id = Column(Integer, ForeignKey("requests.medicine_requests.id"))
 
+    # Define a many-to-one relationship with remote_side set to identify the parent's primary key
+    request = relationship(
+        "MedicineRequest",
+        back_populates="status_changes",
+        foreign_keys=[request_id],
+        lazy="selectin",
+        remote_side=[MedicineRequest.id]
+    )
+    
     def to_dict(self):
-        return {"id": self.id, "status": self.status}
+        return {
+            "id": self.id,
+            "status": self.status,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        }
