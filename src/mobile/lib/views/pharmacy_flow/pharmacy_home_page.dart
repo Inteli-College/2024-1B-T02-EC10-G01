@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:asky/views/pharmacy_flow/in_progress.dart';
-import 'package:asky/views/pharmacy_flow/to_accept.dart';
 import 'package:asky/widgets/bottom_bar.dart';
 import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_bottom_bar.dart';
@@ -28,7 +27,6 @@ class _PharmacyHomePageState extends State<PharmacyHomePage> {
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
     PharmacyHomePageBody(),
-    AcceptSolicitationPage(),
     ViewSolicitationPage(),
     Text('USER', style: optionStyle),
   ];

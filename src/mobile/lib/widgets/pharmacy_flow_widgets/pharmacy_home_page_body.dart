@@ -1,91 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:asky/widgets/last_solicitation_card.dart';
-import 'package:asky/api/request_medicine_api.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:asky/widgets/pharmacy_flow_widgets/accept_solicitation_card.dart'; // Make sure this path is correct
 
 class PharmacyHomePageBody extends StatefulWidget {
-  const PharmacyHomePageBody({Key? key}) : super(key: key);
-
   @override
   _PharmacyHomePageBodyState createState() => _PharmacyHomePageBodyState();
 }
 
 class _PharmacyHomePageBodyState extends State<PharmacyHomePageBody> {
-  final RequestMedicineApi api = RequestMedicineApi();
-  Future? _lastRequest;
-
-  @override
-  void initState() {
-    super.initState();
-    _lastRequest = api.getLastRequest();
-  }
-
-  Future<void> _refreshData() async {
-    setState(() {
-      _lastRequest = api.getLastRequest();
-    });
-  }
+  List<Map<String, dynamic>> medications = [
+    {
+      'medicineName': 'Ibuprofeno',
+      'pyxis': '01',
+      'isUrgent': "Urgente",
+      'floor': 'Floor 1', 
+          },
+    {
+      'medicineName': 'Paracetamol',
+      'pyxis': '02',
+      'isUrgent': "",
+      'floor': 'Floor 2',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _refreshData,
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/qrcode');
-                  },
-                  child: Icon(Icons.add, size: 100, color: Color(0xFF1A365D)),
-                  style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(
-                          side: BorderSide(
-                        color: Color.fromRGBO(224, 224, 224, 0.25),
-                        width: 1,
-                      )),
-                      padding: EdgeInsets.all(50),
-                      backgroundColor: Colors.white,
-                      elevation: 4),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Text(
-                    "Vamo la",
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      color: Color(0xFF1A365D),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                FutureBuilder(
-                    future: _lastRequest,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          var data = snapshot.data!;
-                          return LastRequestCard(
-                              medicineName: data['medicine']['name'],
-                              currentStep: 2,
-                              totalSteps: 4,
-                              pyxis: data['dispenser']['code'],
-                              id: data['id'].toString());
-                        } else {
-                          return Text('Nenhuma solicitação encontrada');
-                        }
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    }),
-              ],
-            ),
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Medication Requests', style: GoogleFonts.notoSans()),
+      ),
+      body: ListView.builder(
+        itemCount: medications.length,
+        itemBuilder: (context, index) {
+          final item = medications[index];
+          return AcceptSolicitationCard(
+            medicineName: item['medicineName'],
+            pyxis: item['pyxis'],
+            floor: item['floor'], // Pass floor
+            isUrgent: item['isUrgent'] // Pass status
+          );
+        },
       ),
     );
   }
