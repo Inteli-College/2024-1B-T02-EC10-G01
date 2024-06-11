@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 import enum
+from typing import Optional
 
 class CreateMedicineRequest(BaseModel):
     dispenser_id: int
     medicine_id: int
     emergency: bool
-    
+    batch_number: Optional[str] = None
 
 class MedicineRequestSchema(BaseModel):
     id: int
@@ -14,6 +15,7 @@ class MedicineRequestSchema(BaseModel):
     medicine: dict
     status: str
     emergency: bool
+    batch_number: str = None
     created_at: str
 
 class CreateMaterialRequest(BaseModel):

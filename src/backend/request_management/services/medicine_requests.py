@@ -67,6 +67,7 @@ async def fetch_requests(session: AsyncSession):
 
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
     print('INSIDE CREATE REQUEST')
+    print(request)
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                  _fetch_medicine_data(request.medicine_id, http_session), 
@@ -86,13 +87,11 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         dispenser, medicine, user = results
 
         # add the request to the database
-        new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'])
+        new_request = MedicineRequest(dispenser_id=dispenser['id'], medicine_id=medicine['id'], requested_by=user['id'], batch_number=request.batch_number, emergency=request.emergency)
         new_status = MedicineStatusChange(status="pending")
-        print('NEW STATUS:', new_status)
         new_request.status_id = new_status.id
         session.add(new_request)
         await session.commit()
-        print(new_request)
 
         # try:
         #     channel = rabbitmq.get_channel()
@@ -118,16 +117,18 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         # except Exception as e:
         #     raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
         
-        asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
+        #asyncio.create_task(publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse"))
         #await publish_notification_by_role('Novo medicamento solicitado!', 'Acesse o aplicativo para aceitar ou recusar.', 1, "nurse")
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
     async with aiohttp.ClientSession() as http_session:
+        print('INSIDE FETCH REQUEST')
+        print(request_id)
         stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
-
+        print(request_result)
 
         tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
                     _fetch_medicine_data(request_result.medicine_id, http_session), 
@@ -151,7 +152,10 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "item": medicine,
             "requested_by": user,
             "status_id": request_result.status_id,
-            "created_at": request_result.created_at
+            "created_at": request_result.created_at,
+            "batch_number": request_result.batch_number,
+            "emergency": request_result.emergency
+            
         }
         return request
 
@@ -182,6 +186,8 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "medicine": medicine,
             "requested_by": user,
             "status_id": request_result.status_id,
-            "created_at": request_result.created_at
+            "created_at": request_result.created_at,
+            "batch_number": request_result.batch_number,
+            "emergency": request_result.emergency
         }
         return request
