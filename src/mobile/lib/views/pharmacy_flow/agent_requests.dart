@@ -1,3 +1,4 @@
+import 'package:asky/api/agent_api.dart';
 import 'package:asky/constants.dart';
 import 'package:asky/widgets/history_card.dart';
 import 'package:flutter/material.dart';
@@ -42,23 +43,21 @@ class AgentRequests extends StatefulWidget {
 }
 
 class _AgentRequestsState extends State<AgentRequests> {
-  dynamic requests = [];
+  dynamic pendingRequests = [];
   bool _isLoading = true;
+  late AgentApi api;
 
   @override
   void initState() {
     super.initState();
-    fetchRequests();
+    api = AgentApi();
+    fetchPendingRequests();
   }
 
-  void fetchRequests() async {
-    var fetchedRequests = await HistoryApi.getHistory();
-    List<dynamic> allRequests = [];
-    fetchedRequests.forEach((key, value) {
-      allRequests.addAll(value);
-    });
+  void fetchPendingRequests() async {
+    var requests = await api.getPendingRequests();
     setState(() {
-      requests = allRequests;
+      pendingRequests = requests;
       _isLoading = false;
     });
   }
@@ -84,60 +83,56 @@ class _AgentRequestsState extends State<AgentRequests> {
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: requests.length,
+                  itemCount: pendingRequests.length,
                   itemBuilder: (context, index) {
-                    var request = requests[index];
+                    var request = pendingRequests[index];
+                    var title = getRequestTitle(request);
+                    var emergency = request['emergency'] == true ? 'EMERGÊNCIA' : 'NORMAL';
+                    var location = '${request['dispenser']['code']} | Andar ${request['dispenser']['floor']}';
+                    var status = getStatusDescription(request);
+                    var color = getStatusColor(request);
 
-                    var title = '';
-                    var translatedAssistanceType = '';
-                    if (request['assistance_type'] != null) {
-                      translatedAssistanceType =
-                          Constants.assistanceTypes[request['assistance_type']] ??
-                              'Tipo desconhecido';
-                    }
-                    if (request['request_type'] == 'medicine') {
-                      title = request['medicine']['name'];
-                    } else if (request['request_type'] == 'material') {
-                      title = request['material']['name'];
-                    } else if (request['request_type'] == 'assistance') {
-                      title = translatedAssistanceType;
-                    }
-
-                    var emergency = '';
-                    if (request['emergency'] == true) {
-                      emergency = 'EMERGÊNCIA';
-                    } else {
-                      emergency = 'NORMAL';
-                    }
-
-                    var location = request['dispenser']['code'] +
-                        ' | Andar ' +
-                        request['dispenser']['floor'].toString();
-                    dynamic status = '';
-                    if (request['request_type'] == 'assistance') {
-                      status = AssistanceStatus.getStatusDescription(request['status']);
-                    } else {
-                      status = getDescription(request['status']);
-                    }
-                    dynamic color = '';
-                    if (request['request_type'] == 'assistance') {
-                      color = Constants.askyBlue;
-                    } else {
-                      color = getColorFromStatus(request['status']);
-                    }
                     return HistoryCard(
-                        date: request['created_at'],
-                        title: title,
-                        subtitle: location,
-                        tag: emergency,
-                        status: status,
-                        statusColor: color,
-                        id: request['id'].toString(),
-                        requestType: request['request_type']);
+                      date: request['created_at'],
+                      title: title,
+                      subtitle: location,
+                      tag: emergency,
+                      status: status,
+                      statusColor: color,
+                      id: request['id'].toString(),
+                      requestType: request['request_type'],
+                    );
                   },
                 ),
         ],
       ),
     );
+  }
+
+  String getRequestTitle(dynamic request) {
+    switch (request['request_type']) {
+      case 'medicine':
+        return request['medicine']['name'];
+      case 'material':
+        return request['material']['name'];
+      case 'assistance':
+        return Constants.assistanceTypes[request['assistance_type']] ?? 'Tipo desconhecido';
+      default:
+        return 'Título desconhecido';
+    }
+  }
+
+  String getStatusDescription(dynamic request) {
+    if (request['request_type'] == 'assistance') {
+      return AssistanceStatus.getStatusDescription(request['status']);
+    }
+    return getDescription(request['status']);
+  }
+
+  Color getStatusColor(dynamic request) {
+    if (request['request_type'] == 'assistance') {
+      return Constants.askyBlue;
+    }
+    return getColorFromStatus(request['status']);
   }
 }

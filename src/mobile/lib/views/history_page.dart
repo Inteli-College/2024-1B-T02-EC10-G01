@@ -56,6 +56,7 @@ class _HistoryPageState extends State<HistoryPage> {
     List<dynamic> allRequests = [];
     fetchedRequests.forEach((key, value) {
       allRequests.addAll(value);
+      print(allRequests.length.toString() + " requests fetched");
     });
     setState(() {
       requests = allRequests;
@@ -95,10 +96,11 @@ class _HistoryPageState extends State<HistoryPage> {
                           Constants.assistanceTypes[request['assistance_type']] ??
                               'Tipo desconhecido';
                     }
+                    
                     if (request['request_type'] == 'medicine') {
-                      title = request['medicine']['name'];
+                      title = request['item']['name'];
                     } else if (request['request_type'] == 'material') {
-                      title = request['material']['name'];
+                      title = request['item']['name'];
                     } else if (request['request_type'] == 'assistance') {
                       title = translatedAssistanceType;
                     }

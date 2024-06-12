@@ -3,25 +3,23 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:asky/constants.dart';
 
-
-class HistoryApi {
-  static Future<Map> getHistory() async {
+class AgentApi {
+   Future<Map> getPendingRequests() async {
     final auth = AuthenticationApi();
     var token = await auth.getToken();
-
+    print('SKJDBSLJFBSDFBSDJKF');
     final String bearerToken = 'Bearer $token';
 
     final response = await http.get(
-      Uri.parse(Constants.baseUrl + '/requests/'),
+      Uri.parse(Constants.baseUrl + '/requests/pending'),
       headers: {
-        'Content-Type': "application/json",
         'Authorization': bearerToken,
       },
     );
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      return data;
+      return data['requests'];
     } else {
       throw Exception('Failed to fetch history');
     }
