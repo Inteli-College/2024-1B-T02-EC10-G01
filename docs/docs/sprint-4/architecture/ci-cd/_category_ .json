@@ -1,12 +1,12 @@
 {
   "position": 2,
-  "label": "Arquitetura",
+  "label": "CI/CD",
   "collapsible": true,
   "collapsed": true,
   "className": "red",
   "link": {
     "type": "generated-index",
-    "title": "Artefatos de arquitetura Sprint 4",
-    "slug": "/sprint-4/architecture"
+    "title": "Artefatos de backend da Sprint 4",
+    "slug": "/sprint-4/architecture/ci-cd"
   }
 }
