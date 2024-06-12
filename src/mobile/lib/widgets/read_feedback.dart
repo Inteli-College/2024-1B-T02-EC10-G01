@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
- import 'package:font_awesome_flutter/font_awesome_flutter.dart';     
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ReadFeedbackWidget extends StatelessWidget {
-  final TextEditingController feedbackController = TextEditingController();
+  final String? feedbackReceived;
+  final TextEditingController feedbackController;
 
-  ReadFeedbackWidget({Key? key}) : super(key: key);
+  ReadFeedbackWidget({String? feedbackReceived})
+      : feedbackReceived = feedbackReceived ?? '',
+        feedbackController = TextEditingController(text: feedbackReceived);
 
   void _launchWhatsApp() async {
     const url = 'https://wa.me/1234567890'; // Replace with actual phone number
-   
   }
 
   @override

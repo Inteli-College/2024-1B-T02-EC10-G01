@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUrl = 'https://8a67-177-69-182-113.ngrok-free.app';
+  static const String baseUrl = 'https://2018-177-69-182-113.ngrok-free.app';
   static const Color askyBlue = Color(0xFF1A365D);
   static const Color offWhite = Color(0xFFF5F5F5);
   static const Color gradientTop = Color(0xFF1A365D);

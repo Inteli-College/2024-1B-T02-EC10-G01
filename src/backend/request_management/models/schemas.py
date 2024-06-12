@@ -8,6 +8,10 @@ class CreateMedicineRequest(BaseModel):
     emergency: bool
     batch_number: Optional[str] = None
 
+class CreateMedicineFeedback(BaseModel):
+    request_id: int
+    feedback: str
+
 class MedicineRequestSchema(BaseModel):
     id: int
     dispenser: dict
@@ -23,6 +27,10 @@ class CreateMaterialRequest(BaseModel):
     dispenser_id: int
     material_id: int
 
+class CreateMaterialFeedback(BaseModel):
+    request_id: int
+    feedback: str
+
 class MaterialRequestSchema(BaseModel):
     id: int
     dispenser: dict
@@ -35,6 +43,10 @@ class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
     assistance_type: str
     details: str
+
+class CreateAssistanceFeedback(BaseModel):
+    request_id: int
+    feedback: str
 
 class AssistanceRequestSchema(BaseModel):
     id: int

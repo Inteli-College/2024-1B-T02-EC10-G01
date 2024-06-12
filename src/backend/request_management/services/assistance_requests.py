@@ -116,8 +116,8 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
        
         return new_request
     
-async def create_feedback(assistance_id: int, feedback: str, session: aiohttp.ClientSession, user: dict):
-    stmt = select(AssistanceRequest).where(AssistanceRequest.id == assistance_id)
+async def create_feedback(request_id: int, feedback: str, session: aiohttp.ClientSession, user: dict):
+    stmt = select(AssistanceRequest).where(AssistanceRequest.id == request_id)
     result = await session.execute(stmt)
     assistance_request = result.scalars().first()
 

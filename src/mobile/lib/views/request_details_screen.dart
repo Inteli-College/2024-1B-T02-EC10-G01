@@ -170,7 +170,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   SizedBox(height: 40),
                   DetailsBox(details: detailsData),
                   SizedBox(height: 40),
-                  ReadFeedbackWidget(),
+                  ReadFeedbackWidget(feedbackReceived: requestData['feedback'],),
                 ],
               ),
             );

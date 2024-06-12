@@ -34,7 +34,8 @@ class AuthenticationApi {
           key: "session", value: response.body, aOptions: _getAndroidOptions());
 
       // Return the role for further processing
-      return data['role']; // Adjust this if the key 'role' is nested or different
+      return data[
+          'role']; // Adjust this if the key 'role' is nested or different
     } else {
       throw Exception('Failed to authenticate');
     }
@@ -57,6 +58,7 @@ class AuthenticationApi {
 
     if (readData != null) {
       var session = jsonDecode(readData);
+      print("SESSION " + session);
       return session["access_token"];
     }
     return null;
@@ -66,13 +68,15 @@ class AuthenticationApi {
     const secureStorage = FlutterSecureStorage();
 
     try {
-      var session = await secureStorage.read(key: "session", aOptions: _getAndroidOptions());
+      var session = await secureStorage.read(
+          key: "session", aOptions: _getAndroidOptions());
 
       if (session != null) {
         var sessionData = jsonDecode(session);
-        var expiresAt = DateTime.parse(sessionData['expires_at']).subtract(Duration(hours: 3));
+        var expiresAt = DateTime.parse(sessionData['expires_at'])
+            .subtract(Duration(hours: 3));
         var now = DateTime.now();
-        
+
         return expiresAt.isAfter(now);
       } else {
         return false;
