@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:asky/views/profile_screen.dart';
 import 'package:asky/widgets/bottom_bar.dart'; // Removed duplicate import
 import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,7 @@ class _HomeNurseState extends State<HomeNurse> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomeNurseBody(),
     HistoryPage(),
-    Text('USER', style: optionStyle),
+    ProfileScreen(),
   ];
 
   @override

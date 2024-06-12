@@ -3,6 +3,7 @@ import 'package:asky/api/request_material_api.dart';
 import 'package:asky/api/request_medicine_api.dart';
 import 'package:asky/api/requests_assistance_api.dart';
 import 'package:asky/constants.dart';
+import 'package:asky/views/profile_screen.dart';
 import 'package:asky/views/request_details_box.dart';
 import 'package:asky/widgets/read_feedback.dart';
 import 'package:asky/widgets/request_details_box.dart';
@@ -43,7 +44,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
         type: widget.type,
       ),
       HistoryPage(),
-      Text('USER', style: optionStyle),
+      ProfileScreen(),
     ];
   }
 
