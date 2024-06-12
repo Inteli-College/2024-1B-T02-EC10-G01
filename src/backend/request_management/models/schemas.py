@@ -33,7 +33,8 @@ class MaterialRequestSchema(BaseModel):
 
 class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
-    assistance_id: int
+    assistance_type: str
+    details: str
 
 class AssistanceRequestSchema(BaseModel):
     id: int

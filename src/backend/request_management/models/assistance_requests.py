@@ -2,44 +2,70 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.sql import func
 from database import Base
-from sqlalchemy import desc  # Import desc
+from sqlalchemy import desc
 import datetime
+import enum
+
+
+class AssistanceStatus(enum.Enum):
+    pending = "pending"
+    accepted = "accepted"
+    rejected = "rejected"
+    resolved = "resolved"
+
 
 class AssistanceRequest(Base):
-    __tablename__ = 'assistance_requests'
-    __table_args__ = {'schema': 'requests'}
+    __tablename__ = "assistance_requests"
+    __table_args__ = {"schema": "requests"}
 
     id = Column(Integer, primary_key=True)
     dispenser_id = Column(Integer)
     requested_by = Column(Integer)
-    assistance_id = Column(Integer)
-    status_id = Column(Integer, ForeignKey('requests.assistance_status.id'))
-    status = relationship("AssistanceStatusChange", uselist=False, back_populates="request")
+    assistance_type = Column(String)
+    details = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.now())
     feedback = Column(String, default="Nenhum feedback disponível.")
 
+    status_changes = relationship(
+        "AssistanceStatusChange",
+        back_populates="request",
+        lazy="selectin",
+        foreign_keys="[AssistanceStatusChange.request_id]",
+    )
+
     def to_dict(self):
         return {
             "id": self.id,
-            "dispenser_id": self.dispenser_id,
+            "dispenser": self.dispenser_id,
             "requested_by": self.requested_by,
-            "assistance_id": self.assistance_id,
-            "status_id": self.status_id,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
-            "feedback": self.feedback
+            "assistance_type": self.assistance_type,
+            "status_changes": [status.to_dict() for status in self.status_changes],
+            "details": self.details,
+            "created_at": self.created_at.isoformat(),
+            "feedback": self.feedback,
         }
+
 
 class AssistanceStatusChange(Base):
-    __tablename__ = 'assistance_status'
-    __table_args__ = {'schema': 'requests'}
+    __tablename__ = "assistance_status_change"
+    __table_args__ = {"schema": "requests"}
 
     id = Column(Integer, primary_key=True)
-    status = Column(String, default="pending")
-    request = relationship("AssistanceRequest", uselist=False ,back_populates="status")
+    status = Column(String, default=AssistanceStatus.pending.value)
+    created_at = Column(DateTime, default=func.now())
+    request_id = Column(Integer, ForeignKey("requests.assistance_requests.id"))
+
+    request = relationship(
+        "AssistanceRequest",
+        back_populates="status_changes",
+        foreign_keys=[request_id],
+        lazy="selectin",
+        remote_side=[AssistanceRequest.id],
+    )
 
     def to_dict(self):
         return {
             "id": self.id,
-            "status": self.status
+            "status": self.status,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
-    

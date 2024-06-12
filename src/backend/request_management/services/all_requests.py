@@ -11,7 +11,6 @@ import asyncio
 import os
 import json
 from middleware import is_nurse, is_agent, is_admin
-from rabbitmq import rabbitmq
 import pika
 from services.notifications import publish_notification_by_role
 import datetime

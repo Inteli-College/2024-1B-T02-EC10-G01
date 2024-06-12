@@ -9,7 +9,6 @@ import asyncio
 import os
 import json
 from middleware import is_nurse, is_agent, is_admin
-from rabbitmq import rabbitmq
 import pika
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")
@@ -91,32 +90,6 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         print('New status committed')
         print(new_request)
         
-
-        # try:
-        #     channel = rabbitmq.get_channel()
-        #     exchange_name = 'material_requests'
-        #     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-        #     routing_key = 'request.new'
-        #     message = {
-        #         'id': new_request.id,
-        #         'dispenser_id': new_request.dispenser_id,
-        #         'material_id': new_request.material_id,
-        #         'requested_by': new_request.requested_by,
-        #         'status': new_status.status,
-        #         'created_at': new_request.created_at.isoformat()
-
-        #     }
-        #     channel.basic_publish(
-        #         exchange=exchange_name,
-        #         routing_key=routing_key,
-        #         body=json.dumps(message),
-        #         properties=pika.BasicProperties(
-        #             delivery_mode=2,  # make message persistent
-        #         )
-        #     )
-        # except Exception as e:
-        #     raise HTTPException(status_code=500, detail=f"Failed to publish message: {str(e)}")
-
         return new_request
     
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    

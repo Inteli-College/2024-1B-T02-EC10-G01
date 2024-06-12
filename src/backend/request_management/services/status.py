@@ -11,7 +11,6 @@ import asyncio
 import os
 import json
 from middleware import is_nurse, is_agent, is_admin
-from rabbitmq import rabbitmq
 import pika
 
 gateway_url = os.getenv("GATEWAY_URL", "http://localhost:8000")

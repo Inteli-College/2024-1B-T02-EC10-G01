@@ -51,6 +51,7 @@ class _RequestDropdownState extends State<RequestDropdown> {
         child: DropdownButton<dynamic>(
           isExpanded: true,
           value: _selectedItem,
+          dropdownColor: Colors.white,
           hint: Text(widget.dropdownType == 'medicine'
               ? 'Selecione o medicamento'
               : 'Selecione o material',

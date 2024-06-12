@@ -6,6 +6,11 @@ class Constants {
   static const Color offWhite = Color(0xFFF5F5F5);
   static const Color gradientTop = Color(0xFF1A365D);
   static const Color gradientBottom = Color(0xFF3771C3);
+  static const Map<String, String> assistanceTypes = {
+    'stuckDoor': 'Porta Emperrada',
+    'expiredMedication': 'Medicamento Vencido',
+    'frozenDisplay': 'Display Congelado',
+  };
 }
 
 enum Status {

@@ -1,4 +1,15 @@
+import 'package:asky/api/requests_assistance_api.dart';
+import 'package:asky/constants.dart';
+import 'package:asky/widgets/top_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:asky/stores/pyxis_store.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:asky/widgets/dropdown.dart';
+import 'package:asky/widgets/toggle.dart';
+import 'package:asky/widgets/styled_button.dart';
+import 'package:asky/widgets/assistanceDropdown.dart'; // Import the new assistanceDropdown widget
 
 class AssistanceScreen extends StatefulWidget {
   @override
@@ -6,149 +17,139 @@ class AssistanceScreen extends StatefulWidget {
 }
 
 class _AssistanceScreenState extends State<AssistanceScreen> {
-  String _selectedAssistanceType = 'Manutenção';
-  final List<String> _assistanceTypes = [
-    'Manutenção',
-    'Solicitação',
-    'Divergencia',
-  ];
-  final TextEditingController _detailsController = TextEditingController();
+  bool isLoading = false; // Add this line to manage loading state
+  TextEditingController textEditingController = TextEditingController();
+  dynamic selectedAssistance = 'stuckDoor';
+  RequestsAssistance assistanceApi = RequestsAssistance();
+
+  void _handleDropdownChange(dynamic newValue) {
+    setState(() {
+      selectedAssistance = newValue; // Update local state with new selection
+    });
+    print(selectedAssistance);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final pyxisStore = context
+        .watch<PyxisStore>(); // Continue to watch the store for other changes
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Assistência', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff1A365D),
-                      borderRadius: BorderRadius.circular(2),
+      appBar: TopBar(),
+      backgroundColor: const Color(0xFFF5F5F5),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Solicitar assistência",
+                style: GoogleFonts.notoSans(
+                  textStyle: Theme.of(context).textTheme.displayLarge,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 40),
+              Text(
+                "Selecione o problema",
+                style: GoogleFonts.notoSans(
+                  textStyle: Theme.of(context).textTheme.displayLarge,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: AssistanceDropdown(
+                    onChanged: _handleDropdownChange,
+                    selectedAssistanceType: selectedAssistance),
+              ),
+              SizedBox(height: 40),
+              Text(
+                "Descrição do problema",
+                style: GoogleFonts.notoSans(
+                  textStyle: Theme.of(context).textTheme.displayLarge,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white, // Background color
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(26, 54, 93, 0.2),
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  flex: 6,
-                  child: Container(
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(2),
+                child: TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    hintText: 'O que está acontecendo?',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Added padding inside the text field
+                    border: InputBorder
+                        .none, // No border needed here as Container handles the visual presentation
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none, // Use BorderSide.none here
                     ),
+                    
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text('Detalhes',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xff1A365D))),
-            SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildDetailRow('Enfermeiro', 'Enfermeiro'),
-                  Divider(color: Colors.grey.shade300),
-                  _buildDetailRow('Data', 'Data'),
-                  Divider(color: Colors.grey.shade300),
-                  _buildDetailRow('Local', 'Andar | Pyxis'),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Text('Qual tipo de assistência precisa?',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xff1A365D))),
-            SizedBox(height: 8),
-            DropdownButton<String>(
-              isExpanded: true,
-              value: _selectedAssistanceType,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedAssistanceType = newValue!;
-                });
-              },
-              items: _assistanceTypes
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value, style: TextStyle(color: Colors.black)),
-                );
-              }).toList(),
-              dropdownColor: Colors.white,
-            ),
-            SizedBox(height: 16),
-            Text('Detalhes',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xff1A365D))),
-            SizedBox(height: 8),
-            TextField(
-              controller: _detailsController,
-              maxLines: 5,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Escreva o problema encontrado',
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-              style: TextStyle(color: Colors.black),
-            ),
-            SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Aqui você pode adicionar a lógica para enviar os detalhes da assistência
-                },
-                child: Text('Confirmar'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff1A365D), // Cor do botão
-                  foregroundColor: Colors.white, // Cor do texto do botão
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 10,
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 40),
+              Center(
+                child: StyledButton(
+                  text: "Confirmar",
+                  onPressed: () async {
+                    setState(() {
+                      isLoading =
+                          true; // Set loading to true when the request starts
+                    });
+                    var response = await assistanceApi.sendRequest(
+                      pyxisStore.currentPyxisData['id'],
+                      selectedAssistance,
+                      details: textEditingController.text,
+                    );
+                    setState(() {
+                      isLoading =
+                          false; // Set loading to false when the request completes
+                    });
+                    if (response != Null) {
+                      Navigator.of(context).pushNamed(
+                        '/nurse_request',
+                        arguments: {
+                          'requestId': response['id'].toString(),
+                          'type': 'assistance'
+                        },
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Something went wrong!'),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(), // Show loading indicator when isLoading is true
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label,
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.bold)),
-        Text(value, style: TextStyle(fontSize: 16, color: Colors.grey)),
-      ],
     );
   }
 }
