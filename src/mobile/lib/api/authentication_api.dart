@@ -89,7 +89,7 @@ class AuthenticationApi {
         key: "session", aOptions: _getAndroidOptions());
     if (session != null) {
       var sessionData = jsonDecode(session);
-      return sessionData;
+      return sessionData['role'];
     }
   }
 }

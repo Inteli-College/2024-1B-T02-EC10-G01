@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:asky/constants.dart';
 
 class AgentApi {
-   Future<Map> getPendingRequests() async {
+   Future getPendingRequests() async {
     final auth = AuthenticationApi();
     var token = await auth.getToken();
     print('SKJDBSLJFBSDFBSDJKF');

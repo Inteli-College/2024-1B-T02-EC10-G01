@@ -58,6 +58,7 @@ class _AgentRequestsState extends State<AgentRequests> {
     var requests = await api.getPendingRequests();
     setState(() {
       pendingRequests = requests;
+      print(pendingRequests);
       _isLoading = false;
     });
   }
@@ -112,9 +113,9 @@ class _AgentRequestsState extends State<AgentRequests> {
   String getRequestTitle(dynamic request) {
     switch (request['request_type']) {
       case 'medicine':
-        return request['medicine']['name'];
+        return request['item']['name'];
       case 'material':
-        return request['material']['name'];
+        return request['item']['name'];
       case 'assistance':
         return Constants.assistanceTypes[request['assistance_type']] ?? 'Tipo desconhecido';
       default:

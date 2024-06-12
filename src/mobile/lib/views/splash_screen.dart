@@ -38,7 +38,9 @@ class _SplashScreenState extends State<SplashScreen> {
       print('Token is valid: $isValid');
       if (!mounted) return;  // Ensure the widget is still mounted before using context
       if (isValid) {
+        print(await auth.getUser());
         if(await auth.getUser() == 'agent') {
+          print('Agent');
         Navigator.pushReplacementNamed(context, '/pharmacy_home');
 
         } else {
