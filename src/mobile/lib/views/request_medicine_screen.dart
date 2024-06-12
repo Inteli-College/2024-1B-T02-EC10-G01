@@ -111,7 +111,6 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     });
 
                     final batchNumber = toggleValue ? textEditingController.text : '';
-                    print(batchNumber);
 
                     if (toggleValue && batchNumber.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(

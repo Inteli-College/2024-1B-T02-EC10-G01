@@ -54,7 +54,6 @@ class _PharmacyHomePageState extends State<PharmacyHomePage> {
       bottomNavigationBar: PharmacyCustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
-          print('Index: $index');
           setState(() {
             _selectedIndex = index;
           });

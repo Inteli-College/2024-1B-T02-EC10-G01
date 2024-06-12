@@ -43,6 +43,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   dynamic requests = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -58,83 +59,85 @@ class _HistoryPageState extends State<HistoryPage> {
     });
     setState(() {
       requests = allRequests;
-      print(requests);
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Todas as solicitações",
-              style: GoogleFonts.notoSans(
-                textStyle: Theme.of(context).textTheme.displayLarge,
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Todas as solicitações",
+            style: GoogleFonts.notoSans(
+              textStyle: Theme.of(context).textTheme.displayLarge,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
             ),
-            SizedBox(height: 40),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                var request = requests[index];
+          ),
+          SizedBox(height: 40),
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: requests.length,
+                  itemBuilder: (context, index) {
+                    var request = requests[index];
 
-                var title = '';
-                var translatedAssistanceType = '';
-                if (request['assistance_type'] != null) {
-                  translatedAssistanceType =
-                      Constants.assistanceTypes[request['assistance_type']] ??
-                          'Tipo desconhecido';
-                }
-                if (request['request_type'] == 'medicine') {
-                  title = request['medicine']['name'];
-                } else if (request['request_type'] == 'material') {
-                  title = request['material']['name'];
-                } else if (request['request_type'] == 'assistance') {
-                  title = translatedAssistanceType;
-                }
+                    var title = '';
+                    var translatedAssistanceType = '';
+                    if (request['assistance_type'] != null) {
+                      translatedAssistanceType =
+                          Constants.assistanceTypes[request['assistance_type']] ??
+                              'Tipo desconhecido';
+                    }
+                    if (request['request_type'] == 'medicine') {
+                      title = request['medicine']['name'];
+                    } else if (request['request_type'] == 'material') {
+                      title = request['material']['name'];
+                    } else if (request['request_type'] == 'assistance') {
+                      title = translatedAssistanceType;
+                    }
 
-                var emergency = '';
-                if (request['emergency'] == true) {
-                  emergency = 'EMERGÊNCIA';
-                } else {
-                  emergency = 'NORMAL';
-                }
+                    var emergency = '';
+                    if (request['emergency'] == true) {
+                      emergency = 'EMERGÊNCIA';
+                    } else {
+                      emergency = 'NORMAL';
+                    }
 
-                var location = request['dispenser']['code'] +
-                    ' | Andar ' +
-                    request['dispenser']['floor'].toString();
-                dynamic status = '';
-                if (request['request_type'] == 'assistance') {
-                  status = AssistanceStatus.getStatusDescription(request['status']);
-                } else {
-                  status = getDescription(request['status']);
-                }
-                dynamic color = '';
-                if (request['request_type'] == 'assistance') {
-                  color = Constants.askyBlue;
-                } else {
-                  color = getColorFromStatus(request['status']);
-                }
-                return HistoryCard(
-                    date: request['created_at'],
-                    title: title,
-                    subtitle: location,
-                    tag: emergency,
-                    status: status,
-                    statusColor: color,
-                    id: request['id'].toString(),
-                    requestType: request['request_type']);
-              },
-            ),
-          ],
-        ),
-      );
+                    var location = request['dispenser']['code'] +
+                        ' | Andar ' +
+                        request['dispenser']['floor'].toString();
+                    dynamic status = '';
+                    if (request['request_type'] == 'assistance') {
+                      status = AssistanceStatus.getStatusDescription(request['status']);
+                    } else {
+                      status = getDescription(request['status']);
+                    }
+                    dynamic color = '';
+                    if (request['request_type'] == 'assistance') {
+                      color = Constants.askyBlue;
+                    } else {
+                      color = getColorFromStatus(request['status']);
+                    }
+                    return HistoryCard(
+                        date: request['created_at'],
+                        title: title,
+                        subtitle: location,
+                        tag: emergency,
+                        status: status,
+                        statusColor: color,
+                        id: request['id'].toString(),
+                        requestType: request['request_type']);
+                  },
+                ),
+        ],
+      ),
+    );
   }
 }
