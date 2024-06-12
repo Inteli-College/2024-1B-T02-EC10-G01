@@ -14,10 +14,10 @@ router = APIRouter()
 @router.get("/last")
 async def read_last(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     request= await fetch_latest_request(session, user)
-    print('REQUEST NO ROUTER: ', request)
     return request
 
 @router.get("/")
 async def read_requests(session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
+    print(user)
     requests = await fetch_all_requests_by_user(session, user)
     return requests

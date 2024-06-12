@@ -8,7 +8,6 @@ class DetailsBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Details: $details');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

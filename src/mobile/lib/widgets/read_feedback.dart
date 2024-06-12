@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ReadFeedbackWidget extends StatelessWidget {
   final String? feedbackReceived;
   final TextEditingController feedbackController;
+  final bool isReadOnly; // This flag will determine if the field is read-only
 
-  ReadFeedbackWidget({String? feedbackReceived})
+  // Added isReadOnly to the constructor with a default value of false
+  ReadFeedbackWidget({String? feedbackReceived, this.isReadOnly = true})
       : feedbackReceived = feedbackReceived ?? '',
         feedbackController = TextEditingController(text: feedbackReceived);
 
@@ -55,6 +57,7 @@ class ReadFeedbackWidget extends StatelessWidget {
             ),
             keyboardType: TextInputType.multiline,
             maxLines: null,
+            readOnly: isReadOnly, // Controlled by the isReadOnly flag
           ),
         ),
       ],

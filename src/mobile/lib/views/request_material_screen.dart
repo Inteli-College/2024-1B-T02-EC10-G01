@@ -25,7 +25,6 @@ class _RequestMaterialState extends State<RequestMaterial> {
     setState(() {
       selectedMaterial = newValue; // Update local state with new selection
     });
-    print(selectedMaterial);
   }
 
   @override

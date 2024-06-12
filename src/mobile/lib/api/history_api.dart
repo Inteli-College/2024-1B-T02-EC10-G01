@@ -23,7 +23,9 @@ class HistoryApi {
     );
 
     if (response.statusCode == 200) {
+      print('OIIIIII');
       var data = jsonDecode(response.body);
+      print("data: $data");
       return data;
     } else {
       throw Exception('Failed to fetch history');

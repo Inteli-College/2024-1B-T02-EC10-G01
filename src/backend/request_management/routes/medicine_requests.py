@@ -28,7 +28,6 @@ async def read_medicine_requests(session: AsyncSession = Depends(get_session), u
 async def create_medicine_request(request: CreateMedicineRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
     key = "read_medicine_requests"
     created_request = await create_request(session, request, user)
-    print('CREATED REQUEST: ', created_request)
     # requests = await fetch_requests(session)
     # request_dicts = [request.to_dict() for request in requests]
     # redis_client.setex(key, 60, json.dumps(request_dicts))

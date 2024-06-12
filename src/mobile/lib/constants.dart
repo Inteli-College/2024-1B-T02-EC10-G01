@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUrl = 'https://2018-177-69-182-113.ngrok-free.app';
+  static const String baseUrl = 'https://4e3a-45-169-248-171.ngrok-free.app';
   static const Color askyBlue = Color(0xFF1A365D);
   static const Color offWhite = Color(0xFFF5F5F5);
   static const Color gradientTop = Color(0xFF1A365D);
@@ -12,7 +12,6 @@ class Constants {
     'frozenDisplay': 'Display Congelado',
   };
 }
-
 enum Status {
   pending,
   accepted,
@@ -29,16 +28,35 @@ extension StatusExtension on Status {
         return 'Pendente';
       case Status.accepted:
         return 'Aceito';
-      case Status.rejected:
-        return 'Rejeitado';
-      case Status.completed:
-        return 'Concluído';
       case Status.preparing:
         return 'Preparando';
       case Status.inTransit:
         return 'Em trânsito';
+      case Status.rejected:
+        return 'Rejeitado';
+      case Status.completed:
+        return 'Concluído';
       default:
         return '';
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case Status.pending:
+        return Colors.orange;
+      case Status.accepted:
+        return Colors.blue;
+      case Status.preparing:
+        return Colors.blue;
+      case Status.inTransit:
+        return Colors.blue;
+      case Status.rejected:
+        return Colors.red;
+      case Status.completed:
+        return Colors.green;
+      default:
+        return Colors.black;
     }
   }
 }
@@ -47,6 +65,26 @@ List<String> getStatusLabels() {
   return Status.values.map((status) => status.description).toList();
 }
 
-getIndexFromStatus(String status) {
+int getIndexFromStatus(String status) {
   return Status.values.indexWhere((element) => element.description == status);
+}
+
+Status? parseStatus(String statusString) {
+  for (Status status in Status.values) {
+    if (status.toString().split('.').last == statusString) {
+      return status;
+    }
+  }
+  return null;
+}
+
+// Corrected function to get the description from a string status
+String getDescription(String statusString) {
+  Status? status = parseStatus(statusString);
+  return status?.description ?? 'Status desconhecido';
+}
+
+Color getColorFromStatus(String statusString) {
+  Status? status = parseStatus(statusString);
+  return status?.color ?? Colors.black; // Default color if status is unknown
 }

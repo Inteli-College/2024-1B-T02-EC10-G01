@@ -83,12 +83,10 @@ async def create_request(session: AsyncSession, request: CreateMaterialRequest, 
         new_request = MaterialRequest(dispenser_id=dispenser['id'], material_id=material['id'], requested_by=user['id'])
         session.add(new_request)
         await session.commit()
-        print('New request committed')
         new_status = MaterialStatusChange(request_id=new_request.id)
         session.add(new_status)
         await session.commit()
-        print('New status committed')
-        print(new_request)
+
         
         return new_request
     

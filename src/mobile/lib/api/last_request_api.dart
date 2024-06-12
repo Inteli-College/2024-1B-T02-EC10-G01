@@ -10,7 +10,6 @@ class LastRequestApi {
   @override
   Future<Map> getLastRequest() async {
     var token = await auth.getToken();
-    print('inside getLastRequest');
     final String bearerToken = 'Bearer $token';
     final response = await http.get(
       Uri.parse(Constants.baseUrl + '/requests/last'),
@@ -21,7 +20,6 @@ class LastRequestApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
       return data;
     } else {
       throw Exception('Failed to fetch medicines');

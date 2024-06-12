@@ -53,7 +53,6 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
         stmt = select(AssistanceRequest).where(AssistanceRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
-        print(request_result.to_dict())
 
         tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
                     _fetch_user_data(user['sub'], http_session),
@@ -81,7 +80,6 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
             "details": request_result.details,
             
         }
-        print(request)
         return request
 
 
@@ -106,13 +104,10 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
         new_request = AssistanceRequest(dispenser_id=dispenser['id'], requested_by=user['id'], assistance_type=request.assistance_type, details=request.details)
         session.add(new_request)
         await session.commit()
-        print('New request committed')
         new_status = AssistanceStatusChange(request_id=new_request.id)
-        print(new_status)
         session.add(new_status)
         await session.commit()
-        print('New status committed')
-        print(new_request)
+
        
         return new_request
     

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:asky/widgets/last_solicitation_card.dart';
 import 'package:asky/api/last_request_api.dart';
 
+
 class AssistanceStatus {
   static const pending = "pending";
   static const accepted = "accepted";
@@ -45,7 +46,6 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
   void initState() {
     super.initState();
     _lastRequest = api.getLastRequest();
-    print('HomeNurseBody initialized');
   }
 
   Future<void> _refreshData() async {
@@ -98,8 +98,7 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
                           var data = snapshot.data!;
-                          print('Last request data: $data');
-                          print(data['assistanceType']);
+            
                           String translatedAssistanceType = '';
                           if (data['assistanceType'] != null) {
                             // Retrieve the translated label from Constants.assistanceTypes using the key from requestData

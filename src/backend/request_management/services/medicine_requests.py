@@ -70,8 +70,6 @@ async def fetch_requests(session: AsyncSession):
     return result.scalars().all()
 
 async def create_request(session: AsyncSession, request: CreateMedicineRequest, user: dict):
-    print('INSIDE CREATE REQUEST')
-    print(request)
     async with aiohttp.ClientSession() as http_session:
         tasks = [_fetch_dispenser_data(request.dispenser_id, http_session),
                  _fetch_medicine_data(request.medicine_id, http_session), 
@@ -105,12 +103,10 @@ async def create_request(session: AsyncSession, request: CreateMedicineRequest, 
         return new_request
 
 async def fetch_request(session: AsyncSession, request_id: int, user: dict):    
-    print('inside fetch request')
     async with aiohttp.ClientSession() as http_session:
         stmt = select(MedicineRequest).where(MedicineRequest.id == request_id)
         result = await session.execute(stmt)
         request_result = result.scalar()
-        print(request_result.to_dict())
 
         tasks = [_fetch_dispenser_data(request_result.dispenser_id, http_session),
                     _fetch_medicine_data(request_result.medicine_id, http_session), 
