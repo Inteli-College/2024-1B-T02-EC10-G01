@@ -108,6 +108,7 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
         await session.commit()
         print('New request committed')
         new_status = AssistanceStatusChange(request_id=new_request.id)
+        print(new_status)
         session.add(new_status)
         await session.commit()
         print('New status committed')

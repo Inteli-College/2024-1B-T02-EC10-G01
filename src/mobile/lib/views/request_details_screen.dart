@@ -26,6 +26,34 @@ class RequestDetailsScreen extends StatefulWidget {
   _RequestDetailsScreenState createState() => _RequestDetailsScreenState();
 }
 
+class AssistanceStatus {
+  static const pending = "pending";
+  static const accepted = "accepted";
+  static const resolved = "resolved";
+}
+
+List<String> getAssistanceStatusLabels() {
+  return [
+    "Pending",    // corresponds to AssistanceStatus.pending
+    "Accepted",   // corresponds to AssistanceStatus.accepted
+    "Resolved"    // corresponds to AssistanceStatus.resolved
+  ];
+}
+
+getIndexFromAssistanceStatus(status) {
+  switch (status) {
+    case AssistanceStatus.pending:
+      return 0;
+    case AssistanceStatus.accepted:
+      return 1;
+    case AssistanceStatus.resolved:
+      return 2;
+    default:
+      return 0;
+  }
+
+}
+
 class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
   int _selectedIndex = 0;
 
@@ -72,6 +100,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
 
             var requestData = snapshot.data;
             print('Request data: $requestData');
+            print(requestData['emergency']);
 
             // Parse the original date
             DateTime createdAt = DateTime.parse(requestData['created_at']);
@@ -103,9 +132,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
             detailsData['Data'] = createdAtMinus3Hours.toString();
             if (requestData['emergency'] != null) {
               detailsData['Emergência'] = 'Sim';
-            } else {
-              detailsData['Emergência'] = 'Não';
-            }
+            } 
             if (requestData['batch_number'] != null &&
                 requestData['batch_number'] != '') {
               detailsData['Lote'] = requestData['batch_number'];
@@ -130,11 +157,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   ),
                   SizedBox(height: 20),
                   StatusProgressBar(
-                    currentStep: getIndexFromStatus(
+                    currentStep: widget.type == 'assistance' ? getIndexFromAssistanceStatus(
+                            requestData['status_changes'].last['status']) +
+                        1 : getIndexFromStatus(
                             requestData['status_changes'].last['status']) +
                         1,
-                    totalSteps: getStatusLabels().length,
-                    labels: getStatusLabels(),
+                    totalSteps: widget.type == 'assistance' ? getAssistanceStatusLabels().length : getStatusLabels().length,
+                    labels: widget.type == 'assistance' ? getAssistanceStatusLabels() : getStatusLabels(),
                     activeColor: Constants.askyBlue,
                     inactiveColor: Colors.grey,
                   ),

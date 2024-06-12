@@ -4,7 +4,9 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.medicine_requests import MedicineRequest, MedicineStatusChange
 from models.material_requests import MaterialRequest, MaterialStatusChange
+from models.assistance_requests import AssistanceRequest, AssistanceStatusChange
 from models.schemas import CreateMedicineRequest, MedicineRequestSchema
+from models.assistance_requests import AssistanceRequest
 from fastapi import HTTPException
 import aiohttp
 import asyncio
@@ -75,8 +77,10 @@ async def _fetch_material_data(material_id: int, session: aiohttp.ClientSession)
 async def _fetch_status_changes(request_id: int, type: str, session: AsyncSession):
     if type == "medicine":
         stmt = select(MedicineStatusChange).filter(MedicineStatusChange.request_id == request_id)
-    else:
+    elif type == "material":
         stmt = select(MaterialStatusChange).filter(MaterialStatusChange.request_id == request_id)
+    else:
+        stmt = select(AssistanceStatusChange).filter(AssistanceStatusChange.request_id == request_id)
     
     result = await session.execute(stmt)
     status_changes = result.scalars().all()
@@ -86,30 +90,50 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
     async with aiohttp.ClientSession() as http_session:
         # Create a union of the two request tables
         medicine_query = (
-            select(
-                MedicineRequest.id,
-                MedicineRequest.dispenser_id,
-                MedicineRequest.medicine_id,
-                MedicineRequest.created_at,
-                MedicineRequest.batch_number,
-                MedicineRequest.emergency,
-                literal("medicine").label("request_type")
+                select(
+                    MedicineRequest.id,
+                    MedicineRequest.dispenser_id,
+                    MedicineRequest.medicine_id,
+                    literal(None).label("assistance_type"),  # No assistance_type in medicine requests
+                    literal(None).label("details"),          # No details in medicine requests
+                    MedicineRequest.created_at,
+                    MedicineRequest.batch_number,
+                    MedicineRequest.emergency,
+                    literal("medicine").label("request_type")
+                )
             )
-        )
 
+            # Corrected Material Query
         material_query = (
-            select(
-                MaterialRequest.id,
-                MaterialRequest.dispenser_id,
-                MaterialRequest.material_id,
-                MaterialRequest.created_at,
-                literal(None).label("batch_number"),  # No batch_number for material requests
-                literal(None).label("emergency"),
-                literal("material").label("request_type")
+                select(
+                    MaterialRequest.id,
+                    MaterialRequest.dispenser_id,
+                    MaterialRequest.material_id,
+                    literal(None).label("assistance_type"),  # No assistance_type in material requests
+                    literal(None).label("details"),          # No details in material requests
+                    MaterialRequest.created_at,
+                    literal(None).label("batch_number"),     # No batch_number for material requests
+                    literal(None).label("emergency"),        # Assume no emergency status for materials
+                    literal("material").label("request_type")
+                )
             )
-        )
 
-        union_query = union_all(medicine_query, material_query).alias("combined_requests")
+            # Corrected Assistance Query
+        assistance_query = (
+                select(
+                    AssistanceRequest.id,
+                    AssistanceRequest.dispenser_id,
+                    literal(None).label("material_id"),      # No material_id in assistance requests
+                    AssistanceRequest.assistance_type,
+                    AssistanceRequest.details,
+                    AssistanceRequest.created_at,
+                    literal(None).label("batch_number"),     # No batch_number in assistance requests
+                    literal(None).label("emergency"),        # Assume emergency handled separately for assistance
+                    literal("assistance").label("request_type")
+                )
+            )
+
+        union_query = union_all(medicine_query, material_query, assistance_query).alias("combined_requests")
         stmt = select(union_query).order_by(union_query.c.created_at.desc()).limit(1)
         
         result = await session.execute(stmt)
@@ -129,7 +153,7 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "emergency": request_result[6],
                 "request_type": request_type
             }
-        else:
+        elif request_type == "material":
             request_dict = {
                 "id": request_result[0],
                 "dispenser_id": request_result[1], # No dispenser_id for material requests
@@ -139,7 +163,15 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
                 "emergency": None,
                 "request_type": request_type
             }
-        
+        else: 
+            request_dict = {
+                "id": request_result[0],
+                "dispenser_id": request_result[1], # No dispenser_id for material requests
+                "created_at": request_result[4],
+                "assistance_type": request_result[3],
+                "details": request_result[5],
+                "request_type": request_type
+            }
         dispenser_id = request_dict.get("dispenser_id")
         
         if dispenser_id is not None:
@@ -149,8 +181,10 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
 
         if request_type == "medicine":
             item_data_task = _fetch_medicine_data(int(request_dict['medicine_id']), http_session)
-        else:
+        elif request_type == "material":
             item_data_task = _fetch_material_data(int(request_dict['material_id']), http_session)  # Adjust to fetch material data
+        else:
+            item_data_task = asyncio.sleep(0)
 
         user_data_task = _fetch_user_data(user['sub'], http_session)
         
@@ -171,6 +205,8 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
         item = results[1]
         user_data = results[2]
         status_changes = results[3]
+        
+        print(status_changes)
 
         request = {
             "id": request_dict['id'],
@@ -180,7 +216,9 @@ async def fetch_latest_request(session: AsyncSession, user: dict):
             "status_changes": status_changes,
             "created_at": request_dict['created_at'],
             "batch_number": request_dict['batch_number'] if request_type == "medicine" else None,
-            "emergency": request_dict['emergency'],
+            "emergency": request_dict['emergency'] if request_type == "medicine" else None,
+            "assistanceType": request_dict['assistance_type'] if request_type == "assistance" else None,
+            "details": request_dict['details'] if request_type == "assistance" else None,
             "request_type": request_dict['request_type']
         }
         print('oi ')

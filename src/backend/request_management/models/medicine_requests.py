@@ -35,7 +35,7 @@ class MedicineRequest(Base):
             "status_changes": [status_change.to_dict() for status_change in self.status_changes],
             "emergency": self.emergency,
             "batch_number": self.batch_number,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": self.created_at,
             "feedback": self.feedback
         }
 
@@ -61,5 +61,5 @@ class MedicineStatusChange(Base):
         return {
             "id": self.id,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": self.created_at
         }

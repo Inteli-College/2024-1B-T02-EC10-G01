@@ -23,7 +23,7 @@ class AssistanceRequest(Base):
     requested_by = Column(Integer)
     assistance_type = Column(String)
     details = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.datetime.now())
+    created_at = Column(DateTime, default=func.now())
     feedback = Column(String, default="Nenhum feedback disponível.")
 
     status_changes = relationship(
@@ -41,7 +41,7 @@ class AssistanceRequest(Base):
             "assistance_type": self.assistance_type,
             "status_changes": [status.to_dict() for status in self.status_changes],
             "details": self.details,
-            "created_at": self.created_at.isoformat(),
+            "created_at": self.created_at,
             "feedback": self.feedback,
         }
 
@@ -67,5 +67,5 @@ class AssistanceStatusChange(Base):
         return {
             "id": self.id,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": self.created_at,
         }

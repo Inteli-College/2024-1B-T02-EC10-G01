@@ -58,5 +58,5 @@ class MaterialStatusChange(Base):
         return {
             "id": self.id,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": self.created_at
         }
