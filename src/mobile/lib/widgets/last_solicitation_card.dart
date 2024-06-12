@@ -3,23 +3,31 @@ import 'package:asky/constants.dart'; // Ensure constants are defined in this im
 import 'package:asky/views/request_details_screen.dart'; // Assuming this is the route for RequestDetailsScreen
 
 class LastRequestCard extends StatelessWidget {
-  final String medicineName;
+  final String item;
   final int currentStep;
   final int totalSteps;
   final String pyxis;
   final String id;
+  final String requestType;
 
   const LastRequestCard({
-    Key? key, 
+    Key? key,
     required this.pyxis,
     required this.id,
-    required this.medicineName, 
-    required this.currentStep, 
+    required this.item,
+    required this.requestType,
+    required this.currentStep,
     required this.totalSteps
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var title = '';
+    if (requestType == 'medicine') {
+      title = 'Medicamento: ';
+    } else if (requestType == 'material') {
+      title = 'Material: ';
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,9 +39,9 @@ class LastRequestCard extends StatelessWidget {
         InkWell(
           onTap: () {
             Navigator.pushNamed(
-              context, 
+              context,
               '/nurse_request', // This is the route name for RequestDetailsScreen
-              arguments: {'requestId': id} // Passing id as an argument
+              arguments: {'requestId': id, 'type': requestType} // Passing id as an argument
             );
           },
           child: Card(
@@ -47,7 +55,7 @@ class LastRequestCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Medicamento: $medicineName', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                  Text(title + item, style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
                   Text('Pyxis $pyxis', style: TextStyle(fontSize: 16, color: Colors.white)),
 
                   SizedBox(height: 20),
@@ -66,7 +74,7 @@ class StepProgressIndicator extends StatelessWidget {
   final int totalSteps;
   final int currentStep;
 
-  StepProgressIndicator({required this.totalSteps, required this.currentStep});
+  const StepProgressIndicator({Key? key, required this.totalSteps, required this.currentStep}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

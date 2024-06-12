@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DetailsBox extends StatelessWidget {
-  final Map<String, String> details;
+  final Map<dynamic, dynamic> details;
 
   DetailsBox({Key? key, required this.details}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('Details: $details');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -45,7 +46,6 @@ class DetailsBox extends StatelessWidget {
                 DateTime parsedDate = DateTime.parse(entry.value);
                 formattedValue = DateFormat('dd-MM-yyyy – kk:mm').format(parsedDate);
               }
-
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(

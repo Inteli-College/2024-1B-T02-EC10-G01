@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:asky/widgets/bottom_bar.dart';
+import 'package:asky/widgets/bottom_bar.dart'; // Removed duplicate import
 import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,6 @@ import 'package:asky/api/authentication_api.dart';
 import 'package:asky/views/assistance_screen.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/top_bar.dart';
-import 'package:asky/widgets/bottom_bar.dart'; // Assuming this widget exists and is stored as a separate file
 
 class HomeNurse extends StatefulWidget {
   HomeNurse({Key? key}) : super(key: key);
@@ -19,7 +18,8 @@ class HomeNurse extends StatefulWidget {
 }
 
 class _HomeNurseState extends State<HomeNurse> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; 
+  final AuthenticationApi auth = AuthenticationApi();
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static final List<Widget> _widgetOptions = <Widget>[
@@ -27,6 +27,20 @@ class _HomeNurseState extends State<HomeNurse> {
     HistoryPage(),
     Text('USER', style: optionStyle),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
+  /// Checks if the authentication token is valid; if not, redirects to the login screen.
+  Future<void> _checkToken() async {
+    bool isValid = await auth.checkToken();
+    if (!isValid) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -44,7 +58,7 @@ class _HomeNurseState extends State<HomeNurse> {
     return Scaffold(
       appBar: TopBar(showBackButton: false),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex), // Displaying the widget based on selected index
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,

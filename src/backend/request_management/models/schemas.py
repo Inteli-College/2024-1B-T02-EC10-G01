@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 import enum
+from typing import Optional
 
 class CreateMedicineRequest(BaseModel):
     dispenser_id: int
     medicine_id: int
     emergency: bool
-    
+    batch_number: Optional[str] = None
 
 class MedicineRequestSchema(BaseModel):
     id: int
@@ -14,7 +15,9 @@ class MedicineRequestSchema(BaseModel):
     medicine: dict
     status: str
     emergency: bool
+    batch_number: str = None
     created_at: str
+    feedback: str
 
 class CreateMaterialRequest(BaseModel):
     dispenser_id: int
@@ -26,10 +29,12 @@ class MaterialRequestSchema(BaseModel):
     requested_by: dict
     material: dict
     status: str
+    feedback: str
 
 class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
-    assistance_id: int
+    assistance_type: str
+    details: str
 
 class AssistanceRequestSchema(BaseModel):
     id: int
@@ -38,7 +43,17 @@ class AssistanceRequestSchema(BaseModel):
     assistance: dict
     status: str
     created_at: str
+    feedback: str
 
 class UpdateStatus(BaseModel):
     id: int
     status: str
+    
+class Status(enum.Enum):
+    pending = 'pending'
+    accepted = 'accepted'
+    rejected = 'rejected'
+    completed = 'completed'
+    preparing = 'preparing'
+    inTransit = 'inTransit'
+

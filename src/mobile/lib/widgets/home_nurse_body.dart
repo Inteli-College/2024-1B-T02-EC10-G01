@@ -1,6 +1,7 @@
+import 'package:asky/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:asky/widgets/last_solicitation_card.dart';
-import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/api/last_request_api.dart';
 
 class HomeNurseBody extends StatefulWidget {
   const HomeNurseBody({Key? key}) : super(key: key);
@@ -10,13 +11,14 @@ class HomeNurseBody extends StatefulWidget {
 }
 
 class _HomeNurseBodyState extends State<HomeNurseBody> {
-  final RequestMedicineApi api = RequestMedicineApi();
+  final LastRequestApi api = LastRequestApi();
   Future? _lastRequest;
 
   @override
   void initState() {
     super.initState();
     _lastRequest = api.getLastRequest();
+    print('HomeNurseBody initialized');
   }
 
   Future<void> _refreshData() async {
@@ -69,10 +71,14 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
                           var data = snapshot.data!;
+                          print('Last request data: $data');
                           return LastRequestCard(
-                              medicineName: data['medicine']['name'],
-                              currentStep: 2,
-                              totalSteps: 4,
+                              item: data['item']['name'],
+                              currentStep: getIndexFromStatus(
+                                      data['status_changes'].last['status']) +
+                                  2,
+                              totalSteps: getStatusLabels().length,
+                              requestType: data['request_type'],
                               pyxis: data['dispenser']['code'],
                               id: data['id'].toString());
                         } else {

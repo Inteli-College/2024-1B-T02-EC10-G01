@@ -3,6 +3,7 @@ from routes.medicine_requests import router as medicine_requests_router
 from routes.material_requests import router as material_requests_router
 from routes.assistance_requests import router as assistance_requests_router
 from routes.status import router as status_router
+from routes.all_requests import router as all_requests_router
 import uvicorn
 from database import get_session, engine, Base
 
@@ -14,6 +15,7 @@ api_router.include_router(medicine_requests_router)
 api_router.include_router(material_requests_router)
 api_router.include_router(assistance_requests_router)
 api_router.include_router(status_router)
+api_router.include_router(all_requests_router)
 
 @app.on_event("startup")
 async def startup():
