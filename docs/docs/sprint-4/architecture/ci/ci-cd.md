@@ -1,5 +1,5 @@
 ---
-title: CI/CD
+title: Estratégias de CI/CD
 sidebar_position: 1
 slug: /sprint-4
 ---
