@@ -1,7 +1,6 @@
 ---
 title: Estratégias de CI/CD
 sidebar_position: 1
-slug: /sprint-4
 ---
 # CI/CD (Continuous Integration/Continuous Deployment)
 
