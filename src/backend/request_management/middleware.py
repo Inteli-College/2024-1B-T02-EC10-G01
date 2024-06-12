@@ -17,11 +17,14 @@ def verify_token(token: str = Security()):
     public_key = get_public_key()
     try:
         decoded_token = jwt.decode(token, public_key, algorithms=["RS256"])
+        print('DECODED TOKEN: ', decoded_token)
         return decoded_token  # Token is valid
     except InvalidTokenError as e:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 async def get_current_user(authorization: str = Header(...)):
+    print('AUTHORIZATION: ', authorization)
+    
     try:
         scheme, token = authorization.split()
         if scheme.lower() != "bearer":

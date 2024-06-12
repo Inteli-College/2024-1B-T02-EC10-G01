@@ -120,7 +120,7 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                                       1
                                   : getIndexFromStatus(data['status_changes']
                                           .last['status']) +
-                                      1,
+                                      2,
                               totalSteps: data['request_type'] == 'assistance'
                                   ? getAssistanceStatusLabels().length
                                   : getStatusLabels().length,

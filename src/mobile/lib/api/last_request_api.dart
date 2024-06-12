@@ -13,7 +13,7 @@ class LastRequestApi {
     print('inside getLastRequest');
     final String bearerToken = 'Bearer $token';
     final response = await http.get(
-      Uri.parse(Constants.baseUrl + '/requests/last/'),
+      Uri.parse(Constants.baseUrl + '/requests/last'),
       headers: {
         'Authorization': bearerToken,
       },
@@ -21,6 +21,7 @@ class LastRequestApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
       return data;
     } else {
       throw Exception('Failed to fetch medicines');
