@@ -17,6 +17,7 @@ class MedicineRequest(Base):
     created_at = Column(DateTime, default=func.now())
     batch_number = Column(String, nullable=True)
     feedback = Column(String, default="No feedback available.")
+    status = Column(String, default=Status.pending.value)
 
     # Define a one-to-many relationship with selectin loading
     status_changes = relationship(
@@ -35,8 +36,9 @@ class MedicineRequest(Base):
             "status_changes": [status_change.to_dict() for status_change in self.status_changes],
             "emergency": self.emergency,
             "batch_number": self.batch_number,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            "feedback": self.feedback
+            "created_at": self.created_at,
+            "feedback": self.feedback,
+            "status": self.status
         }
 
 class MedicineStatusChange(Base):
@@ -61,5 +63,5 @@ class MedicineStatusChange(Base):
         return {
             "id": self.id,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": self.created_at
         }

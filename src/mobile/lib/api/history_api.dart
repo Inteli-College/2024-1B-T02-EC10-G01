@@ -5,15 +5,17 @@ import 'package:asky/constants.dart';
 
 
 class HistoryApi {
-  final auth = AuthenticationApi();
 
-  Future<List<dynamic>> getHistory() async {
+
+  static Future<Map> getHistory() async {
+    print('GET HISTORY');
+    final auth = AuthenticationApi();
     var token = await auth.getToken();
 
     final String bearerToken = 'Bearer $token';
 
     final response = await http.get(
-      Uri.parse(Constants.baseUrl + '/requests/medicine/'),
+      Uri.parse(Constants.baseUrl + '/requests/'),
       headers: {
         'Content-Type': "application/json",
         'Authorization': bearerToken,
@@ -22,7 +24,6 @@ class HistoryApi {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
       return data;
     } else {
       throw Exception('Failed to fetch history');

@@ -10,6 +10,7 @@ class AuthenticationApi {
 
   Future<String> signIn(String _email, String _password) async {
     const _secureStorage = FlutterSecureStorage();
+    print("Signing in with email: $_email and password: $_password");
 
     var _mobile_token = await _secureStorage.read(
         key: "mobile_token", aOptions: _getAndroidOptions());

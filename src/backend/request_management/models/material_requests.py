@@ -17,6 +17,7 @@ class MaterialRequest(Base):
     material_id = Column(Integer)
     created_at = Column(DateTime, default=func.now())
     feedback = Column(String, default="Nenhum feedback disponível.")
+    status = Column(String, default=Status.pending.value)
     
      # Define a one-to-many relationship with selectin loading
     status_changes = relationship(
@@ -34,7 +35,8 @@ class MaterialRequest(Base):
             "material_id": self.material_id,
             "status_changes": [status_change.to_dict() for status_change in self.status_changes],
             "created_at": self.created_at,
-            "feedback": self.feedback
+            "feedback": self.feedback,
+            "status": self.status
         }
 class MaterialStatusChange(Base):
     __tablename__ = 'material_status_change'
@@ -58,5 +60,5 @@ class MaterialStatusChange(Base):
         return {
             "id": self.id,
             "status": self.status,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": self.created_at
         }

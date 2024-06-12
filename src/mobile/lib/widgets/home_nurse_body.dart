@@ -3,6 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:asky/widgets/last_solicitation_card.dart';
 import 'package:asky/api/last_request_api.dart';
 
+class AssistanceStatus {
+  static const pending = "pending";
+  static const accepted = "accepted";
+  static const resolved = "resolved";
+}
+
+List<String> getAssistanceStatusLabels() {
+  return [
+    "Pending", // corresponds to AssistanceStatus.pending
+    "Accepted", // corresponds to AssistanceStatus.accepted
+    "Resolved" // corresponds to AssistanceStatus.resolved
+  ];
+}
+
+getIndexFromAssistanceStatus(status) {
+  switch (status) {
+    case AssistanceStatus.pending:
+      return 0;
+    case AssistanceStatus.accepted:
+      return 1;
+    case AssistanceStatus.resolved:
+      return 2;
+    default:
+      return 0;
+  }
+}
+
 class HomeNurseBody extends StatefulWidget {
   const HomeNurseBody({Key? key}) : super(key: key);
 
@@ -72,12 +99,31 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                         if (snapshot.hasData) {
                           var data = snapshot.data!;
                           print('Last request data: $data');
+                          print(data['assistanceType']);
+                          String translatedAssistanceType = '';
+                          if (data['assistanceType'] != null) {
+                            // Retrieve the translated label from Constants.assistanceTypes using the key from requestData
+                            translatedAssistanceType = Constants
+                                    .assistanceTypes[data['assistanceType']] ??
+                                'Tipo desconhecido';
+
+                            // Set the translated assistance type in detailsData
+                          }
                           return LastRequestCard(
-                              item: data['item']['name'],
-                              currentStep: getIndexFromStatus(
-                                      data['status_changes'].last['status']) +
-                                  2,
-                              totalSteps: getStatusLabels().length,
+                              item: data['request_type'] == 'assistance'
+                                  ? translatedAssistanceType
+                                  : data['item']['name'],
+                              currentStep: data['request_type'] == 'assistance'
+                                  ? getIndexFromAssistanceStatus(
+                                          data['status_changes']
+                                              .last['status']) +
+                                      1
+                                  : getIndexFromStatus(data['status_changes']
+                                          .last['status']) +
+                                      2,
+                              totalSteps: data['request_type'] == 'assistance'
+                                  ? getAssistanceStatusLabels().length
+                                  : getStatusLabels().length,
                               requestType: data['request_type'],
                               pyxis: data['dispenser']['code'],
                               id: data['id'].toString());
