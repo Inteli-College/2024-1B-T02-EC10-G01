@@ -29,16 +29,8 @@ class _PharmacyCustomBottomNavigationBarState extends State<PharmacyCustomBottom
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.access_time),
-          label: 'Acompanhamento'
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list),
-          label: 'History',
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Perfil',
         ),
         
       ],

@@ -82,4 +82,14 @@ class AuthenticationApi {
       return false;
     }
   }
+
+  Future getUser() async {
+     const secureStorage = FlutterSecureStorage();
+    var session = await secureStorage.read(
+        key: "session", aOptions: _getAndroidOptions());
+    if (session != null) {
+      var sessionData = jsonDecode(session);
+      return sessionData;
+    }
+  }
 }
