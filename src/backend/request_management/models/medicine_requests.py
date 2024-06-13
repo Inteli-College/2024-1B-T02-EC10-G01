@@ -16,7 +16,7 @@ class MedicineRequest(Base):
     emergency = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())
     batch_number = Column(String, nullable=True)
-    feedback = Column(String, default="No feedback available.")
+    feedback = Column(String, default="Nenhum feedback disponível.")
     status = Column(String, default=Status.pending.value)
 
     # Define a one-to-many relationship with selectin loading

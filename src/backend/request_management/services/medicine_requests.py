@@ -175,3 +175,21 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             
         }
         return request
+    
+async def create_feedback(session: AsyncSession, request: CreateMedicineRequest, user: dict):     
+    stmt = select(MedicineRequest).where(MedicineRequest.id == request.request_id)
+    result = await session.execute(stmt)
+    medicine_request = result.scalars().first()
+
+    if not medicine_request:
+        raise HTTPException(status_code=404, detail="Medicine request not found")
+
+    # Update the feedback column
+    medicine_request.feedback = request.feedback
+
+    # Commit the changes to the database
+    session.add(medicine_request)
+    await session.commit()
+    await session.refresh(medicine_request)
+
+    return medicine_request

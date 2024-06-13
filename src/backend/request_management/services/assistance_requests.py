@@ -111,8 +111,8 @@ async def create_request(session: AsyncSession, request: CreateAssistanceRequest
        
         return new_request
     
-async def create_feedback(request_id: int, feedback: str, session: aiohttp.ClientSession, user: dict):
-    stmt = select(AssistanceRequest).where(AssistanceRequest.id == request_id)
+async def create_feedback(session: AsyncSession, request: CreateAssistanceRequest, user: dict):     
+    stmt = select(AssistanceRequest).where(AssistanceRequest.id == request.request_id)
     result = await session.execute(stmt)
     assistance_request = result.scalars().first()
 
@@ -120,7 +120,7 @@ async def create_feedback(request_id: int, feedback: str, session: aiohttp.Clien
         raise HTTPException(status_code=404, detail="Assistance request not found")
 
     # Update the feedback column
-    assistance_request.feedback = feedback
+    assistance_request.feedback = request.feedback
 
     # Commit the changes to the database
     session.add(assistance_request)

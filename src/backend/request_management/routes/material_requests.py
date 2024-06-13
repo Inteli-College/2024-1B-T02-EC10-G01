@@ -2,9 +2,9 @@ from fastapi import APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
-from models.schemas import CreateMaterialRequest
+from models.schemas import CreateMaterialRequest, CreateMaterialFeedback
 from middleware import get_current_user, is_admin, is_nurse, is_agent
-from services.material_requests import fetch_requests, create_request, fetch_last_user_request, fetch_request
+from services.material_requests import fetch_requests, create_request, fetch_last_user_request, fetch_request, create_feedback
 import redis
 import json
 
@@ -43,3 +43,9 @@ async def read_last_material_request(session: AsyncSession = Depends(get_session
 async def read_material(id: int, session: AsyncSession = Depends(get_session), user: dict = Depends(get_current_user)):
     request = await fetch_request(session, id, user)
     return request if request else None
+
+@router.post("/feedback")
+async def create_material_feedback(request: CreateMaterialFeedback, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+    key = 'read_material_requests'
+    created_feedback = await create_feedback(session, request, user)
+    return created_feedback

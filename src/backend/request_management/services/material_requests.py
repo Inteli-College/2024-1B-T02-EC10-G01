@@ -155,3 +155,21 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "status_changes": request_result.status_changes
         }
         return request
+    
+async def create_feedback(session: AsyncSession, request: CreateMaterialRequest, user: dict):     
+    stmt = select(MaterialRequest).where(MaterialRequest.id == request.request_id)
+    result = await session.execute(stmt)
+    material_request = result.scalars().first()
+
+    if not material_request:
+        raise HTTPException(status_code=404, detail="Material request not found")
+
+    # Update the feedback column
+    material_request.feedback = request.feedback
+
+    # Commit the changes to the database
+    session.add(material_request)
+    await session.commit()
+    await session.refresh(material_request)
+
+    return material_request
