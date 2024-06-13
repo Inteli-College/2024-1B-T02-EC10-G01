@@ -20,7 +20,7 @@ class RequestMedicineApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to fetch history');
@@ -40,7 +40,7 @@ class RequestMedicineApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to fetch medicines');
@@ -66,7 +66,7 @@ class RequestMedicineApi implements RequestApi {
       }),
     );
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to send request');
@@ -86,7 +86,7 @@ class RequestMedicineApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       return data ?? {};
     } else {
@@ -106,7 +106,7 @@ class RequestMedicineApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data ?? {};
     } else {
       throw Exception('Failed to fetch last request');

@@ -26,7 +26,7 @@ class AuthenticationApi {
         body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       // Store the entire response body
       await _secureStorage.write(

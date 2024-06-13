@@ -89,6 +89,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
           }
 
           var requestData = snapshot.data;
+          print(requestData);
 
           // Parse the original date
           DateTime createdAt = DateTime.parse(requestData['created_at']);
@@ -180,6 +181,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                 SizedBox(height: 40),
                 ReadFeedbackWidget(
                   feedbackReceived: requestData['feedback'],
+                  type: widget.type,
                 ),
               ],
             ),

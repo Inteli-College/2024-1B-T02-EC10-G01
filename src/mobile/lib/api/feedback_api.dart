@@ -3,69 +3,72 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:asky/constants.dart';
 
-
-class RequestsAssistance {
+class FeedbackRequest {
   final auth = AuthenticationApi();
 
-  Future<List<dynamic>> getHistory() async {
+  Future<dynamic> createMedicineFeedback(int requestId, String feedback) async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/requests/medicine/'),
-      headers: {
-        'Content-Type': "application/json",
-        'Authorization': bearerToken,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(utf8.decode(response.bodyBytes));
-      return data;
-    } else {
-      throw Exception('Failed to fetch history');
-    }
-  }
-
-  Future<dynamic> sendRequest(int pyxisId, String assistanceType, {String details = ''} ) async {
-  
-    var token = await auth.getToken();
-    final String bearerToken = 'Bearer $token';
-    final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/requests/assistance/'),
+      Uri.parse(Constants.baseUrl + '/requests/medicine/feedback'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': bearerToken,
       },
       body: json.encode({
-        'dispenser_id': pyxisId,
-       'assistance_type': assistanceType,
-        'details': details,
+        'request_id': requestId,
+        'feedback': feedback,
       }),
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
-      throw Exception('Failed to send request');
+      throw Exception('Failed to send feedback');
     }
   }
 
-  Future<dynamic> getRequestById(int requestId) async {
+  Future<dynamic> createMaterialFeedback(int requestId, String feedback) async {
     var token = await auth.getToken();
-    final String bearer = 'Bearer $token';
-    final response = await http.get(
-      Uri.parse(Constants.baseUrl + '/requests/assistance/$requestId'),
+    final String bearerToken = 'Bearer $token';
+    final response = await http.post(
+      Uri.parse(Constants.baseUrl + '/requests/material/feedback'),
       headers: {
-        'Authorization': bearer,
+        'Content-Type': 'application/json',
+        'Authorization': bearerToken,
       },
+      body: json.encode({
+        'request_id': requestId,
+        'feedback': feedback,
+      }),
     );
-
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
-      return data ?? {};
+      return data;
     } else {
-      throw Exception('Failed to fetch request');
+      throw Exception('Failed to send feedback');
     }
   }
 
+  Future<dynamic> createAssistanceFeedback(int requestId, String feedback) async {
+    var token = await auth.getToken();
+    final String bearerToken = 'Bearer $token';
+    final response = await http.post(
+      Uri.parse(Constants.baseUrl + '/requests/assistance/feedback'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': bearerToken,
+      },
+      body: json.encode({
+        'request_id': requestId,
+        'feedback': feedback,
+      }),
+    );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+      return data;
+    } else {
+      throw Exception('Failed to send feedback');
+    }
+  }
 }
