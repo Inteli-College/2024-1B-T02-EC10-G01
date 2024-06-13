@@ -18,7 +18,7 @@ class AgentApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data['requests'];
     } else {
       throw Exception('Failed to fetch history');

@@ -21,7 +21,7 @@ class RequestMaterialApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to fetch history');
@@ -41,7 +41,7 @@ class RequestMaterialApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to fetch materials');
@@ -64,7 +64,7 @@ class RequestMaterialApi implements RequestApi {
       }),
     );
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to send request');
@@ -84,7 +84,7 @@ class RequestMaterialApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data ?? {};
     } else {
       throw Exception('Failed to fetch request');
@@ -103,7 +103,7 @@ class RequestMaterialApi implements RequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data ?? {};
     } else {
       throw Exception('Failed to fetch last request');

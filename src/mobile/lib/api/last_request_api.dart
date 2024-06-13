@@ -19,7 +19,7 @@ class LastRequestApi {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data;
     } else {
       throw Exception('Failed to fetch medicines');
