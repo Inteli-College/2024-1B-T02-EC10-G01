@@ -27,6 +27,8 @@ class LastRequestCard extends StatelessWidget {
       title = 'Medicamento: ';
     } else if (requestType == 'material') {
       title = 'Material: ';
+    } else if (requestType == 'assistance') {
+      title = 'Assistência: ';
     }
     return Column(
       mainAxisSize: MainAxisSize.min,
