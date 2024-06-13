@@ -6,6 +6,7 @@ class StatusProgressBar extends StatefulWidget {
   final List<String> labels;
   final Color activeColor;
   final Color inactiveColor;
+  final String status;
 
   StatusProgressBar({
     Key? key,
@@ -14,6 +15,7 @@ class StatusProgressBar extends StatefulWidget {
     required this.labels,
     required this.activeColor,
     required this.inactiveColor,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -84,7 +86,7 @@ class _StatusProgressBarState extends State<StatusProgressBar> with TickerProvid
               ),
               const SizedBox(width: 10),
               Text(
-                widget.labels[widget.currentStep],
+                widget.status,
                 style: TextStyle(
                   color: widget.currentStep >= 0 ? widget.activeColor : widget.inactiveColor,
                 ),

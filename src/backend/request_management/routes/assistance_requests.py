@@ -42,6 +42,7 @@ async def fetch_by_id(id: int, session: AsyncSession = Depends(get_session), use
     #     return json.loads(resultado)
     
     request = await fetch_request_by_id(id, session, user)
+    request['']
     # redis_client.setex(key, 60, json.dumps(request_dicts))
     return request
 

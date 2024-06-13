@@ -78,6 +78,8 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
             "created_at": request_result.created_at,
             "assistanceType": request_result.assistance_type,
             "details": request_result.details,
+            "requestType": 'assistance',
+            "feedback": request_result.feedback
             
         }
         return request

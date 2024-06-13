@@ -12,6 +12,38 @@ import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:asky/widgets/request_details_box.dart';
 import 'package:asky/widgets/read_feedback.dart';
 
+class AssistanceStatus {
+  static const pending = "pending";
+  static const accepted = "accepted";
+  static const resolved = "resolved";
+
+  static List<String> getAssistanceStatusLabels() {
+    return [
+      "Pendente", // corresponds to AssistanceStatus.pending
+      "Aceito", // corresponds to AssistanceStatus.accepted
+      "Resolvido" // corresponds to AssistanceStatus.resolved
+    ];
+  }
+
+  static String getStatusDescription(String status) {
+    int index = getIndexFromAssistanceStatus(status);
+    return getAssistanceStatusLabels()[index];
+  }
+
+  static int getIndexFromAssistanceStatus(String status) {
+    switch (status) {
+      case AssistanceStatus.pending:
+        return 0;
+      case AssistanceStatus.accepted:
+        return 1;
+      case AssistanceStatus.resolved:
+        return 2;
+      default:
+        return 0; // Default to "Pendente" if status is unknown
+    }
+  }
+}
+
 class RequestDetailsBox extends StatefulWidget {
   final String requestId;
   final String type;
@@ -66,7 +98,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
               createdAt.subtract(Duration(hours: 3));
 
           Map<dynamic, dynamic> detailsData = {};
-
+          print(requestData);
           if (requestData['assistanceType'] != null) {
             // Retrieve the translated label from Constants.assistanceTypes using the key from requestData
             String translatedAssistanceType =
@@ -98,6 +130,19 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
           if (requestData['details'] != null && requestData['details'] != '') {
             detailsData['Detalhes'] = requestData['details'];
           }
+          dynamic status = '';
+          if (requestData['request_type'] == 'assistance') {
+            status =
+                AssistanceStatus.getStatusDescription(requestData['status']);
+          } else {
+            status = getDescription(requestData['status']);
+          }
+          dynamic color = '';
+          if (requestData['request_type'] == 'assistance') {
+            color = Constants.askyBlue;
+          } else {
+            color = getColorFromStatus(requestData['status']);
+          }
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
             child: Column(
@@ -116,7 +161,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                 StatusProgressBar(
                   currentStep: widget.type == 'assistance'
                       ? getIndexFromAssistanceStatus(
-                              requestData['status_changes'].last['status'])
+                          requestData['status_changes'].last['status'])
                       : getIndexFromStatus(
                               requestData['status_changes'].last['status']) +
                           1,
@@ -126,7 +171,8 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                   labels: widget.type == 'assistance'
                       ? getAssistanceStatusLabels()
                       : getStatusLabels(),
-                  activeColor: Constants.askyBlue,
+                  status: status,
+                  activeColor: color,
                   inactiveColor: Colors.grey,
                 ),
                 SizedBox(height: 40),
