@@ -26,8 +26,6 @@ getIndexFromAssistanceStatus(status) {
       return 1;
     case AssistanceStatus.resolved:
       return 2;
-    default:
-      return 0;
   }
 }
 
@@ -100,11 +98,12 @@ class _HomeNurseBodyState extends State<HomeNurseBody> {
                           var data = snapshot.data!;
             
                           String translatedAssistanceType = '';
-                          if (data['assistanceType'] != null) {
+                          if (data['assistance_type'] != null) {
                             // Retrieve the translated label from Constants.assistanceTypes using the key from requestData
                             translatedAssistanceType = Constants
-                                    .assistanceTypes[data['assistanceType']] ??
+                                    .assistanceTypes[data['assistance_type']] ??
                                 'Tipo desconhecido';
+
 
                             // Set the translated assistance type in detailsData
                           }

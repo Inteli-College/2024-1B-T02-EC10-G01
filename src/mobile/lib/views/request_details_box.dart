@@ -117,8 +117,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                 StatusProgressBar(
                   currentStep: widget.type == 'assistance'
                       ? getIndexFromAssistanceStatus(
-                              requestData['status_changes'].last['status']) +
-                          1
+                              requestData['status_changes'].last['status'])
                       : getIndexFromStatus(
                               requestData['status_changes'].last['status']) +
                           1,
