@@ -85,7 +85,6 @@ services:
     volumes:
       - ./logs:/src/logs
     depends_on:
-      - backend
       - elasticsearch
       - kibana
     network_mode: "host"

@@ -15,14 +15,20 @@ monitoring:
     password: senha
 
 filebeat.inputs:
-- type: kubernetes
-  in_cluster: true
-  # Collect logs from all namespaces
-  include_namespaces: ['*']
-  # Exclude logs from specific namespaces if needed
+- type: container
   paths: 
-    - '/var/lib/docker/containers/*/*.log'
+    - '/var/log/containers/*.log'
 
+filebeat.autodiscover:
+  providers:
+    - type: kubernetes
+      node: ${NODE_NAME}
+      hints.enabled: true
+      hints.default_config:
+        type: container
+        paths:
+          - /var/log/containers/*.log
+          
 processors:
 - add_docker_metadata:
     host: "unix:///var/run/docker.sock"

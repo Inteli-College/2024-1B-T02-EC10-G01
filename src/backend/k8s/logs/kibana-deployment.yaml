@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\WINDOWS\system32\kompose.exe convert -f docker-kompose.yaml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kibana
+  name: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: kibana
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\WINDOWS\system32\kompose.exe convert -f docker-kompose.yaml
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kibana
+    spec:
+      containers:
+        - image: elisaflemer/asky-kibana
+          name: kibana
+          ports:
+            - containerPort: 5601
+          resources: {}
+      restartPolicy: Always
+status: {}

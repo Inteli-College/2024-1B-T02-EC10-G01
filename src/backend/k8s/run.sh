@@ -36,3 +36,14 @@ kubectl apply -f services.yaml
 
 kubectl apply -f ingress.yaml
 
+# Monitor the status of the deployment
+kubectl apply -f logs/elasticsearch-deployment.yaml
+kubectl apply -f logs/elasticsearch-service.yaml
+
+kubectl apply -f logs/kibana-deployment.yaml
+kubectl apply -f logs/kibana-service.yaml
+
+kubectl apply -f logs/filebeat-claim0-persistentvolumeclaim.yaml
+kubectl apply -f logs/filebeat-deployment.yaml
+
+
