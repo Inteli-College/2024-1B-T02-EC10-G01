@@ -119,10 +119,10 @@ data:
       - add_host_metadata:
 
     output.elasticsearch:
-      hosts: "http://elasticsearch:9200"
+      hosts: ["elasticsearch:9200"]
       username: "elastic"
       password: "senha"
       indices:
-        - index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+        - index: "filebeat"
     setup.kibana:
       host: "http://kibana:5601"
