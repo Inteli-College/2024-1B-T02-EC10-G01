@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Demonstração
 
-![video](../../../static/video/nurse.mp4)
+https://github.com/Inteli-College/2024-1B-T02-EC10-G01/assets/99193547/3a4799c8-01f0-487a-8ec5-0ff427567953
 
 # Contexto
 
