@@ -15,7 +15,11 @@ monitoring:
     password: senha
 
 filebeat.inputs:
-- type: container
+- type: kubernetes
+  in_cluster: true
+  # Collect logs from all namespaces
+  include_namespaces: ['*']
+  # Exclude logs from specific namespaces if needed
   paths: 
     - '/var/lib/docker/containers/*/*.log'
 

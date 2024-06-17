@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  
+  filebeat:
+    image: elisaflemer/asky-filebeat
+    container_name: filebeat
+    volumes:
+      - ./logs:/src/logs
+    depends_on:
+      - elasticsearch
+      - kibana
+    network_mode: "host"
+
+  elasticsearch:
+    image: elisaflemer/asky-elasticsearch
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  kibana:
+    image: elisaflemer/asky-kibana
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+volumes:
+    elasticsearch_data:
+        driver: local
