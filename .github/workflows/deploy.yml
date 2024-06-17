@@ -19,7 +19,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        service: [request_management, pyxis, auth] 
+        service: [request_management, pyxis, auth, kibana, elasticsearch, filebeat, gateway] 
 
     steps:
       - name: Check out the repo
