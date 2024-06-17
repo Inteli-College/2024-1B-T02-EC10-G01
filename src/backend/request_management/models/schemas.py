@@ -12,6 +12,10 @@ class CreateMedicineFeedback(BaseModel):
     request_id: int
     feedback: str
 
+class AssignMedicineRequest(BaseModel):
+    request_id: int
+    agent_id: int
+
 class MedicineRequestSchema(BaseModel):
     id: int
     dispenser: dict
@@ -22,6 +26,7 @@ class MedicineRequestSchema(BaseModel):
     batch_number: str = None
     created_at: str
     feedback: str
+    assign_to: dict
 
 class CreateMaterialRequest(BaseModel):
     dispenser_id: int
@@ -31,6 +36,10 @@ class CreateMaterialFeedback(BaseModel):
     request_id: int
     feedback: str
 
+class AssignMaterialRequest(BaseModel):
+    request_id: int
+    agent_id: int
+
 class MaterialRequestSchema(BaseModel):
     id: int
     dispenser: dict
@@ -38,6 +47,7 @@ class MaterialRequestSchema(BaseModel):
     material: dict
     status: str
     feedback: str
+    assign_to: dict
 
 class CreateAssistanceRequest(BaseModel):
     dispenser_id: int
@@ -48,6 +58,10 @@ class CreateAssistanceFeedback(BaseModel):
     request_id: int
     feedback: str
 
+class AssignAssistanceRequest(BaseModel):
+    request_id: int
+    agent_id: int
+
 class AssistanceRequestSchema(BaseModel):
     id: int
     dispenser: dict
@@ -56,6 +70,7 @@ class AssistanceRequestSchema(BaseModel):
     status: str
     created_at: str
     feedback: str
+    assign_to: dict
 
 class UpdateStatus(BaseModel):
     id: int

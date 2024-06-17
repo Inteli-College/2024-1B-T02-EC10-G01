@@ -14,7 +14,6 @@ import 'package:asky/api/authentication_api.dart';
 class RequestMedicine extends StatefulWidget {
   @override
   _RequestMedicineState createState() => _RequestMedicineState();
-  
 }
 
 class _RequestMedicineState extends State<RequestMedicine> {
@@ -53,7 +52,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
 
   @override
   Widget build(BuildContext context) {
-    final pyxisStore = context.watch<PyxisStore>(); // Continue to watch the store for other changes
+    final pyxisStore = context
+        .watch<PyxisStore>(); // Continue to watch the store for other changes
 
     return Scaffold(
       appBar: TopBar(),
@@ -107,10 +107,12 @@ class _RequestMedicineState extends State<RequestMedicine> {
                   text: "Confirmar",
                   onPressed: () async {
                     setState(() {
-                      isLoading = true; // Set loading to true when the request starts
+                      isLoading =
+                          true; // Set loading to true when the request starts
                     });
 
-                    final batchNumber = toggleValue ? textEditingController.text : '';
+                    final batchNumber =
+                        toggleValue ? textEditingController.text : '';
 
                     if (toggleValue && batchNumber.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -137,13 +139,17 @@ class _RequestMedicineState extends State<RequestMedicine> {
                       );
 
                       setState(() {
-                        isLoading = false; // Set loading to false when the request completes
+                        isLoading =
+                            false; // Set loading to false when the request completes
                       });
 
                       if (response != null) {
                         Navigator.of(context).pushNamed(
                           '/nurse_request',
-                          arguments: {'requestId': response['id'].toString(), 'type': 'medicine'},
+                          arguments: {
+                            'requestId': response['id'].toString(),
+                            'type': 'medicine'
+                          },
                         );
                       } else {
                         print('Error: Medicine ID is null');

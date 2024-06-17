@@ -24,7 +24,7 @@ def create_access_token(data: dict, expire_minutes: int = 15):
     return encoded_jwt
 
 def create_service_account_tokens():
-    requests = create_access_token({"sub": "requests_service", "role": "admin"}, 60 * 24)
+    requests = create_access_token({"sub": "requests_service", "role": "admin"}, 60 * 24 * 7)
     pyxis = create_access_token({"sub": "pyxis_service", "role": "admin"}, 60 * 24)
     return {"requests": requests, "pyxis": pyxis}
 

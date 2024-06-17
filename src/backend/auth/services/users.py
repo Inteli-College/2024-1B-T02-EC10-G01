@@ -36,8 +36,8 @@ async def get_user_by_id(session, user_id: int):
     user = user.to_dict() if user else None
     return user
 
-async def create_user(session, email: str, password_hash: str, role: str):
-    user = User(email=email, password_hash=password_hash, role=role)
+async def create_user(session, email: str, phone_number: str, password_hash: str, role: str):
+    user = User(email=email, phone_number=phone_number, password_hash=password_hash, role=role)
     session.add(user)
     await session.commit()
     await session.refresh(user)

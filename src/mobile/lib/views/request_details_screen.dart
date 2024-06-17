@@ -63,7 +63,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     }
 
     return Scaffold(
-      appBar: TopBar(backRoute: '/nurse'),
+      appBar: TopBar(),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

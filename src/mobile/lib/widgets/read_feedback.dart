@@ -1,23 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:asky/api/authentication_api.dart';
+import 'package:asky/api/feedback_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReadFeedbackWidget extends StatelessWidget {
-  final String? feedbackReceived;
-  final String? type;
-  final bool isReadOnly; // This flag will determine if the field is read-only
+  String? feedbackReceived;
+  final String? typeUser;
+  final String? typeRequest;
+  final int? requestId;
+  final String? phoneNumber;
+  bool isReadOnly;
+
+  final AuthenticationApi auth = AuthenticationApi();
 
   ReadFeedbackWidget(
       {Key? key,
       required this.feedbackReceived,
       this.isReadOnly = true,
-      this.type});
+      this.typeUser,
+      this.typeRequest,
+      this.requestId,
+      this.phoneNumber
+      });
 
   void _launchWhatsApp() async {
-    const url = 'https://wa.me/1234567890'; // Replace with actual phone number
+    final url = "https://wa.me/$phoneNumber";
+    
+    if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      } // Replace with actual phone number
   }
 
   @override
   Widget build(BuildContext context) {
+    final api;
+
+    if (typeUser == 'agent') {
+      isReadOnly = false;
+    } else {
+      isReadOnly = true;
+    }
+
+    switch (typeRequest) {
+      case 'material':
+        api = MaterialFeedbackRequest();
+        break;
+      case 'assistance':
+        api = AssistanceFeedbackRequest(); // Make sure to implement this API
+        break;
+      default:
+        api = MedicineFeedbackRequest();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -51,7 +88,16 @@ class ReadFeedbackWidget extends StatelessWidget {
             border: Border.all(color: Colors.grey.shade300, width: 1),
           ),
           child: TextField(
+            onChanged: (value) {
+              feedbackReceived =
+                  value; // Atualiza o valor do texto conforme o usuário digita
+            },
             controller: TextEditingController(text: feedbackReceived),
+            textInputAction: TextInputAction.done,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+              api.createFeedback(requestId, feedbackReceived);
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Write your feedback here...',

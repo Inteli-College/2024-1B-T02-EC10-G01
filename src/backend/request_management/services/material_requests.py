@@ -120,7 +120,8 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "requested_by": user,
             "status_changes": request_result.status_changes,
             "created_at": request_result.created_at,
-            "feedback": request_result.feedback
+            "feedback": request_result.feedback,
+            "assign_to": request_result.assign_to
         }
         return request
     
@@ -152,6 +153,7 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "requested_by": user,
             "created_at": request_result.created_at,
             "feedback": request_result.feedback,
+            "assign_to": request_result.assign_to,
             "status_changes": request_result.status_changes
         }
         return request
