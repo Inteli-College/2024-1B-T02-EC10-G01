@@ -52,6 +52,7 @@ Nesta sprint, o foco foi em avançar a solução a fim de atingir o objetivo de 
 
 ### Sprint 4:
 
+Na sprint 4, o foco foi finalizar todos os serviços e integrá-los. Além disso, práticas de CI/CD(contínua integração e desenvolvimento) foram implementados, com objetivo de agilizar e facilitar a adição de novas features, porém mantendo a segurança e a alta disponibilidade da aplicação. Uma das práticas adicionadas foi um serviço de logging, que aumenta a depuração, facilita o diagnóstico de erros e aumentar o traqueamento de eventos. Uma nova feature foi adicionada a aplicação, que é a capacidade de enviar notificações ao usuário mediante alguns eventos que ocorrem, como aceitação de um pedido.
 
 ### Sprint 5:
 
