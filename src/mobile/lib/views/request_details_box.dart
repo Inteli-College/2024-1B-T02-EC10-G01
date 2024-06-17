@@ -136,13 +136,14 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
             status =
                 AssistanceStatus.getStatusDescription(requestData['status']);
           } else {
-            status = getDescription(requestData['status']);
+            print(requestData['status_changes'][0]['status']);
+            status = getDescription(requestData['status_changes'][0]['status']);
           }
           dynamic color = '';
           if (requestData['request_type'] == 'assistance') {
             color = Constants.askyBlue;
           } else {
-            color = getColorFromStatus(requestData['status']);
+            color = getColorFromStatus(requestData['status_changes'][0]['status']);
           }
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
