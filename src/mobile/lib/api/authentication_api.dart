@@ -29,12 +29,11 @@ class AuthenticationApi {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
       // Store the entire response body
-      await _secureStorage.write(
-          key: "session", value: response.body, aOptions: _getAndroidOptions());
+      await _secureStorage.write(key: "session", value: response.body, aOptions: _getAndroidOptions());
+      await _secureStorage.write(key: "role", value: data['role'], aOptions: _getAndroidOptions());
 
       // Return the role for further processing
-      return data[
-          'role']; // Adjust this if the key 'role' is nested or different
+      return data['role']; // Adjust this if the key 'role' is nested or different
     } else {
       throw Exception('Failed to authenticate');
     }
