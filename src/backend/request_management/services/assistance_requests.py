@@ -79,8 +79,8 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
             "assistanceType": request_result.assistance_type,
             "details": request_result.details,
             "requestType": 'assistance',
-            "feedback": request_result.feedback
-            
+            "feedback": request_result.feedback,
+            "assign_to": request_result.assign_to
         }
         return request
 
@@ -123,6 +123,24 @@ async def create_feedback(session: AsyncSession, request: CreateAssistanceReques
 
     # Update the feedback column
     assistance_request.feedback = request.feedback
+
+    # Commit the changes to the database
+    session.add(assistance_request)
+    await session.commit()
+    await session.refresh(assistance_request)
+
+    return assistance_request
+
+async def assign_request(session: AsyncSession, request: CreateAssistanceRequest, user: dict):     
+    stmt = select(AssistanceRequest).where(AssistanceRequest.id == request.request_id)
+    result = await session.execute(stmt)
+    assistance_request = result.scalars().first()
+
+    if not assistance_request:
+        raise HTTPException(status_code=404, detail="Assistance request not found")
+
+    # Update the feedback column
+    assistance_request.assign_to = request.feedback
 
     # Commit the changes to the database
     session.add(assistance_request)

@@ -26,6 +26,7 @@ class AssistanceRequest(Base):
     created_at = Column(DateTime, default=func.now())
     feedback = Column(String, default="Nenhum feedback disponível.")
     status = Column(String, default=AssistanceStatus.pending.value)
+    assign_to = Column(Integer)
 
     status_changes = relationship(
         "AssistanceStatusChange",
@@ -45,6 +46,7 @@ class AssistanceRequest(Base):
             "created_at": self.created_at,
             "feedback": self.feedback,
             "status": self.status,
+            "assign_to": self.assign_to
         }
 
 

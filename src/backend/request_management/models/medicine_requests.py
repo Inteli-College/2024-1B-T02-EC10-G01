@@ -18,6 +18,7 @@ class MedicineRequest(Base):
     batch_number = Column(String, nullable=True)
     feedback = Column(String, default="Nenhum feedback disponível.")
     status = Column(String, default=Status.pending.value)
+    assign_to = Column(Integer)
 
     # Define a one-to-many relationship with selectin loading
     status_changes = relationship(
@@ -38,7 +39,8 @@ class MedicineRequest(Base):
             "batch_number": self.batch_number,
             "created_at": self.created_at,
             "feedback": self.feedback,
-            "status": self.status
+            "status": self.status,
+            "assign_to": self.assign_to
         }
 
 class MedicineStatusChange(Base):

@@ -143,7 +143,8 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
           if (requestData['request_type'] == 'assistance') {
             color = Constants.askyBlue;
           } else {
-            color = getColorFromStatus(requestData['status_changes'][0]['status']);
+            color =
+                getColorFromStatus(requestData['status_changes'][0]['status']);
           }
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -181,9 +182,11 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                 DetailsBox(details: detailsData),
                 SizedBox(height: 40),
                 ReadFeedbackWidget(
-                  feedbackReceived: requestData['feedback'],
-                  type: widget.type,
-                ),
+                    feedbackReceived: requestData['feedback'],
+                    typeUser: requestData['requested_by']['role'],
+                    typeRequest: widget.type,
+                    requestId: requestData['status_changes'][0]['request_id'],
+                    phoneNumber: requestData['assign_to']['phone_number']),
               ],
             ),
           );

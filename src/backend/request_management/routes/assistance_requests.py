@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
-from models.schemas import CreateAssistanceRequest, CreateAssistanceFeedback
+from models.schemas import CreateAssistanceRequest, CreateAssistanceFeedback, AssignAssistanceRequest
 from middleware import get_current_user, is_admin, is_nurse, is_agent
 from services.assistance_requests import fetch_requests, create_request, create_feedback, fetch_request_by_id
 import redis
@@ -47,7 +47,13 @@ async def fetch_by_id(id: int, session: AsyncSession = Depends(get_session), use
     return request
 
 @router.post("/feedback")
-async def create_assistance_feedback(request: CreateAssistanceFeedback, session: AsyncSession = Depends(get_session), user: dict = Depends(is_nurse)):
+async def create_assistance_feedback(request: CreateAssistanceFeedback, session: AsyncSession = Depends(get_session), user: dict = Depends(is_agent)):
     key = 'read_assistance_requests'
     created_feedback = await create_feedback(session, request, user)
     return created_feedback
+
+@router.post("/accept_request")
+async def accept_assistance_request(request: AssignAssistanceRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_agent)):
+    key = 'read_assistance_requests'
+    assign_request = await assign_request(session, request, user)
+    return assign_request
