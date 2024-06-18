@@ -55,5 +55,14 @@ O `run.sh` é um script Bash utilizado para aplicar manualmente as configuraçõ
 
 Baseado no argumento fornecido (dev, test, main), o script aplica as configurações do ambiente correspondente. Ele também monitora o status dos serviços, aguarda a prontidão dos pods e verifica os logs para confirmar a inicialização bem-sucedida dos componentes.
 
+## Estratégia de desastre
+Um projeto de larga escala está suscetível a diversos tipos de desastres. Sejam ataques hackers ou próprios erros da aplicação, é importante se prever deles. Portanto em caso de desastres, em relação ao nosso projeto há algumas possibiilidades.
+
+**Limpeza do Cache:** O sistema de Cache é essencial quando se trata de diminuir o tempo de resposta de aplicação, porém essa prática poder facilmente sobrecarregar a aplciação. Um cache pode superaquecer, isto é, se sobrecarregar de informações, replicando um banco de dados, porém com uma execução extremamente inferior, o que pode aumentar gerar erros diversos na aplciação.
+
+**Reiniciar o Orquestrador:** Um orquestrador é uma parte essencial de uma aplicação com arquitetura em microserviços. Uma falha na sua execução pode comprometer toda a performance da aplicação. Com tamanha resposabilidade, o orquestardor, no nosso caso Kubernetes com contâiners em Docker, pode vir a sofrer falhas. Para isso se deve reiniciar o orquestrador, registrando e lançando os contâiners novamente.
+
+**Monitoramento de Logs:** Uma das principais funções do sistema de logging é reportar eventos indesejados, que podem representar um mero aviso até a uma falha crítica do sistema. Por isso, revisá-los após um "crash" do sistema, é essencial para entender o que ocasionou esse desastre e como foi o processo até a falha.
+
 ## Conclusão
 O setup de CI/CD detalhado nesta documentação garante que o projeto Asky possa operar com eficiência e segurança, automatizando a maior parte do processo de entrega enquanto mantém a flexibilidade para intervenções manuais quando necessário, garantindo assim a estabilidade e a performance otimizada para cada ambiente específico.
