@@ -24,7 +24,7 @@ class User(Base):
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            "phone_numner": self.phone_number,
+            "phone_number": self.phone_number,
             "role": self.role if self.role else None,  # Accessing enum value
             "created_at": self.created_at.isoformat() if self.created_at else None,  # Format datetime as string
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,

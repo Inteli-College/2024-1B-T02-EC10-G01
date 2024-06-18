@@ -63,15 +63,15 @@ services:
       - auth
       - redis
       
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"  
-      - "15672:15672" 
-    environment:
-      RABBITMQ_DEFAULT_USER: rabbitmq
-      RABBITMQ_DEFAULT_PASS: rabbitmq
+  # rabbitmq:
+  #   image: rabbitmq:management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"  
+  #     - "15672:15672" 
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: rabbitmq
+  #     RABBITMQ_DEFAULT_PASS: rabbitmq
 
   redis:
     image: redis
@@ -79,30 +79,30 @@ services:
     ports:
       - "6379:6379"
 
-  filebeat:
-    build: ./filebeat/
-    container_name: filebeat
-    volumes:
-      - ./logs:/src/logs
-    depends_on:
-      - elasticsearch
-      - kibana
-    network_mode: "host"
+  # filebeat:
+  #   build: ./filebeat/
+  #   container_name: filebeat
+  #   volumes:
+  #     - ./logs:/src/logs
+  #   depends_on:
+  #     - elasticsearch
+  #     - kibana
+  #   network_mode: "host"
 
-  elasticsearch:
-    build: ./elasticsearch/
-    container_name: elasticsearch
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+  # elasticsearch:
+  #   build: ./elasticsearch/
+  #   container_name: elasticsearch
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
 
-  kibana:
-    build: ./kibana/
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
+  # kibana:
+  #   build: ./kibana/
+  #   container_name: kibana
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
 
 volumes:
     elasticsearch_data:

@@ -46,7 +46,7 @@ async def fetch_request_data(request_dict, session: aiohttp.ClientSession, db_se
     dispenser_data_task = _fetch_data("pyxis/dispensers", request_dict["dispenser_id"], session) if request_dict.get("dispenser_id") else asyncio.sleep(0)
     item_data_task = _fetch_data(f"pyxis/{request_type}s", request_dict.get(f"medicine_id"), session) if request_type in ["medicine", "material"] else asyncio.sleep(0)
     user_data_task = _fetch_data("auth/users", user_email, session)
-    assign_to_task = _fetch_data("auth/users", request_dict.get(f"agent_id"), session)
+    assign_to_task = _fetch_data("auth/users", request_dict.get(f"assign_to"), session) if request_dict.get("assign_to") else asyncio.sleep(0)
     status_changes_task = _fetch_status_changes(request_dict["id"], request_type, db_session)
     
     tasks = [dispenser_data_task, item_data_task, user_data_task, assign_to_task, status_changes_task]

@@ -60,7 +60,6 @@ class CreateAssistanceFeedback(BaseModel):
 
 class AssignAssistanceRequest(BaseModel):
     request_id: int
-    agent_id: int
 
 class AssistanceRequestSchema(BaseModel):
     id: int

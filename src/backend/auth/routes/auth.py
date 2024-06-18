@@ -91,6 +91,22 @@ async def get_user(user_email: str, session: AsyncSession = Depends(get_session)
         phone_number=user["phone_number"]
     )
 
+@router.get("/users/id/{id}", response_model=UserResponseModel)
+async def get_user(id: int, session: AsyncSession = Depends(get_session)):
+    user = await get_user_by_id(session, id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    return UserResponseModel(
+        id=user["id"],
+        email=user["email"],
+        role=user["role"],
+        mobile_token=user["mobile_token"],
+        name = user["name"],
+        phone_number=user["phone_number"]
+    )
+
 
 @router.get("/users/roles/{user_role}")
 async def get_user_role(user_role: str, session: AsyncSession = Depends(get_session)):
