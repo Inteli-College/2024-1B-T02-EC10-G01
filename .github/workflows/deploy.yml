@@ -38,7 +38,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.service }}
@@ -49,22 +49,22 @@ jobs:
         env:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: |
-          echo "${FIREBASE_SECRET}" > ./src/backend/request_management/serviceAccountKey.json
-          echo "Service account key file created at: $(pwd)/src/backend/request_management/serviceAccountKey.json"    
+          echo "${FIREBASE_SECRET}" > ./src/backend/${{ matrix.service }}/serviceAccountKey.json
+          echo "Service account key file created at: $(pwd)/src/backend/${{ matrix.service }}/serviceAccountKey.json"    
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        uses: docker/build-push-action@v2
         with:
           context: ./src/backend/${{ matrix.service }}
           file: ./src/backend/${{ matrix.service }}/Dockerfile
           push: true
-          tags: elisaflemer/asky-${{ matrix.service }}:${{ matrix.include.tag_suffix }}
+          tags: elisaflemer/asky-${{ matrix.service }}:${{ matrix.tag_suffix }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
