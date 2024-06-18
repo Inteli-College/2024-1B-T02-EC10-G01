@@ -1,4 +1,4 @@
-# Sistema de Logging para Projeto Asky
+# Logging
 
 ## Visão Geral
 O sistema de logging do projeto Asky utiliza Elasticsearch para armazenamento e busca de logs, Kibana para visualização e Filebeat para coleta de logs do Docker. Esta solução é integrada no ambiente de containers Docker, facilitando o monitoramento e a análise em tempo real dos logs de aplicação e sistema.
