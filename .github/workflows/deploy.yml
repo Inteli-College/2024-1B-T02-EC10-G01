@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - dev
+      - test
   release:
     types: [published]
   workflow_dispatch:
@@ -19,7 +21,14 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        service: [request_management, pyxis, auth, kibana, elasticsearch, filebeat, gateway] 
+        service: [request_management, pyxis, auth, kibana, elasticsearch, filebeat, gateway]
+        include:
+          - branch: dev
+            tag_suffix: dev
+          - branch: test
+            tag_suffix: test
+          - branch: main
+            tag_suffix: latest
 
     steps:
       - name: Check out the repo
@@ -55,6 +64,11 @@ jobs:
           context: ./src/backend/${{ matrix.service }}
           file: ./src/backend/${{ matrix.service }}/Dockerfile
           push: true
-          tags: elisaflemer/asky-${{ matrix.service }}:latest
+          tags: elisaflemer/asky-${{ matrix.service }}:${{ matrix.include.tag_suffix }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Cleanup post build
+        run: |
+          echo "Cleanup temporary files"
+          rm -rf /tmp/.buildx-cache

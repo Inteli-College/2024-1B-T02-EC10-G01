@@ -29,11 +29,6 @@ kubectl apply -f deployments.yaml
 # Apply the Service for the backend
 kubectl apply -f services.yaml
 
-# helm install filebeat ./logging/filebeat -n default
-# helm install logstash ./logging/logstash -n default
-# helm install elasticsearch ./logging/elasticsearch -n default
-#helm install kibana ./logging/kibana -n default
-
 kubectl apply -f ingress.yaml
 
 # Monitor the status of the deployment
@@ -45,5 +40,7 @@ kubectl apply -f logs/kibana-service.yaml
 
 kubectl apply -f logs/filebeat-claim0-persistentvolumeclaim.yaml
 kubectl apply -f logs/filebeat-deployment.yaml
+
+kubectl port-forward svc/kibana 5601:5601
 
 

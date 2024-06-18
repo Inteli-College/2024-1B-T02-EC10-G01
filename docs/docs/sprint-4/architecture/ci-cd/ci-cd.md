@@ -4,26 +4,56 @@ sidebar_position: 1
 ---
 # CI/CD (Continuous Integration/Continuous Deployment)
 
-CI/CD é um conjunto de práticas no desenvolvimento de software que visa a automação e melhoria contínua dos processos de integração, testes e implantação de código. As práticas de CI/CD trazem benefícios significativos, como maior velocidade de entrega, melhoria na qualidade do código, redução de riscos e feedback contínuo, tornando-se fundamentais para o desenvolvimento de software ágil e DevOps, especialmente em aplicações que precisam escalar rapidamente para atender a um número crescente de usuários.
+## Introdução
+Esta documentação descreve a infraestrutura de CI/CD utilizada no projeto Asky, delineando as práticas adotadas para automação de builds, testes e deploy, assim como a gestão de configurações Kubernetes através de um script de implantação chamado `run.sh`. Esta infraestrutura é projetada para promover a entrega contínua com alta confiabilidade e segurança.
 
-No projeto que estamos desenvolvendo, a adoção de CI/CD pode gerar um grande diferencial e nos aproximar mais do nosso objetivo, que é criar uma aplicação com alta escalabilidade. Com estas práticas, é possível desenvolver um método de entrega eficiente e rápido, a fim de estar sempre crescendo e melhorando a aplicação.
-## Backup
+## Estrutura de Diretórios do Repositório
+A organização dos diretórios no repositório do projeto Asky é essencial para o gerenciamento de múltiplos ambientes (desenvolvimento, teste e produção), facilitando a segregação e aplicação de configurações específicas de cada ambiente.
 
-Backup consiste na capacidade de um sistema de identificar um erro na execução de um serviço(e.g. container de Banco de Dados), destruí-lo e substituir por uma réplica. Esta é uma das estratégias implementadas em uma pipeline de CI/CD a fim de rapidamente identificar falhas e se recompor. O uso de Backups é importante para reduzir o tempo de indisponibilidade e a perda de dados.
+```
+src/backend/k8/
+│
+├── dev/          # Arquivos de configuração para o ambiente de desenvolvimento
+│   ├── config_maps.yaml
+│   ├── deployments.yaml
+│   ├── ingress.yaml
+│   └── ...
+│
+├── test/         # Arquivos de configuração para o ambiente de testes
+│   ├── config_maps.yaml
+│   ├── deployments.yaml
+│   ├── ingress.yaml
+│   └── ...
+│
+└── main/         # Arquivos de configuração para o ambiente de produção
+    ├── config_maps.yaml
+    ├── deployments.yaml
+    ├── ingress.yaml
+    └── ...
+```
 
-Uma das maneiras de aplicar essa estratégia é utilizando snapshots. Serviços com a AWS oferecem esse serviço por meio de AMIs. Um snapshot é uma imagem daquela instância que pode substituir aquele serviço, retrocedendo a versões com garantia de funcionamento.
-## Estratégia de desastre
+## Configuração do GitHub Actions
+O pipeline de CI/CD do Asky é implementado usando GitHub Actions, configurado para executar em resposta a eventos específicos.
 
-Um projeto de larga escala está suscetível a diversos tipos de desastres. Sejam ataques hackers ou próprios erros da aplicação, é importante se prever deles. Portanto em caso de desastres, em relação ao nosso projeto há algumas possibiilidades.
+### Triggers do Workflow
+- **Pushes e Pull Requests:** O workflow é acionado em commits nos ramos dev, test e main.
+- **Publicação de Releases:** Ativações adicionais ocorrem ao publicar releases, permitindo deploys automatizados.
+- **Disparos Manuais:** O workflow pode ser disparado manualmente para deploys ad hoc ou testes de configurações específicas.
 
-1. **Limpeza do Cache**: O sistema de Cache é essencial quando se trata de diminuir o tempo de resposta de aplicação, porém essa prática poder facilmente sobrecarregar a aplciação. Um cache pode superaquecer, isto é, se sobrecarregar de informações, replicando um banco de dados, porém com uma execução extremamente inferior, o que pode aumentar gerar erros diversos na aplciação.
+### Jobs Definidos no Workflow
+1. **Checkout do Código:** Utiliza actions/checkout@v4 para obter a versão mais recente do código no ramo especificado.
+2. **Preparação do Docker Buildx:** Configura o Buildx para suportar a construção de imagens multi-arquitetura usando docker/setup-buildx-action@v1.
+3. **Autenticação no Docker Hub:** Autentica no Docker Hub com credenciais armazenadas em segurança, permitindo o push de imagens.
+4. **Construção e Push das Imagens Docker:** As imagens são construídas e enviadas para o Docker Hub com tags que indicam o ambiente (dev, test, main) usando docker/build-push-action@vX.
+5. **Script de Implantação Kubernetes** (`run.sh`)
+   
+O `run.sh` é um script Bash utilizado para aplicar manualmente as configurações Kubernetes. Este script permite flexibilidade e controle detalhado durante o processo de implantação, essencial para operações críticas. Para executá-lo, basta rodar:
 
-2. **Reiniciar o Orquestrador**: Um orquestrador é uma parte essencial de uma aplicação com arquitetura em microserviços. Uma falha na sua execução pode comprometer toda a performance da aplicação. Com tamanha resposabilidade, o orquestardor, no nosso caso Kubernetes com contâiners em Docker, pode vir a sofrer falhas. Para isso se deve reiniciar o orquestrador, registrando e lançando os contâiners novamente.
+```
+./run.sh [branch]
+```
 
-3. **Monitoramento de Logs**: Uma das principais funções do sistema de logging é reportar eventos indesejados, que podem representar um mero aviso até a uma falha crítica do sistema. Por isso, revisá-los após um "crash" do sistema, é essencial para entender o que ocasionou esse desastre e como foi o processo até a falha.
+Baseado no argumento fornecido (dev, test, main), o script aplica as configurações do ambiente correspondente. Ele também monitora o status dos serviços, aguarda a prontidão dos pods e verifica os logs para confirmar a inicialização bem-sucedida dos componentes.
 
-## Logger
-
-Como citada, outra estratégia que pode ser aplicada é de logger. O logger tem a finalidade de monitorar, dar transparência e traqueabilidade à aplicação, de modo que seja fácil rastrear eventos que ocorreram. Esse tipo de prática facilita na depuração e diagnóstico de falhas, aumentando a velocidade de tratamentos erros.
-
-No projeto, o logger foi implementado utilizando RabbitMQ, onde as mensagem são postadas em um canal e depois são redirecionadas à um banco de dados PostgresSQL. Esta prática foi implementada especialmente pela necessidade de validar os dados durante o desenvolvimento de aplicação, uma vez que erros são mais recorrentemente nos estágios iniciais de desenvolvimento e é necessário rapidamente identificá-los, a fim de evoluir a aplicação de maneira mais eficiente e rápida.
+## Conclusão
+O setup de CI/CD detalhado nesta documentação garante que o projeto Asky possa operar com eficiência e segurança, automatizando a maior parte do processo de entrega enquanto mantém a flexibilidade para intervenções manuais quando necessário, garantindo assim a estabilidade e a performance otimizada para cada ambiente específico.
