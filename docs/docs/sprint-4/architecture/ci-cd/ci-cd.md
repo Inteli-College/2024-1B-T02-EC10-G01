@@ -2,6 +2,7 @@
 title: Estratégias de CI/CD
 sidebar_position: 1
 ---
+
 # CI/CD (Continuous Integration/Continuous Deployment)
 
 ## Introdução
