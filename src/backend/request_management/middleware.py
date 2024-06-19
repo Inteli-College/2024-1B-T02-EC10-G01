@@ -34,10 +34,12 @@ async def get_current_user(authorization: str = Header(...)):
     
     if user_info is None:
         raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+    
     return user_info
 
 async def is_admin(authorization: str = Header(...)):
     user_info = await get_current_user(authorization)
+    print(user_info)
     if user_info["role"] != "admin":
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="You are not authorized to access this resource.")
     return user_info

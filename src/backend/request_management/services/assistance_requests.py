@@ -29,6 +29,20 @@ async def _fetch_dispenser_data(dispenser_id: int, session: aiohttp.ClientSessio
     except aiohttp.ClientError as e:
         raise HTTPException(status_code=503, detail=f"Unable to reach the material service: {str(e)}")
     
+async def _update_status(request_id: int, session: aiohttp.ClientSession):
+    url = f"{gateway_url}/requests/status/assistance"
+    headers = {"Authorization": f"Bearer {token}"}
+    body = {"id": request_id, "status": "accepted"}
+    try:
+        async with session.put(url, headers=headers, json=body) as response:
+            if response.status == 200:
+                return await response.json()  # Assuming JSON response
+            else:
+                error_message = await response.text()
+                raise HTTPException(status_code=response.status, detail=error_message)
+    except aiohttp.ClientError as e:
+        raise HTTPException(status_code=503, detail=f"Unable to reach the material service: {str(e)}")
+    
     
 async def _fetch_user_data(user_email: str, session: aiohttp.ClientSession):
     url = f"{gateway_url}/auth/users/{user_email}"
@@ -67,7 +81,6 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
         result = await session.execute(stmt)
         request_result = result.scalar()
 
-        print(request_result)
         dispenser_task = _fetch_dispenser_data(request_result.dispenser_id, http_session)
         requested_by_task = _fetch_user_by_id(request_result.requested_by, http_session)
         assign_to_task = _fetch_user_by_id(request_result.assign_to, http_session) if request_result.assign_to else asyncio.sleep(0)
@@ -85,9 +98,6 @@ async def fetch_request_by_id(request_id: int, session: AsyncSession, user):
         # If no HTTPException, extract data from results
         dispenser, requested, assign = results
 
-        print(dispenser)
-        print(requested)
-        print(assign)
         request = {
             "id": request_result.id,
             "dispenser": dispenser,
@@ -151,7 +161,9 @@ async def create_feedback(session: AsyncSession, request: CreateAssistanceFeedba
 
 async def assign_request(session: AsyncSession, request: AssignAssistanceRequest, user: dict):   
     async with aiohttp.ClientSession() as http_session:
-        tasks = [_fetch_user_data(user['sub'], http_session)]
+        tasks = [_fetch_user_data(user['sub'], http_session),
+                 _update_status(request.request_id, http_session)
+        ]
         try:
             results = await asyncio.gather(*tasks, return_exceptions=True)
         except Exception as e:
