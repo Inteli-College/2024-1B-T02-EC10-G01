@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:asky/constants.dart';
 
-
 class RequestsAssistance {
   final auth = AuthenticationApi();
 
@@ -26,8 +25,8 @@ class RequestsAssistance {
     }
   }
 
-  Future<dynamic> sendRequest(int pyxisId, String assistanceType, {String details = ''} ) async {
-  
+  Future<dynamic> sendRequest(int pyxisId, String assistanceType,
+      {String details = ''}) async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
@@ -38,7 +37,7 @@ class RequestsAssistance {
       },
       body: json.encode({
         'dispenser_id': pyxisId,
-       'assistance_type': assistanceType,
+        'assistance_type': assistanceType,
         'details': details,
       }),
     );
@@ -68,4 +67,22 @@ class RequestsAssistance {
     }
   }
 
+  Future<bool> updateRequestStatus(int requestId, String status) async {
+    var token = await auth.getToken();
+    final String bearer = 'Bearer $token';
+    final response = await http.put(
+        Uri.parse(Constants.baseUrl + '/requests/status/assistance'),
+        headers: {
+          'Authorization': bearer,
+        },
+        body: jsonEncode({"id": requestId, "status": status}));
+
+    if (response.statusCode == 200) {
+      // var data = jsonDecode(utf8.decode(response.bodyBytes));
+      // return data ?? {};
+      return true;
+    } else {
+      throw Exception('Failed to fetch last request');
+    }
+  }
 }

@@ -7,7 +7,6 @@ import 'request_api.dart';
 class RequestMaterialApi implements RequestApi {
   final auth = AuthenticationApi();
 
-
   @override
   Future<List<dynamic>> getHistory() async {
     var token = await auth.getToken();
@@ -105,6 +104,26 @@ class RequestMaterialApi implements RequestApi {
     if (response.statusCode == 200) {
       var data = jsonDecode(utf8.decode(response.bodyBytes));
       return data ?? {};
+    } else {
+      throw Exception('Failed to fetch last request');
+    }
+  }
+
+  @override
+  Future<bool> updateRequestStatus(int requestId, String status) async {
+    var token = await auth.getToken();
+    final String bearer = 'Bearer $token';
+    final response = await http.put(
+        Uri.parse(Constants.baseUrl + '/requests/status/material'),
+        headers: {
+          'Authorization': bearer,
+        },
+        body: jsonEncode({"id": requestId, "status": status}));
+
+    if (response.statusCode == 200) {
+      // var data = jsonDecode(utf8.decode(response.bodyBytes));
+      // return data ?? {};
+      return true;
     } else {
       throw Exception('Failed to fetch last request');
     }
