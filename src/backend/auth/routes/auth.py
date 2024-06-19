@@ -35,8 +35,8 @@ async def register(
         )
 
     hashed_password = hash_password(request.password)
-    user = await create_user(session, request.email, hashed_password, request.role)
-    return UserResponseModel(id=user["id"], email=user["email"], role=user["role"], name=user["name"])
+    user = await create_user(session, request.email, request.phone_number, hashed_password, request.role)
+    return UserResponseModel(id=user["id"], email=user["email"], phone_number=user["phone_number"], role=user["role"], name=user["name"])
 
 
 @router.post("/login", response_model=LoginResponseModel)
@@ -70,7 +70,8 @@ async def login(
         mobile_token=request.mobile_token,
         expires_at=str(datetime.datetime.now() + timedelta(minutes=15)),
         role=user["role"],
-        name=user["name"]
+        name=user["name"],
+        phone_number=user["phone_number"]
     )
 
 
@@ -86,8 +87,24 @@ async def get_user(user_email: str, session: AsyncSession = Depends(get_session)
         email=user["email"],
         role=user["role"],
         mobile_token=user["mobile_token"],
-        name = user["name"]
-        
+        name = user["name"],
+        phone_number=user["phone_number"]
+    )
+
+@router.get("/users/id/{id}", response_model=UserResponseModel)
+async def get_user(id: int, session: AsyncSession = Depends(get_session)):
+    user = await get_user_by_id(session, id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    return UserResponseModel(
+        id=user["id"],
+        email=user["email"],
+        role=user["role"],
+        mobile_token=user["mobile_token"],
+        name = user["name"],
+        phone_number=user["phone_number"]
     )
 
 

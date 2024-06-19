@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:asky/constants.dart';
 
-class FeedbackRequest {
+class MedicineFeedbackRequest {
   final auth = AuthenticationApi();
 
-  Future<dynamic> createMedicineFeedback(int requestId, String feedback) async {
+  Future<dynamic> createFeedback(int requestId, String feedback) async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
@@ -27,8 +27,12 @@ class FeedbackRequest {
       throw Exception('Failed to send feedback');
     }
   }
+}
 
-  Future<dynamic> createMaterialFeedback(int requestId, String feedback) async {
+class MaterialFeedbackRequest {
+  final auth = AuthenticationApi();
+
+  Future<dynamic> createFeedback(int requestId, String feedback) async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
@@ -49,8 +53,12 @@ class FeedbackRequest {
       throw Exception('Failed to send feedback');
     }
   }
+}
 
-  Future<dynamic> createAssistanceFeedback(int requestId, String feedback) async {
+class AssistanceFeedbackRequest {
+  final auth = AuthenticationApi();
+
+  Future<dynamic> createFeedback(int requestId, String feedback) async {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(

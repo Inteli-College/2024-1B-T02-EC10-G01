@@ -5,6 +5,7 @@ from typing import Optional
 class UserRegistrationRequest(BaseModel):
     email: str
     password: str
+    phone_number: str
     role: str
 
 class UserResponseModel(BaseModel):
@@ -13,10 +14,12 @@ class UserResponseModel(BaseModel):
     role: str
     mobile_token: Optional[str] = None
     name: str
+    phone_number: str
 
 class LoginResponseModel(BaseModel):
     email: str
     name: str
+    phone_number: str
     access_token: str
     token_type: str
     mobile_token: Optional[str] = None

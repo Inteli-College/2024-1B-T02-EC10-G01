@@ -18,3 +18,23 @@ Atualmente, utilizamos o serviço de notificações para facilitar as atualizaç
 ## Como funciona?
 
 Para que as notificações funcionem, capturamos um endereço chamado "mobile_token" assim que o usuário realiza o login. Este token é específico para cada dispositivo e cada instalação do aplicativo. Isso facilita o processo em caso de troca de dispositivo ou atualização do aplicativo. Além disso, deixamos funções pré-definidas para o envio das notificações, permitindo o envio para um usuário específico ou para um grupo de usuários com o mesmo cargo, facilitando a implementação de ações futuras, caso necessário.
+
+## Benefícios das Notificações em Tempo Real
+
+A implementação de notificações em tempo real oferece vários benefícios significativos para o aplicativo Asky:
+
+### Melhoria na Comunicação
+
+As notificações garantem que as informações críticas sejam entregues imediatamente aos usuários certos, melhorando a comunicação entre enfermeiros e agentes. Isso reduz o tempo de resposta e aumenta a eficiência no atendimento das solicitações.
+
+### Acompanhamento de Processos
+
+Com o sistema de notificações, enfermeiros e agentes podem acompanhar o status dos pedidos em tempo real. Isso oferece maior transparência e controle sobre os processos em andamento, permitindo uma gestão mais eficaz das tarefas.
+
+### Aumento da Produtividade
+
+Ao receber notificações instantâneas, os usuários podem agir rapidamente sobre novas informações, aumentando a produtividade e a capacidade de resposta às demandas. Isso é particularmente importante em ambientes de alta pressão, como o atendimento de saúde.
+
+### Segurança da Informação
+
+Utilizando o Firebase, garantimos que todas as notificações sejam enviadas de forma segura e confiável. As requisições internas são protegidas contra acessos não autorizados, assegurando a integridade e a privacidade dos dados dos usuários.

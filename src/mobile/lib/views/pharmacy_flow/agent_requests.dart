@@ -43,7 +43,7 @@ class AgentRequests extends StatefulWidget {
 }
 
 class _AgentRequestsState extends State<AgentRequests> {
-  dynamic pendingRequests = [];
+  dynamic pendingRequests;
   bool _isLoading = true;
   late AgentApi api;
 
@@ -81,30 +81,33 @@ class _AgentRequestsState extends State<AgentRequests> {
           SizedBox(height: 40),
           _isLoading
               ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: pendingRequests.length,
-                  itemBuilder: (context, index) {
-                    var request = pendingRequests[index];
-                    var title = getRequestTitle(request);
-                    var emergency = request['emergency'] == true ? 'EMERGÊNCIA' : 'NORMAL';
-                    var location = '${request['dispenser']['code']} | Andar ${request['dispenser']['floor']}';
-                    var status = getStatusDescription(request);
-                    var color = getStatusColor(request);
+              : (pendingRequests == null || pendingRequests.isEmpty
+                  ? Center(child: Text("Nenhuma solicitação foi feita."))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: pendingRequests.length,
+                      itemBuilder: (context, index) {
+                        print(pendingRequests.length);
+                        var request = pendingRequests[index];
+                        var title = getRequestTitle(request);
+                        var emergency = request['emergency'] == true ? 'EMERGÊNCIA' : 'NORMAL';
+                        var location = '${request['dispenser']['code']} | Andar ${request['dispenser']['floor']}';
+                        var status = getStatusDescription(request);
+                        var color = getStatusColor(request);
 
-                    return HistoryCard(
-                      date: request['created_at'],
-                      title: title,
-                      subtitle: location,
-                      tag: emergency,
-                      status: status,
-                      statusColor: color,
-                      id: request['id'].toString(),
-                      requestType: request['request_type'],
-                    );
-                  },
-                ),
+                        return HistoryCard(
+                          date: request['created_at'],
+                          title: title,
+                          subtitle: location,
+                          tag: emergency,
+                          status: status,
+                          statusColor: color,
+                          id: request['id'].toString(),
+                          requestType: request['request_type'],
+                        );
+                      },
+                    )),
         ],
       ),
     );

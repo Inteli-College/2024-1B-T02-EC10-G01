@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
               home: SplashScreen(),
               routes: {
                 "/nurse": (context) => HomeNurse(),
-                "/choose_request":(context) => ChooseRequestScreen(),
+                "/choose_request": (context) => ChooseRequestScreen(),
                 "/assistance": (context) => AssistanceScreen(),
                 "/history": (context) => HistoryPage(),
                 "/login": (context) => LoginPage(),

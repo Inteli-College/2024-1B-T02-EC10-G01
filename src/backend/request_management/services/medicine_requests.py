@@ -134,8 +134,8 @@ async def fetch_request(session: AsyncSession, request_id: int, user: dict):
             "created_at": request_result.created_at,
             "batch_number": request_result.batch_number,
             "emergency": request_result.emergency,
-            "feedback": request_result.feedback
-            
+            "feedback": request_result.feedback,
+            "assign_to": request_result.assign_to
         }
         return request
 
@@ -171,8 +171,8 @@ async def fetch_last_user_request(session: AsyncSession, user: dict):
             "batch_number": request_result.batch_number,
             "emergency": request_result.emergency,
             "feedback": request_result.feedback,
+            "assign_to": request_result.assign_to,
             "status_changes": request_result.status_changes
-            
         }
         return request
     
