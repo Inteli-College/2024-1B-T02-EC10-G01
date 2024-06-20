@@ -117,12 +117,18 @@ class RequestMedicineApi implements RequestApi {
   Future<bool> updateRequestStatus(int requestId, String status) async {
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
+    print("Request ID: $requestId");
+    print("Status: $status");
     final response = await http.put(
         Uri.parse(Constants.baseUrl + '/requests/status/medicine'),
         headers: {
           'Authorization': bearer,
         },
-        body: jsonEncode({"id": requestId, "status": status}));
+        body: {
+          "id": requestId, 
+          "status": status
+          }
+        );
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(utf8.decode(response.bodyBytes));

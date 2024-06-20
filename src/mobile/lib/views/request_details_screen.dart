@@ -16,7 +16,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/home_nurse_body.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:asky/api/request_material_api.dart';
+import 'package:asky/api/request_medicine_api.dart';
+import 'package:asky/api/requests_assistance_api.dart';
 import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_bottom_bar.dart';
 
 class RequestDetailsScreen extends StatefulWidget {
@@ -112,6 +114,19 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   // Add navigation or interaction logic as needed
                 },
               ),
+          floatingActionButton: userRole == "agent"
+            ? FloatingActionButton(
+                onPressed: () async {
+                  // Example status update logic
+                  await api.updateRequestStatus(int.parse(widget.requestId));
+                  // Show a success message or handle the result as needed
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Status updated to accepted')),
+                  );
+                },
+                child: Icon(Icons.update),
+              )
+            : null,
         );
       },
     );
