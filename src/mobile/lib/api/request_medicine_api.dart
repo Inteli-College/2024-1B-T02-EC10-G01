@@ -113,22 +113,16 @@ class RequestMedicineApi implements RequestApi {
     }
   }
 
-  @override
-  Future<bool> updateRequestStatus(int requestId, String status) async {
+  Future<bool> updateRequestStatus(int requestId) async {
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
-    print("Request ID: $requestId");
-    print("Status: $status");
-    final response = await http.put(
-        Uri.parse(Constants.baseUrl + '/requests/status/medicine'),
+    final response = await http.post(
+        Uri.parse(Constants.baseUrl + '/requests/medicine/accept_request'),
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': bearer,
         },
-        body: {
-          "id": requestId, 
-          "status": status
-          }
-        );
+        body: json.encode({'request_id': requestId}));
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(utf8.decode(response.bodyBytes));

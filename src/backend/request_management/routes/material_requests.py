@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
 from models.schemas import CreateMaterialRequest, CreateMaterialFeedback, AssignMaterialRequest
 from middleware import get_current_user, is_admin, is_nurse, is_agent
-from services.material_requests import fetch_requests, create_request, fetch_last_user_request, fetch_request, create_feedback
+from services.material_requests import fetch_requests, create_request, fetch_last_user_request, fetch_request, create_feedback, assign_request
 import redis
 import json
 
@@ -53,5 +53,5 @@ async def create_material_feedback(request: CreateMaterialFeedback, session: Asy
 @router.post("/accept_request")
 async def accept_material_request(request: AssignMaterialRequest, session: AsyncSession = Depends(get_session), user: dict = Depends(is_agent)):
     key = 'read_material_requests'
-    assign_request = await assign_request(session, request, user)
-    return assign_request
+    assigned_request = await assign_request(session, request, user)
+    return assigned_request

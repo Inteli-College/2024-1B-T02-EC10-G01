@@ -10,7 +10,7 @@ class RequestsAssistance {
     var token = await auth.getToken();
     final String bearerToken = 'Bearer $token';
     final response = await http.post(
-      Uri.parse(Constants.baseUrl + '/requests/medicine/'),
+      Uri.parse(Constants.baseUrl + '/requests/assistance/'),
       headers: {
         'Content-Type': "application/json",
         'Authorization': bearerToken,
