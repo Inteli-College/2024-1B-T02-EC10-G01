@@ -41,7 +41,7 @@ async def _update_status(request_id: int, session: aiohttp.ClientSession):
                 error_message = await response.text()
                 raise HTTPException(status_code=response.status, detail=error_message)
     except aiohttp.ClientError as e:
-        raise HTTPException(status_code=503, detail=f"Unable to reach the material service: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Unable to reach the assistance service: {str(e)}")
     
     
 async def _fetch_user_data(user_email: str, session: aiohttp.ClientSession):

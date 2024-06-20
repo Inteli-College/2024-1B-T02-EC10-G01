@@ -18,7 +18,7 @@ class MedicineRequest(Base):
     batch_number = Column(String, nullable=True)
     feedback = Column(String, default="Nenhum feedback disponível.")
     status = Column(String, default=Status.pending.value)
-    assign_to = Column(Integer)
+    assign_to = Column(Integer, nullable=True)
 
     # Define a one-to-many relationship with selectin loading
     status_changes = relationship(
