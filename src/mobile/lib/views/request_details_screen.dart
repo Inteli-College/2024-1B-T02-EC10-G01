@@ -15,6 +15,9 @@ import 'package:asky/widgets/bottom_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:asky/views/history_page.dart';
 import 'package:asky/widgets/home_nurse_body.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:asky/widgets/pharmacy_flow_widgets/pharmacy_bottom_bar.dart';
 
 class RequestDetailsScreen extends StatefulWidget {
   final String requestId;
@@ -35,9 +38,19 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   late final List<Widget> _widgetOptions;
 
+  Future<String?> userGetRole() async {
+    const _secureStorage = FlutterSecureStorage();
+    var userRole = await _secureStorage.read(key: "role", aOptions: _getAndroidOptions());
+    return userRole;
+  }
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
+
   @override
   void initState() {
     super.initState();
+    
     _widgetOptions = <Widget>[
       RequestDetailsBox(
         requestId: widget.requestId,
@@ -50,6 +63,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     final api;
     switch (widget.type) {
       case 'material':
@@ -62,21 +76,44 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
         api = RequestMedicineApi();
     }
 
-    return Scaffold(
-      appBar: TopBar(),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onTabChange: (int index) {
-          setState(() {
-            print('Index changed to $index');
-            _selectedIndex = index;
-          });
-          // Add navigation or interaction logic as needed
-        },
-      ),
+    return FutureBuilder<String?>(
+      future: userGetRole(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            appBar: TopBar(),
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final userRole = snapshot.data;
+
+        return Scaffold(
+          appBar: TopBar(),
+          body: Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: userRole == "agent" 
+            ? PharmacyCustomBottomNavigationBar(
+                selectedIndex: _selectedIndex,
+                onTabChange: (int index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              )
+            : CustomBottomNavigationBar(
+                selectedIndex: _selectedIndex,
+                onTabChange: (int index) {
+                  setState(() {
+                    print('Index changed to $index');
+                    _selectedIndex = index;
+                  });
+                  // Add navigation or interaction logic as needed
+                },
+              ),
+        );
+      },
     );
   }
 }
