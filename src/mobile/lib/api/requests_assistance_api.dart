@@ -67,15 +67,16 @@ class RequestsAssistance {
     }
   }
 
-  Future<bool> updateRequestStatus(int requestId, String status) async {
+  Future<bool> updateRequestStatus(int requestId) async {
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
-    final response = await http.put(
-        Uri.parse(Constants.baseUrl + '/requests/status/assistance'),
+    final response = await http.post(
+        Uri.parse(Constants.baseUrl + '/requests/assistance/accept_request'),
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': bearer,
         },
-        body: jsonEncode({"id": requestId, "status": status}));
+        body: json.encode({'request_id': requestId}));
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(utf8.decode(response.bodyBytes));
