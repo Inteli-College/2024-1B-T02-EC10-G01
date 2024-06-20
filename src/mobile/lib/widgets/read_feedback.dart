@@ -21,17 +21,17 @@ class ReadFeedbackWidget extends StatelessWidget {
       this.typeUser,
       this.typeRequest,
       this.requestId,
-      this.phoneNumber
-      });
+      this.phoneNumber});
 
   void _launchWhatsApp() async {
-    final url = "https://wa.me/$phoneNumber";
-    
-    if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      } // Replace with actual phone number
+    final url = Uri.parse("https://wa.me/$phoneNumber");
+
+    print(url);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    } // Replace with actual phone number
   }
 
   @override
@@ -72,7 +72,27 @@ class ReadFeedbackWidget extends StatelessWidget {
               ),
               IconButton(
                 icon: FaIcon(FontAwesomeIcons.whatsapp),
-                onPressed: _launchWhatsApp,
+                onPressed: () {
+                  if (phoneNumber == null) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title:
+                            Text('Este número de telefone não está disponível'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    _launchWhatsApp();
+                  }
+                },
                 color: Colors.green,
                 iconSize: 30,
               ),

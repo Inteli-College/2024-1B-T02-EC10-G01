@@ -14,7 +14,6 @@ class CreateMedicineFeedback(BaseModel):
 
 class AssignMedicineRequest(BaseModel):
     request_id: int
-    agent_id: int
 
 class MedicineRequestSchema(BaseModel):
     id: int
@@ -38,7 +37,6 @@ class CreateMaterialFeedback(BaseModel):
 
 class AssignMaterialRequest(BaseModel):
     request_id: int
-    agent_id: int
 
 class MaterialRequestSchema(BaseModel):
     id: int

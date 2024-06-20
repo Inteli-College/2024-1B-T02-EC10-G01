@@ -186,7 +186,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                     typeUser: requestData['requested_by']['role'],
                     typeRequest: widget.type,
                     requestId: requestData['status_changes'][0]['request_id'],
-                    phoneNumber: requestData['assign_to']['phone_number']),
+                    phoneNumber: requestData['assign_to']?['phone_number']),
               ],
             ),
           );

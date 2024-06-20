@@ -128,15 +128,15 @@ class _AgentRequestsState extends State<AgentRequests> {
 
   String getStatusDescription(dynamic request) {
     if (request['request_type'] == 'assistance') {
-      return AssistanceStatus.getStatusDescription(request['status']);
+      return AssistanceStatus.getStatusDescription(request['status_changes'][0]['status']);
     }
-    return getDescription(request['status']);
+    return getDescription(request['status_changes'][0]['status']);
   }
 
   Color getStatusColor(dynamic request) {
     if (request['request_type'] == 'assistance') {
       return Constants.askyBlue;
     }
-    return getColorFromStatus(request['status']);
+    return getColorFromStatus(request['status_changes'][0]['status']);
   }
 }
