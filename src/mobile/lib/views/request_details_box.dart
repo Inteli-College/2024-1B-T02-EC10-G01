@@ -42,6 +42,19 @@ class AssistanceStatus {
         return 0; // Default to "Pendente" if status is unknown
     }
   }
+
+  static Color getColorFromStatus(String status) {
+    switch (status) {
+      case AssistanceStatus.pending:
+        return Colors.orange;
+      case AssistanceStatus.accepted:
+        return Colors.blue;
+      case AssistanceStatus.resolved:
+        return Colors.green;
+      default:
+        return Colors.grey; // Default to grey if status is unknown
+    }
+  }
 }
 
 class RequestDetailsBox extends StatefulWidget {
@@ -113,10 +126,17 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
             detailsData['Item'] = requestData['item']['name'];
           }
 
+          
+                        
+
           detailsData['Pyxis'] = requestData['dispenser']['code'] +
               ' | Andar ' +
               requestData['dispenser']['floor'].toString();
           detailsData['Enfermeiro'] = requestData['requested_by']['name'];
+          print('index');
+          print(getIndexFromStatus(
+                              requestData['status_changes'].last['status']) +
+                          1);
           detailsData['Data'] = createdAtMinus3Hours.toString();
           if (requestData['emergency'] == true) {
             detailsData['Emergência'] = 'Sim';
@@ -133,16 +153,16 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
           dynamic status = '';
           if (requestData['request_type'] == 'assistance') {
             status =
-                AssistanceStatus.getStatusDescription(requestData['status']);
+                AssistanceStatus.getStatusDescription(requestData['status_changes'].last['status']);
           } else {
-            status = getDescription(requestData['status_changes'][0]['status']);
+            status = getDescription(requestData['status_changes'].last['status']);
           }
           dynamic color = '';
           if (requestData['request_type'] == 'assistance') {
-            color = Constants.askyBlue;
+            color = AssistanceStatus.getColorFromStatus(requestData['status_changes'].last['status']);
           } else {
             color =
-                getColorFromStatus(requestData['status_changes'][0]['status']);
+                getColorFromStatus( requestData['status_changes'].last['status']);
           }
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -164,8 +184,7 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                       ? getIndexFromAssistanceStatus(
                           requestData['status_changes'].last['status'])
                       : getIndexFromStatus(
-                              requestData['status_changes'].last['status']) +
-                          1,
+                              requestData['status_changes'].last['status']),
                   totalSteps: widget.type == 'assistance'
                       ? getAssistanceStatusLabels().length
                       : getStatusLabels().length,

@@ -2,7 +2,7 @@ import 'package:asky/views/history_page.dart';
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUrl = 'https://35a1-189-201-201-2.ngrok-free.app';
+  static const String baseUrl = 'https://e628-204-199-57-10.ngrok-free.app';
   static const Color askyBlue = Color(0xFF1A365D);
   static const Color offWhite = Color(0xFFF5F5F5);
   static const Color gradientTop = Color(0xFF1A365D);
@@ -62,9 +62,9 @@ extension StatusExtension on Status {
       case Status.accepted:
         return Colors.blue;
       case Status.preparing:
-        return Colors.blue;
+        return Colors.blue.shade900;
       case Status.inTransit:
-        return Colors.blue;
+        return Colors.purple.shade900;
       case Status.completed:
         return Colors.green;
       default:
@@ -78,7 +78,19 @@ List<String> getStatusLabels() {
 }
 
 int getIndexFromStatus(String status) {
-  return Status.values.indexWhere((element) => element.description == status);
+  if (status == 'pending') {
+    return 0;
+  } else if (status == 'accepted') {
+    return 1;
+  } else if (status == 'preparing') {
+    return 2;
+  } else if (status == 'inTransit') {
+    return 3;
+  } else if (status == 'completed') {
+    return 4;
+  } else {
+    return 0; // Default to "Pendente" if status is unknown
+  }
 }
 
 Status? parseStatus(String statusString) {
