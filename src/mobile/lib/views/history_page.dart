@@ -56,7 +56,6 @@ class _HistoryPageState extends State<HistoryPage> {
     List<dynamic> allRequests = [];
     fetchedRequests.forEach((key, value) {
       allRequests.addAll(value);
-      print(allRequests.length.toString() + " requests fetched");
     });
     setState(() {
       requests = allRequests;
@@ -122,11 +121,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       status = getDescription(request['status']);
                     }
                     dynamic color = '';
-                    if (request['request_type'] == 'assistance') {
-                      color = Constants.askyBlue;
-                    } else {
-                      color = getColorFromStatus(request['status']);
-                    }
+                    color = getColorFromStatus(request['status']);
                     return HistoryCard(
                         date: request['created_at'],
                         title: title,

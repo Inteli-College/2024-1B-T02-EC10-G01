@@ -2,9 +2,9 @@ from fastapi import APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException
 from database import get_session, engine, Base
-from models.schemas import CreateMedicineRequest, CreateMedicineFeedback, AssignMedicineRequest
+from models.schemas import CreateMedicineRequest, CreateMedicineFeedback, AssignMedicineRequest, changeStatus
 from middleware import get_current_user, is_admin, is_nurse, is_agent
-from services.medicine_requests import fetch_requests, create_request, fetch_request, fetch_last_user_request, create_feedback, assign_request
+from services.medicine_requests import fetch_requests, create_request, fetch_request, fetch_last_user_request, create_feedback, assign_request, update_status
 import redis
 import json
 
@@ -56,3 +56,8 @@ async def accept_medicine_request(request: AssignMedicineRequest, session: Async
     key = 'read_medicine_requests'
     assigned_request = await assign_request(session, request, user)
     return assigned_request
+
+@router.post("/change_status/{request_id}")
+async def change_status(request: changeStatus, request_id, session: AsyncSession = Depends(get_session), user: dict = Depends(is_agent)):
+    changed_status = await update_status(session, request, user, request_id)
+    return changed_status

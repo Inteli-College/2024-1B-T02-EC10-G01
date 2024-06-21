@@ -111,9 +111,9 @@ async def fetch_all_requests_by_user(session: AsyncSession, user: dict):
 
 async def fetch_pending_requests(session: AsyncSession, user: dict):
     async with aiohttp.ClientSession() as http_session:
-        medicine_query = select_requests(MedicineRequest, status="pending", request_type="medicine")
-        material_query = select_requests(MaterialRequest, status="pending", request_type="material")
-        assistance_query = select_requests(AssistanceRequest, status="pending", request_type="assistance")
+        medicine_query = select_requests(MedicineRequest,request_type="medicine")
+        material_query = select_requests(MaterialRequest, request_type="material")
+        assistance_query = select_requests(AssistanceRequest,request_type="assistance")
 
         union_query = union_all(medicine_query, material_query, assistance_query).alias("combined_requests")
         stmt = select(union_query).order_by(union_query.c.created_at.desc())
@@ -130,6 +130,7 @@ async def fetch_pending_requests(session: AsyncSession, user: dict):
             requests["requests"].append(request)
 
         return requests
+
 
 def select_requests(model, user_id=None, status=None, request_type=None):
     query = select(

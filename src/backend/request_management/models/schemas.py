@@ -59,6 +59,9 @@ class CreateAssistanceFeedback(BaseModel):
 class AssignAssistanceRequest(BaseModel):
     request_id: int
 
+class changeStatus(BaseModel):
+    status: str
+
 class AssistanceRequestSchema(BaseModel):
     id: int
     dispenser: dict

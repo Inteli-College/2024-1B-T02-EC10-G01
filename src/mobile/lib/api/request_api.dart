@@ -4,5 +4,5 @@ abstract class RequestApi {
   Future<Map> getPyxisByPyxisId(int pyxisId);
   Future<dynamic> sendRequest(int pyxisId, int itemId);
   Future<dynamic> getLastRequest();
-  Future<dynamic> updateRequestStatus(int requestId);
+  Future<dynamic> updateRequestStatus(int requestId, String status);
 }

@@ -2,7 +2,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.medicine_requests import MedicineRequest, MedicineStatusChange, Status
-from models.schemas import AssignMedicineRequest, CreateMedicineRequest, MedicineRequestSchema
+from models.schemas import AssignMedicineRequest, CreateMedicineRequest, MedicineRequestSchema, changeStatus
 from fastapi import HTTPException
 import aiohttp
 import asyncio
@@ -257,3 +257,27 @@ async def assign_request(session: AsyncSession, request: AssignMedicineRequest, 
     await session.refresh(medicine_request)
 
     return medicine_request
+
+
+async def update_status(session: AsyncSession, request: changeStatus, user: dict, id):
+    print('in service')
+    stmt = select(MedicineRequest).where(MedicineRequest.id == int(id))
+    result = await session.execute(stmt)
+    assistance_request = result.scalars().first()
+
+    if not assistance_request:
+        raise HTTPException(status_code=404, detail="Assistance request not found")
+
+    print(assistance_request)
+    # Update the status column
+    assistance_request.status = request.status
+
+    change_status = MedicineStatusChange(request_id=int(id), status=request.status)
+
+    session.add(change_status)
+    
+    # Commit the changes to the database
+    session.add(assistance_request)
+    await session.commit()
+    return assistance_request
+

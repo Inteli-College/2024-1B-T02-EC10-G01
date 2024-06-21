@@ -2,7 +2,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.material_requests import MaterialRequest, MaterialStatusChange
-from models.schemas import AssignMaterialRequest, CreateMaterialRequest, MaterialRequestSchema
+from models.schemas import AssignMaterialRequest, CreateMaterialRequest, MaterialRequestSchema, changeStatus
 from fastapi import HTTPException
 import aiohttp
 import asyncio
@@ -240,3 +240,26 @@ async def assign_request(session: AsyncSession, request: AssignMaterialRequest, 
     await session.refresh(material_request)
 
     return material_request
+
+async def update_status(session: AsyncSession, request: changeStatus, user: dict, id):
+    print('in service')
+    stmt = select(MaterialRequest).where(MaterialRequest.id == int(id))
+    result = await session.execute(stmt)
+    assistance_request = result.scalars().first()
+
+    if not assistance_request:
+        raise HTTPException(status_code=404, detail="Assistance request not found")
+
+    print(assistance_request)
+    # Update the status column
+    assistance_request.status = request.status
+
+    change_status = MaterialStatusChange(request_id=int(id), status=request.status)
+
+    session.add(change_status)
+    
+    # Commit the changes to the database
+    session.add(assistance_request)
+    await session.commit()
+    return assistance_request
+

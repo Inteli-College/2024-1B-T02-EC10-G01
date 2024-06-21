@@ -47,8 +47,9 @@ class AssistanceStatus {
 class RequestDetailsBox extends StatefulWidget {
   final String requestId;
   final String type;
+  final String userRole;
 
-  RequestDetailsBox({Key? key, required this.requestId, this.type = 'medicine'})
+  RequestDetailsBox({Key? key, required this.requestId, this.type = 'medicine', this.userRole = 'nurse'	})
       : super(key: key);
 
   @override
@@ -89,7 +90,6 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
           }
 
           var requestData = snapshot.data;
-          print(requestData);
 
           // Parse the original date
           DateTime createdAt = DateTime.parse(requestData['created_at']);
@@ -99,7 +99,6 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
               createdAt.subtract(Duration(hours: 3));
 
           Map<dynamic, dynamic> detailsData = {};
-          print(requestData);
           if (requestData['assistanceType'] != null) {
             // Retrieve the translated label from Constants.assistanceTypes using the key from requestData
             String translatedAssistanceType =
@@ -136,7 +135,6 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
             status =
                 AssistanceStatus.getStatusDescription(requestData['status']);
           } else {
-            print(requestData['status_changes'][0]['status']);
             status = getDescription(requestData['status_changes'][0]['status']);
           }
           dynamic color = '';
@@ -174,9 +172,15 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                   labels: widget.type == 'assistance'
                       ? getAssistanceStatusLabels()
                       : getStatusLabels(),
-                  status: status,
+                  status: requestData['status_changes'].last['status'],
                   activeColor: color,
                   inactiveColor: Colors.grey,
+                  requestId: requestData['id'],
+                  type: widget.type,
+                  editable: widget.userRole == "agent",
+                  dropdownOptions: widget.type == 'assistance'
+                      ? Constants.AssistanceStatus
+                      : Constants.statuses,
                 ),
                 SizedBox(height: 40),
                 DetailsBox(details: detailsData),

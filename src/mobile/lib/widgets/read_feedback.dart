@@ -26,7 +26,6 @@ class ReadFeedbackWidget extends StatelessWidget {
   void _launchWhatsApp() async {
     final url = Uri.parse("https://wa.me/$phoneNumber");
 
-    print(url);
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {

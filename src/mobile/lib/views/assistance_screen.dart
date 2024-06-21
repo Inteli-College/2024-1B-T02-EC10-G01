@@ -26,7 +26,6 @@ class _AssistanceScreenState extends State<AssistanceScreen> {
     setState(() {
       selectedAssistance = newValue; // Update local state with new selection
     });
-    print(selectedAssistance);
   }
 
   @override

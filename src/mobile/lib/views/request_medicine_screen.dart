@@ -45,7 +45,6 @@ class _RequestMedicineState extends State<RequestMedicine> {
 
   Future<void> _checkToken() async {
     if (!await auth.checkToken()) {
-      print('Token is invalid');
       Navigator.pushReplacementNamed(context, '/login');
     }
   }

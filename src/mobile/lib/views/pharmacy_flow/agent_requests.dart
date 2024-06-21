@@ -54,61 +54,63 @@ class _AgentRequestsState extends State<AgentRequests> {
     fetchPendingRequests();
   }
 
-  void fetchPendingRequests() async {
+  Future<void> fetchPendingRequests() async {
     var requests = await api.getPendingRequests();
     setState(() {
       pendingRequests = requests;
-      //print(pendingRequests);
       _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Todas as solicitações",
-            style: GoogleFonts.notoSans(
-              textStyle: Theme.of(context).textTheme.displayLarge,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
+    return RefreshIndicator(
+      onRefresh: fetchPendingRequests,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+        physics: AlwaysScrollableScrollPhysics(), // Ensures scrollable even if content is less
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Todas as solicitações",
+              style: GoogleFonts.notoSans(
+                textStyle: Theme.of(context).textTheme.displayLarge,
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          SizedBox(height: 40),
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : (pendingRequests == null || pendingRequests.isEmpty
-                  ? Center(child: Text("Nenhuma solicitação foi feita."))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: pendingRequests.length,
-                      itemBuilder: (context, index) {
-                        print(pendingRequests.length);
-                        var request = pendingRequests[index];
-                        var title = getRequestTitle(request);
-                        var emergency = request['emergency'] == true ? 'EMERGÊNCIA' : 'NORMAL';
-                        var location = '${request['dispenser']['code']} | Andar ${request['dispenser']['floor']}';
-                        var status = getStatusDescription(request);
-                        var color = getStatusColor(request);
+            SizedBox(height: 40),
+            _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : (pendingRequests == null || pendingRequests.isEmpty
+                    ? Center(child: Text("Nenhuma solicitação foi feita."))
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: pendingRequests.length,
+                        itemBuilder: (context, index) {
+                          var request = pendingRequests[index];
+                          var title = getRequestTitle(request);
+                          var emergency = request['emergency'] == true ? 'EMERGÊNCIA' : 'NORMAL';
+                          var location = '${request['dispenser']['code']} | Andar ${request['dispenser']['floor']}';
+                          var status = getStatusDescription(request);
+                          var color = getStatusColor(request);
 
-                        return HistoryCard(
-                          date: request['created_at'],
-                          title: title,
-                          subtitle: location,
-                          tag: emergency,
-                          status: status,
-                          statusColor: color,
-                          id: request['id'].toString(),
-                          requestType: request['request_type'],
-                        );
-                      },
-                    )),
-        ],
+                          return HistoryCard(
+                            date: request['created_at'],
+                            title: title,
+                            subtitle: location,
+                            tag: emergency,
+                            status: status,
+                            statusColor: color,
+                            id: request['id'].toString(),
+                            requestType: request['request_type'],
+                          );
+                        },
+                      )),
+          ],
+        ),
       ),
     );
   }
@@ -134,7 +136,6 @@ class _AgentRequestsState extends State<AgentRequests> {
   }
 
   Color getStatusColor(dynamic request) {
-    print(request['status_changes']);
     return getColorFromStatus(request['status_changes'].last['status']);
   }
 }

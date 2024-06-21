@@ -194,3 +194,29 @@ async def assign_request(session: AsyncSession, request: AssignAssistanceRequest
 
     return assistance_request
 
+async def update_status(session: AsyncSession, request: AssistanceStatusChange, user: dict, id):
+    print('in service')
+    stmt = select(AssistanceRequest).where(AssistanceRequest.id == int(id))
+    result = await session.execute(stmt)
+    assistance_request = result.scalars().first()
+
+    if not assistance_request:
+        raise HTTPException(status_code=404, detail="Assistance request not found")
+
+    print(assistance_request)
+    # Update the status column
+
+    assistance_request.status = request.status
+
+    change_status = AssistanceStatusChange(request_id=int(id), status=request.status)
+
+    session.add(change_status)
+
+    # Commit the changes to the database
+    session.add(assistance_request)
+    await session.commit()
+    await session.refresh(assistance_request)
+    print('ASSISTANCE')
+    print(assistance_request)
+    return assistance_request
+

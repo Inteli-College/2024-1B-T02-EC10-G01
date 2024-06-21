@@ -112,17 +112,16 @@ class RequestMedicineApi implements RequestApi {
       throw Exception('Failed to fetch last request');
     }
   }
-
-  Future<bool> updateRequestStatus(int requestId) async {
+Future<bool> updateRequestStatus(int requestId, String status) async {
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
     final response = await http.post(
-        Uri.parse(Constants.baseUrl + '/requests/medicine/accept_request'),
+        Uri.parse(Constants.baseUrl + '/requests/medicine/change_status/$requestId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': bearer,
         },
-        body: json.encode({'request_id': requestId}));
+        body: json.encode({'status': status}));
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(utf8.decode(response.bodyBytes));

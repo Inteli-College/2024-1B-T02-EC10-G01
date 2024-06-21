@@ -71,7 +71,6 @@ class _RequestDetailsAgentState extends State<RequestDetailsAgent> {
         selectedIndex: _selectedIndex,
         onTabChange: (int index) {
           setState(() {
-            print('Index changed to $index');
             _selectedIndex = index;
           });
           // Add navigation or interaction logic as needed

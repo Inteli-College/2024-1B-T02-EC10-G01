@@ -3,6 +3,7 @@ import 'package:asky/api/request_material_api.dart';
 import 'package:asky/api/request_medicine_api.dart';
 import 'package:asky/api/requests_assistance_api.dart';
 import 'package:asky/constants.dart';
+import 'package:asky/views/home_nurse.dart';
 import 'package:asky/views/profile_screen.dart';
 import 'package:asky/views/request_details_box.dart';
 import 'package:asky/widgets/read_feedback.dart';
@@ -34,7 +35,7 @@ class RequestDetailsScreen extends StatefulWidget {
 }
 
 class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
@@ -54,12 +55,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     super.initState();
     
     _widgetOptions = <Widget>[
+      HomeNurseBody(),
+      HistoryPage(),
+      ProfileScreen(),
       RequestDetailsBox(
         requestId: widget.requestId,
         type: widget.type,
       ),
-      HistoryPage(),
-      ProfileScreen(),
     ];
   }
 
@@ -89,60 +91,18 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
         }
 
         final userRole = snapshot.data;
+        var backRoute = userRole == 'agent' ? '/pharmacy_home' : '/nurse';
 
         return Scaffold(
-          appBar: TopBar(),
-          body: Center(
-            child: _widgetOptions.elementAt(_selectedIndex),
+          appBar: TopBar(backRoute: backRoute,),
+          body: SingleChildScrollView(
+            child: Center(child:  RequestDetailsBox(
+        requestId: widget.requestId,
+        type: widget.type,
+        userRole: userRole!,
+      ),)
           ),
-          bottomNavigationBar: userRole == "agent" 
-            ? PharmacyCustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,
-                onTabChange: (int index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-              )
-            : CustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,
-                onTabChange: (int index) {
-                  setState(() {
-                    print('Index changed to $index');
-                    _selectedIndex = index;
-                  });
-                  // Add navigation or interaction logic as needed
-                },
-              ),
-          floatingActionButton: userRole == "agent"
-            ? Padding(
-                padding: EdgeInsets.all(16.0),
-                child:ElevatedButton(
-                  onPressed: () async {
-                    // Example status update logic
-                    await api.updateRequestStatus(int.parse(widget.requestId));
-                    // Show a success message or handle the result as needed
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Status updated to accepted')),
-                    );
-                  },
-                  child: Padding (
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      "Aceitar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold
-                        )
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 35, 109, 38),
-                    elevation: 1,
-                  ),
-                )
-            )
-            : null,
+        
         );
       },
     );

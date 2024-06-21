@@ -7,7 +7,6 @@ class AgentApi {
    Future getPendingRequests() async {
     final auth = AuthenticationApi();
     var token = await auth.getToken();
-    print('SKJDBSLJFBSDFBSDJKF');
     final String bearerToken = 'Bearer $token';
 
     final response = await http.get(

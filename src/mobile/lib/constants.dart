@@ -1,7 +1,8 @@
+import 'package:asky/views/history_page.dart';
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseUrl = 'https://bf25-177-69-182-113.ngrok-free.app';
+  static const String baseUrl = 'https://35a1-189-201-201-2.ngrok-free.app';
   static const Color askyBlue = Color(0xFF1A365D);
   static const Color offWhite = Color(0xFFF5F5F5);
   static const Color gradientTop = Color(0xFF1A365D);
@@ -11,15 +12,30 @@ class Constants {
     'expiredMedication': 'Medicamento Vencido',
     'frozenDisplay': 'Display Congelado',
   };
+  static const statuses = {
+  'pending': 'Pendente',
+  'accepted': 'Aceito',
+  'preparing': 'Preparando',
+  'inTransit': 'Em trânsito',
+  'completed': 'Concluído',
+};
+
+static const AssistanceStatus = {
+  'pending': 'Pendente',
+  'accepted': 'Aceito',
+  'resolved': 'Resolvido',
+};
 }
 enum Status {
   pending,
   accepted,
   preparing,
   inTransit,
-  rejected,
   completed,
 }
+
+
+
 
 extension StatusExtension on Status {
   String get description {
@@ -32,8 +48,6 @@ extension StatusExtension on Status {
         return 'Preparando';
       case Status.inTransit:
         return 'Em trânsito';
-      case Status.rejected:
-        return 'Rejeitado';
       case Status.completed:
         return 'Concluído';
       default:
@@ -51,8 +65,6 @@ extension StatusExtension on Status {
         return Colors.blue;
       case Status.inTransit:
         return Colors.blue;
-      case Status.rejected:
-        return Colors.red;
       case Status.completed:
         return Colors.green;
       default:

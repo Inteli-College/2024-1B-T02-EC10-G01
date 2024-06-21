@@ -109,16 +109,16 @@ class RequestMaterialApi implements RequestApi {
     }
   }
 
-  Future<bool> updateRequestStatus(int requestId) async {
+  Future<bool> updateRequestStatus(int requestId, String status) async {
     var token = await auth.getToken();
     final String bearer = 'Bearer $token';
     final response = await http.post(
-        Uri.parse(Constants.baseUrl + '/requests/material/accept_request'),
+        Uri.parse(Constants.baseUrl + '/requests/material/change_status/$requestId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': bearer,
         },
-        body: jsonEncode({"request_id": requestId}));
+        body: json.encode({'status': status}));
 
     if (response.statusCode == 200) {
       // var data = jsonDecode(utf8.decode(response.bodyBytes));
