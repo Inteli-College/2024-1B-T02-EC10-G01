@@ -1,12 +1,34 @@
 # Plano de Comunicação para o Projeto Asky
 
+## Visão Geral
+
+O plano de comunicação é uma estratégia fundamental para garantir que a mensagem certa seja entregue ao público-alvo de maneira eficaz e impactante. Ele consiste não apenas na definição clara de quem queremos atingir, mas também na escolha dos canais e meios mais adequados para alcançar essas pessoas. 
+
 ## Elementos-chave do Plano de Comunicação
+
+### Propósito na comunicação
+
+Os objetivos da divulgação do novo sistema Asky são estruturados em duas etapas fundamentais. A primeira etapa é interna e tem como foco a implementação e introdução do sistema no Hospital Sírio Libanês. Nessa fase, o objetivo é envolver e engajar os funcionários, demonstrando as funcionalidades e benefícios do novo sistema para garantir sua adoção eficaz e eficiente.
+
+A segunda etapa é externa e visa a promoção comercial do Asky. Essa fase envolve a divulgação dos benefícios e vantagens do sistema para outros hospitais e instituições de saúde, destacando como ele pode melhorar a eficiência operacional, a qualidade do atendimento e a gestão hospitalar. Além de contribuir para a melhoria dos serviços em outras instituições, essa etapa tem o potencial de gerar receita e fortalecer a posição do Hospital Sírio Libanês no mercado de soluções tecnológicas para a saúde.
+
+Essas duas etapas, quando executadas de maneira estratégica, não apenas promovem a adoção do sistema Asky internamente, mas também expandem sua influência e aplicabilidade no setor de saúde, gerando valor tanto para o Hospital Sírio Libanês quanto para os demais usuários da solução.
 
 ### Público-alvo
 
-**Enfermeiros:**
-- **Conhecimento atual:** Familiaridade com os dispensadores Pyxis e o sistema de requisição atual, mas desconhecimento das melhorias trazidas pelo QR Code.
-- **Nível de interesse e atitude:** Alto interesse devido à potencial redução de tempo e simplificação de processos.
+O público-alvo inclui os funcionários principais que interagem com o Pyxis:
+
+#### Enfermeiro
+
+Os enfermeiros são os principais usuários do sistema Pyxis, possuindo um profundo conhecimento sobre seu funcionamento. No entanto, eles não têm visibilidade sobre o que ocorre nos bastidores quando abrem um pedido de urgência de abastecimento.
+
+Eles demonstram um alto nível de interesse na nova implementação, pois esta promete tornar o processo de atendimento às urgências mais eficiente. A falta de conhecimento sobre o volume de chamadas direcionadas à farmácia e sobre como o formato atual de abertura de pedidos por chat dificulta o gerenciamento pelos assistentes resulta em frustração quando há atrasos no atendimento.
+
+A nova implementação visa proporcionar uma solução que não apenas agiliza o processo, mas também oferece maior transparência e eficiência, diminuindo a frustração dos enfermeiros e melhorando a coordenação com a farmácia.
+
+#### Assistentes de Farmácia
+
+
 
 **Assistentes de Farmácia:**
 - **Conhecimento atual:** Experiência com o atendimento das requisições de medicamentos e uso do sistema atual.
