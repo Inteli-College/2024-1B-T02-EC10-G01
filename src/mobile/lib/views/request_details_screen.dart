@@ -115,17 +115,33 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 },
               ),
           floatingActionButton: userRole == "agent"
-            ? FloatingActionButton(
-                onPressed: () async {
-                  // Example status update logic
-                  await api.updateRequestStatus(int.parse(widget.requestId));
-                  // Show a success message or handle the result as needed
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Status updated to accepted')),
-                  );
-                },
-                child: Icon(Icons.update),
-              )
+            ? Padding(
+                padding: EdgeInsets.all(16.0),
+                child:ElevatedButton(
+                  onPressed: () async {
+                    // Example status update logic
+                    await api.updateRequestStatus(int.parse(widget.requestId));
+                    // Show a success message or handle the result as needed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Status updated to accepted')),
+                    );
+                  },
+                  child: Padding (
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      "Aceitar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                        )
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 35, 109, 38),
+                    elevation: 1,
+                  ),
+                )
+            )
             : null,
         );
       },
