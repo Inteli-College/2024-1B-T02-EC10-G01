@@ -10,14 +10,13 @@ class ReadFeedbackWidget extends StatelessWidget {
   final String? typeRequest;
   final int? requestId;
   final String? phoneNumber;
-  bool isReadOnly;
+  bool isReadOnly = false;
 
   final AuthenticationApi auth = AuthenticationApi();
 
   ReadFeedbackWidget(
       {Key? key,
       required this.feedbackReceived,
-      this.isReadOnly = true,
       this.typeUser,
       this.typeRequest,
       this.requestId,
@@ -37,11 +36,15 @@ class ReadFeedbackWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final api;
 
+    print('Type User: $typeUser');
+
     if (typeUser == 'agent') {
       isReadOnly = false;
     } else {
       isReadOnly = true;
     }
+
+    print('IsReadOnly: $isReadOnly');
 
     switch (typeRequest) {
       case 'material':

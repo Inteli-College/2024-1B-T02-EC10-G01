@@ -196,20 +196,24 @@ class _RequestDetailsBoxState extends State<RequestDetailsBox> {
                   inactiveColor: Colors.grey,
                   requestId: requestData['id'],
                   type: widget.type,
+                  statusName: status,
                   editable: widget.userRole == "agent",
                   dropdownOptions: widget.type == 'assistance'
                       ? Constants.AssistanceStatus
                       : Constants.statuses,
+                
                 ),
+                  
                 SizedBox(height: 40),
                 DetailsBox(details: detailsData),
                 SizedBox(height: 40),
                 ReadFeedbackWidget(
                     feedbackReceived: requestData['feedback'],
-                    typeUser: requestData['requested_by']['role'],
+                    typeUser: widget.userRole,
                     typeRequest: widget.type,
-                    requestId: requestData['status_changes'][0]['request_id'],
+                    requestId: requestData['request_id'],
                     phoneNumber: requestData['assign_to']?['phone_number']),
+                    
               ],
             ),
           );

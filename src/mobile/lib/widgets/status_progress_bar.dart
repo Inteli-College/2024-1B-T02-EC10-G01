@@ -14,6 +14,7 @@ class StatusProgressBar extends StatefulWidget {
  final Map<String, String> dropdownOptions;
   final int requestId;
   final String type;
+  final String statusName;
 
   StatusProgressBar({
     Key? key,
@@ -25,6 +26,7 @@ class StatusProgressBar extends StatefulWidget {
     required this.status,
     required this.requestId,
     required this.type,
+    required this.statusName,
     this.editable = false,
     this.dropdownOptions = const {},
     
@@ -139,7 +141,7 @@ class _StatusProgressBarState extends State<StatusProgressBar> with TickerProvid
                       },
                     )
                   : Text(
-                      widget.status,
+                      widget.statusName,
                       style: TextStyle(
                         color: widget.currentStep >= 0 ? widget.activeColor : widget.inactiveColor,
                       ),
