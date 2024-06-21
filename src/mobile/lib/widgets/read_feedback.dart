@@ -71,27 +71,28 @@ class ReadFeedbackWidget extends StatelessWidget {
               ),
               IconButton(
                 icon: FaIcon(FontAwesomeIcons.whatsapp),
-                onPressed: () {
-                  if (phoneNumber == null) {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title:
-                            Text('Este número de telefone não está disponível'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(ctx).pop();
-                            },
-                            child: Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    _launchWhatsApp();
-                  }
-                },
+                onPressed: _launchWhatsApp,
+                // () {
+                //   if (phoneNumber == null) {
+                //     showDialog(
+                //       context: context,
+                //       builder: (ctx) => AlertDialog(
+                //         title:
+                //             Text('Este número de telefone não está disponível'),
+                //         actions: [
+                //           TextButton(
+                //             onPressed: () {
+                //               Navigator.of(ctx).pop();
+                //             },
+                //             child: Text('OK'),
+                //           ),
+                //         ],
+                //       ),
+                //     );
+                //   } else {
+                //     _launchWhatsApp();
+                //   }
+                // },
                 color: Colors.green,
                 iconSize: 30,
               ),
