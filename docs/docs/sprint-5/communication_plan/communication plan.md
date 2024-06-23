@@ -1,3 +1,8 @@
+---
+title: Plano de Comunicação
+sidebar_position: 1
+---
+
 # Plano de Comunicação para o Projeto Asky
 
 ## Visão Geral

@@ -1,0 +1,12 @@
+{
+    "position": 2,
+    "label": "Plano de Comunicação",
+    "collapsible": true,
+    "collapsed": true,
+    "className": "red",
+    "link": {
+      "type": "generated-index",
+      "title": "Plano de Comunicação",
+      "slug": "/sprint-5/comunication_plan"
+    }
+  }
