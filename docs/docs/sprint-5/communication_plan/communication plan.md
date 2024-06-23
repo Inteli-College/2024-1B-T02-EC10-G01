@@ -28,87 +28,77 @@ A nova implementação visa proporcionar uma solução que não apenas agiliza o
 
 #### Assistentes de Farmácia
 
+No fluxo que estamos tratando com a nossa solução, o assistente de farmácia interage com o Pyxis principalmente no momento de reabastecimento de medicamentos ou materiais. No entanto, a efetivação desse reabastecimento depende de pedidos feitos pelos enfermeiros, que atualmente são realizados por meio de um aplicativo de mensagens. Esse método pode dificultar bastante o acompanhamento dos pedidos pelo assistente, pois as mensagens dos enfermeiros frequentemente carecem de informações completas ou são enviadas em formato de áudio, o que torna todo o processo mais demorado.
 
+Os assistentes de farmácia possuem um conhecimento detalhado de todo o processo, e seu nível de interesse na nova solução é extremamente alto. A nova implementação promete tornar seu trabalho muito mais eficiente. Utilizando um formulário no aplicativo, os assistentes receberão todas as informações necessárias de forma estruturada, reduzindo a necessidade de contato direto com os enfermeiros a casos raros. Além disso, a solução melhora a transparência do processo, permitindo o acompanhamento do status de cada pedido tanto pelos enfermeiros quanto pelos assistentes.
 
-**Assistentes de Farmácia:**
-- **Conhecimento atual:** Experiência com o atendimento das requisições de medicamentos e uso do sistema atual.
-- **Nível de interesse e atitude:** Interesse moderado a alto, dependendo do impacto no fluxo de trabalho.
-
-**Gerentes de Farmácia:**
-- **Conhecimento atual:** Conhecimento básico das operações de reabastecimento e gerenciamento de equipes.
-- **Nível de interesse e atitude:** Interesse moderado, focado na eficiência operacional e melhoria da qualidade do serviço.
+Essa melhoria não apenas agiliza o reabastecimento, mas também aumenta a precisão e a satisfação dos profissionais envolvidos, proporcionando um fluxo de trabalho mais organizado e eficiente.
 
 ### Mensagens-chave
 
 1. **Melhoria na Eficiência:**
-   "A nova funcionalidade de QR Code no Asky otimiza o processo de requisição de medicamentos, reduzindo o tempo de preenchimento e melhorando a precisão dos dados."
+"A nova funcionalidade de QR Code no Asky revoluciona o processo de requisição de medicamentos, reduzindo significativamente o tempo necessário para o preenchimento de formulários e aumentando a precisão dos dados. Essa otimização permite que os profissionais de saúde se concentrem mais no atendimento aos pacientes e menos na administração de pedidos."
 
 2. **Facilidade de Uso:**
-   "Com a nova funcionalidade de QR Code, basta escanear o código no dispensador Pyxis para preencher automaticamente as informações necessárias, simplificando o processo."
+"Com a introdução da funcionalidade de QR Code, os usuários podem simplesmente escanear o código presente no dispensador Pyxis para preencher automaticamente todas as informações necessárias. Este processo simplificado elimina etapas manuais, reduzindo erros e tornando o sistema intuitivo e rápido de usar."
 
 3. **Benefícios Operacionais:**
-   "A adoção do QR Code no Asky resultará em uma menor discrepância de inventário e uma resposta mais rápida às requisições de medicamentos."
+"A adoção do QR Code no Asky trará inúmeros benefícios operacionais, incluindo uma menor discrepância de inventário e uma resposta mais ágil às requisições de medicamentos. Esse aumento na eficiência operacional se traduz em uma melhor gestão dos recursos e um atendimento mais eficaz aos pacientes."
 
 4. **Suporte e Treinamento:**
-   "Oferecemos sessões de treinamento e suporte contínuo para garantir que todos os usuários se sintam confortáveis e confiantes com a nova tecnologia."
+"Para garantir uma transição suave e maximizar os benefícios da nova tecnologia, oferecemos sessões de treinamento abrangentes e suporte contínuo. Nossa equipe está dedicada a assegurar que todos os usuários se sintam confortáveis e confiantes ao utilizar a funcionalidade de QR Code, proporcionando um ambiente de trabalho mais eficiente e produtivo."
 
 ### Canais de Comunicação
 
 1. **E-mail:**
-   - Enviar informações detalhadas e guias de uso.
+Enviar informações detalhadas e guias de uso diretamente para os funcionários, garantindo que todos tenham acesso rápido a instruções claras e completas sobre a nova funcionalidade.
 
 2. **Reuniões Presenciais:**
-   - Sessões de treinamento e demonstrações práticas.
+Organizar sessões de treinamento e demonstrações práticas, proporcionando uma experiência hands-on para os funcionários. Essas reuniões permitem resolver dúvidas imediatas e assegurar que todos estejam confortáveis com o novo sistema.
 
 3. **Mídias Sociais Internas:**
-   - Publicações e lembretes no grupo de comunicação interna do hospital.
+Utilizar o grupo de comunicação interna do hospital para publicar atualizações, lembretes e dicas úteis. Esse canal mantém todos os membros da equipe informados e engajados com as novidades.
 
 4. **Manuais e Guias Impressos:**
-   - Distribuir material de apoio para consulta rápida.
+Distribuir materiais de apoio impressos, como manuais e guias rápidos, para referência imediata. Esses documentos servem como uma ferramenta valiosa para consultas rápidas no dia a dia.
 
 5. **Plataforma de Intranet:**
-   - Disponibilizar recursos e FAQs para acesso fácil.
+Disponibilizar recursos como tutoriais em vídeo, FAQs e documentação completa na intranet do hospital. Essa plataforma centralizada permite que os funcionários acessem as informações necessárias a qualquer momento e de qualquer lugar.
+
+6. **Convenções de Saúde:**
+Participar de convenções e eventos de saúde com o objetivo de apresentar a solução Asky para outros hospitais. Essas apresentações destacam os benefícios e a eficácia do sistema, gerando interesse e incentivando outras instituições a adquirir a solução do Hospital Sírio Libanês.
+Esses canais de comunicação integrados garantem que a informação seja disseminada de maneira eficaz, alcançando todos os funcionários e potenciais clientes de maneira abrangente e acessível.
 
 ### Cronograma
 
 1. **Semana 1:**
-   - **Dia 1:** Envio de e-mail introdutório anunciando a nova funcionalidade.
-   - **Dia 3:** Publicação nas mídias sociais internas com informações sobre as sessões de treinamento.
+   - **Dia 1:** Enviar um e-mail introdutório anunciando a nova funcionalidade de QR Code no Asky, destacando seus benefícios e a importância da adoção.
+   - **Dia 3:** Publicar nas mídias sociais internas informações detalhadas sobre as próximas sessões de treinamento, incluindo datas, horários e objetivos.
 
 2. **Semana 2:**
-   - **Dia 1:** Início das sessões de treinamento presenciais.
-   - **Dia 4:** Envio de e-mail com materiais de apoio e guias de uso.
+   - **Dia 1:** Iniciar as sessões de treinamento presenciais, oferecendo demonstrações práticas e respondendo a dúvidas dos funcionários.
+   - **Dia 4:** Enviar um e-mail com materiais de apoio e guias de uso, reforçando as instruções e fornecendo recursos adicionais para consulta.
 
 3. **Semana 3:**
-   - **Dia 2:** Distribuição de manuais impressos.
-   - **Dia 5:** Publicação de lembretes nas mídias sociais internas sobre a disponibilidade de suporte contínuo.
+   - **Dia 2:** Distribuir manuais e guias impressos a todos os funcionários, garantindo que tenham acesso fácil a informações importantes.
+   - **Dia 5:** Publicar lembretes nas mídias sociais internas sobre a disponibilidade de suporte contínuo, incentivando os funcionários a buscar ajuda quando necessário.
 
 4. **Semana 4:**
-   - **Dia 1:** Revisão do feedback dos usuários e ajustes necessários.
-   - **Dia 3:** Reunião final para discutir a eficácia da implementação e próximos passos.
+   - **Dia 1:** Coletar e revisar o feedback dos usuários sobre a nova funcionalidade, identificando áreas para melhorias e ajustes necessários.
+   - **Dia 3:** Realizar uma reunião final para discutir a eficácia da implementação, abordar quaisquer preocupações restantes e planejar ações futuras com base no feedback recebido.
 
----
+5. **Semana 5:**
+   - **Dia 1:** Iniciar a busca por convenções de saúde onde o Asky pode ser demonstrado, destacando os benefícios e a inovação da nova funcionalidade de QR Code. Planejar a participação em eventos relevantes para atrair o interesse de outros hospitais e instituições de saúde.
 
-## Formato da Entrega
-
-- **Entrega em PDF:** Salvar o plano de comunicação em formato PDF.
-- **Repositório GitHub:** Disponibilizar o documento no repositório GitHub do grupo, no diretório "Documentos".
-
----
-
-## Padrão de Qualidade
-
-**Clareza e Relevância:**
-- As mensagens-chave são claras e pertinentes ao público-alvo, focando em eficiência, facilidade de uso e benefícios operacionais.
-
-**Adequação do Canal:**
-- Os canais de comunicação foram escolhidos para maximizar o alcance e a eficácia da mensagem, utilizando meios digitais e presenciais apropriados para cada público.
-
-**Eficiência do Cronograma:**
-- O cronograma é realista, alinhado com os objetivos de comunicação, e garante tempo suficiente para treinamento e adaptação dos usuários.
+Este cronograma detalhado assegura uma abordagem estruturada e eficaz para a implementação e divulgação da nova funcionalidade, garantindo que todos os funcionários estejam bem informados e preparados para utilizar o sistema, enquanto se promove a solução para um público mais amplo.
 
 
-## Mensagem
+![alt text](<../../../static/img/plano de comunicação.drawio.png>)
+
+
+#### Exemplo
+
+Segue, um exemplo de comunicação para os funcionários do Hospital Sírio Libanês:
 
 Prezados colaboradores,
 

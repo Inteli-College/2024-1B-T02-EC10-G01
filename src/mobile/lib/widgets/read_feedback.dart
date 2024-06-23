@@ -23,7 +23,7 @@ class ReadFeedbackWidget extends StatelessWidget {
       this.phoneNumber});
 
   void _launchWhatsApp() async {
-    final url = Uri.parse("https://wa.me/5511999453131");
+    final url = Uri.parse("https://wa.me/$phoneNumber");
 
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
@@ -74,28 +74,27 @@ class ReadFeedbackWidget extends StatelessWidget {
               ),
               IconButton(
                 icon: FaIcon(FontAwesomeIcons.whatsapp),
-                onPressed: _launchWhatsApp,
-                // () {
-                //   if (phoneNumber == null) {
-                //     showDialog(
-                //       context: context,
-                //       builder: (ctx) => AlertDialog(
-                //         title:
-                //             Text('Este número de telefone não está disponível'),
-                //         actions: [
-                //           TextButton(
-                //             onPressed: () {
-                //               Navigator.of(ctx).pop();
-                //             },
-                //             child: Text('OK'),
-                //           ),
-                //         ],
-                //       ),
-                //     );
-                //   } else {
-                //     _launchWhatsApp();
-                //   }
-                // },
+                onPressed: () {
+                  if (phoneNumber == null) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title:
+                            Text('Este número de telefone não está disponível'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    _launchWhatsApp();
+                  }
+                },
                 color: Colors.green,
                 iconSize: 30,
               ),
