@@ -1,13 +1,13 @@
 ---
-title: Introdução
-slug: /sprint-5
+title: Walkthrough da aplicação
+slug: /sprint-5/walkthrough_aplication
 ---
 
 # Walkthrough da aplicação
 
-<!-- ## Vídeo 
+## Vídeo 
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=NH4VseyHHxc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=NH4VseyHHxc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
  
 ## Objetivo
@@ -18,7 +18,7 @@ Atualmente, os enfermeiros necessitam ligar para os auxiliares de farmácia, que
 
 O problema nesse fluxo é que há gargalo para o enfermeiro e uma falta de planejamento para o auxiliar. De modo que as entregas atrasem e acumulem.
 
-## Fluxo por usuário
+## Fluxo
 
 ### Enfermeiro
 
@@ -39,25 +39,25 @@ Para o auxiliar o fluxo é mais enxuto, uma vez que o objetivo principal é ter 
 
 Como o serviço foi desenvolvido em Flutter, não é possível criar um contîner dessa parte da aplicação, o que facilitaria executar, mas uma vez que ele for processado, ele fica salvo no sistema.
 
-Primeiramente é necessário baixar ambos o **VS Code** e **Flutter**:
+Primeiramente é necessário baixar ambos o *VS Code* e *Flutter*:
 - [VS Code](https://code.visualstudio.com/download)
 - [Flutter](https://docs.flutter.dev/get-started/install?gad_source=1&gclid=Cj0KCQjwj9-zBhDyARIsAERjds3ro5ekXN0EgrBqZ_VL--nQjF6yVdEP-T5-d2kIxaLQ0Vljj9kHjmgaAgBjEALw_wcB&gclsrc=aw.ds)
 
 Em segundo, para executar é necessário rodar o ngrok, a fim de ter um endpoint para rodar a aplicação. Mas primeiro, é necessário ter o Back-End da aplicação rodando, o que está disponível em outra documentação desta sprint. Para isso deve-se realizar:
 
-```
+
 ngrok http http://localhost:8000
-```
-
-E substituir a variável ***baseUrl***, no arquivo *`src/mobile/lib/constants.dart`* por este valor correspondente ao campo ***Forwaing***
-
-![ngrok](docs/static/img/ngrok.png)
 
 
-Após isso, basta conectar o celular ao dispositivo que estára executando a aplicação e selecionar no canto da tela, o campo ***No Device***
+E substituir a variável **baseUrl*, no arquivo *src/mobile/lib/constants.dart por este valor correspondente ao campo **Forwaing**
 
-![no-device](docs/static/img/no-device.png)
+![ngrok](../../static/img/ngrok.png)
+
+
+Após isso, basta conectar o celular ao dispositivo que estára executando a aplicação e selecionar no canto da tela, o campo **No Device**
+
+![no-device](../../static/img/no-device.png)
 
 E depois selecionar o seu dispositivo para rodar a aplicação! (Os dispositivos demonstrados abaixos são apenas parte do Android Studio, um simulador de smartphones Android)
 
-![choose-device](docs/static/img/choose-device.png)
+![choose-device](../../static/img/choose-device.png)
