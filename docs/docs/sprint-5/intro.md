@@ -5,14 +5,6 @@ slug: /sprint-5
 ---
 
 # Introdução
- 
----
-title: Introdução
-sidebar_position: 1
-slug: /sprint-5
----
-
-# Introdução
 
 Bem vindos a documentação da nossa Sprint 5 do projeto! Nessa Sprint tivemos um foco maior em integrar o fluxo de assistente de farmácia na nossa aplicação.
 
