@@ -5,9 +5,9 @@ slug: /sprint-5
 
 # Walkthrough da aplicação
 
-## Vídeo 
+<!-- ## Vídeo 
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=NH4VseyHHxc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=NH4VseyHHxc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 
  
 ## Objetivo
@@ -18,7 +18,7 @@ Atualmente, os enfermeiros necessitam ligar para os auxiliares de farmácia, que
 
 O problema nesse fluxo é que há gargalo para o enfermeiro e uma falta de planejamento para o auxiliar. De modo que as entregas atrasem e acumulem.
 
-## Fluxo
+## Fluxo por usuário
 
 ### Enfermeiro
 
