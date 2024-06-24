@@ -1,6 +1,7 @@
 ---
 title: Arquitetura
 sidebar_position: 3
+slug: /sprint-5/archtecture
 ---
 
 # Mudanças da arquitetura da Sprint 1 para Sprint 5

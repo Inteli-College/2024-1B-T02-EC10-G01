@@ -1,6 +1,7 @@
 ---
 title: Walkthrough da aplicação
 slug: /sprint-5/walkthrough_aplication
+sidebar_position: 5
 ---
 
 # Walkthrough da aplicação
