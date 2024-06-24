@@ -56,3 +56,4 @@ Na sprint 4, o foco foi finalizar todos os serviços e integrá-los. Além disso
 
 ### Sprint 5:
 
+Na sprint 5, o objetivo for dar os polimentos finais da aplicação. Um dos pontos importantes da sprint 4 é definir a arquitetura final da solução, consequentemente, na sprint 5 busca-se concluir o que foi proposto. Para isso os fluxos de enfermeiro e auxiliar foram concluídos e completamente integrados. Aleḿ disso, foi criado um plano de comunicação que visa alcançar o público alvo da aplicação, no caso, os enfermeiros e auxiliares que irão utilizar a solução.
